@@ -1,0 +1,88 @@
+* {
+/*  border: 1px solid black;
+  box-sizing: border-box;*/
+  text-align: center;
+  margin: 0 auto;
+  padding: 0;
+  font-family: helvetica;
+
+}
+
+body {
+
+}
+
+main {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+}
+
+.header {
+  background-color: yellow;
+  width: 100%;
+}
+
+.footer {
+  background-color: blue;
+  width: 100%;
+}
+
+#gamebox-parent {
+  position: relative;
+  overflow: hidden;
+}
+
+.gamebox-child {
+  position: absolute;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+}
+
+#plane1 {
+  z-index: 10;
+}
+
+#plane2 {
+  z-index: 9;
+}
+
+#plane3 {
+  z-index: 8;
+}
+
+#plane4 {
+  z-index: 7;
+}
+
+#plane5 {
+  z-index: 6;
+}
+
+#plane6 {
+  z-index: 5;
+}
+
+#plane7 {
+  z-index: 4;
+}
+
+#plane8 {
+  z-index: 3;
+}
+
+#plane9 {
+  z-index: 2;
+}
+
+#plane10 {
+  z-index: 1;
+  background-color: gray;
+}
+
+
+
+
+
+
