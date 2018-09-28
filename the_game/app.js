@@ -23,9 +23,12 @@
     function drawGame(timestamp) {
       t = timestamp / 16;
       window.requestAnimationFrame(drawGame);
-      setSpeed(t);
       setClock(timestamp);
+      setSpeed(t);
+      setDistance(timestamp);
       redraw(t);
+      getPlayerHitSpot();
+      checkForHit();
     };
     window.requestAnimationFrame(drawGame);
 
@@ -73,8 +76,8 @@
       par.style.height = fullH + 'px';
       header.style.height = gameboxPadding + 'px';
       footer.style.height = gameboxPadding + 'px';
-      body.style.fontSize = gameboxPadding / 2 + 'px';
-      body.style.lineHeight = gameboxPadding + 'px';
+      // body.style.fontSize = gameboxPadding / 2 + 'px';
+      // body.style.lineHeight = gameboxPadding + 'px';
     };
     buildGamePage();
 
@@ -103,34 +106,95 @@
     function refreshHud(t) {
       speedBoxRefresh();
       timeBoxRefresh();
+      distBoxRefresh();
     };
 
-// Function Make Arbitrary Box
+// Function Make Arbitrary HUD Box
     function makeHudBox(gamePlane, id, left, top, width, height, color) {
       let div = document.createElement('div');
       div.style.position = 'absolute';
+      // div.style.overflow = 'hidden';
+      // div.style.display = 'inline-block';
       // div.style.backgroundImage = "url('img/car1.png')";
       // div.style.backgroundSize = '100%';
       // div.style.backgroundRepeat = 'no-repeat';
-      div.style.backgroundColor = color;
+      // div.style.fontSize = (width * h) / 50 + 'px;'
+      // div.style.lineHeight = (width * h) / 2 + 'px;'
+      div.style.fontSize = '50px';
+      div.style.fontFamily = 'Seven Segment';
+      div.style.color = 'orange';
+      // div.style.backgroundColor = color;
       div.style.left = left * w + 'px';
       div.style.top = top * h + 'px';
       div.style.width = width * w + 'px';
       div.style.height = height * h + 'px';
       div.id = id;
       gamePlane.appendChild(div);
+      let textBox = document.createElement('div');
+      textBox.id = id + 'Text';
+      div.appendChild(textBox);
     };
-    makeHudBox(p2, 'speedBox', 0, 1, 3, 2, 'yellow');
-    makeHudBox(p2, 'timeBox', 13, 1, 3, 2, 'blue');
+    makeHudBox(p2, 'speedBox', 0, 1, 3, 2, 'rgba(255,0,0,0.3)');
+    makeHudBox(p2, 'timeBox', 6, 1, 4, 2, 'rgba(0,255,0,0.3)');
+    makeHudBox(p2, 'distBox', 13, 1, 3, 2, 'rgba(0,0,255,0.3)');
+
+// Function Make Speed Needle
+    function makeNeedle() {
+      let div = document.createElement('div');
+      div.style.position = 'absolute';
+      div.style.backgroundColor = 'black';
+      div.style.left = '10%';
+      div.style.top = '90%';
+      div.style.width = '40%';
+      div.style.height = '1%';
+      div.id = 'needle';
+      speedBox.appendChild(div);
+    };
+    makeNeedle();
+
+// Function Add Leading Zeros To Integer
+    function leadZeros(num, digits) {
+      let str = String(num);
+      let output = str;
+      while (output.length < digits) {
+        output = `0${output}`;
+      };
+      return output;
+    };
+
+// Function Rotate Speed Needle
+    function rotateNeedle() {
+      let rotation = (speed / maxSpeed) * 170;
+      needle.style.transitionDuration = '100ms';
+      needle.style.transformOrigin = '100% 100%';
+      needle.style.transform = `rotate(${rotation}deg)`;
+    };
 
 // Function Refresh Speed Text
     function speedBoxRefresh() {
-      speedBox.innerText = 'Speed:\n' + Math.floor(speed) + ' mph';
+      speedBoxText.innerText = Math.floor(speed) + ' mph';
+      rotateNeedle()
     };
 
 // Function Refresh Time Text
     function timeBoxRefresh() {
-      timeBox.innerText = 'Time:\n' + runTimeRemain;
+      let string = '';
+      if (runTimeRemain >= 60) {
+        let mins = Math.floor(runTimeRemain / 60);
+        let secs = runTimeRemain - (mins * 60);
+        let minStr = leadZeros(mins, 2);
+        let secStr = leadZeros(secs, 2);
+        string = `${minStr}:${secStr}`;
+      } else {
+        let secStr = leadZeros(runTimeRemain, 2);
+        string = `00:${secStr}`;
+      };
+      timeBoxText.innerText = 'Time:\n' + string;
+    };
+
+// Function Refresh Distance Text
+    function distBoxRefresh() {
+      distBoxText.innerText = 'Distance:\n' + distanceRemain.toFixed(2);
     };
 
 
@@ -139,14 +203,19 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // Initialization Parameters
-    const runTimeTotal = 100;
+    const runTimeTotal = 90;
     let runTimeElapsed = 0;
     let runTimeRemain = runTimeTotal - runTimeElapsed;
 
 // Function Update Clock
-    function setClock(t) {
-      runTimeElapsed = Math.floor(t / 60);
-      runTimeRemain = runTimeTotal - runTimeElapsed
+    function setClock(timestamp) {
+      runTimeElapsed = Math.floor(timestamp / 1000);
+      runTimeRemain = runTimeTotal - runTimeElapsed;
+    };
+
+// Function Reset Clock
+    function resetClock() {
+      runTimeElapsed = 0;
     };
 
 
@@ -155,11 +224,11 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 // Initialization Parameters
-    const maxSpeed = 120;
+    const maxSpeed = 150;
     const minSpeed = 10;
     let speedUp = false;
     let speedDown = false;
-    let speed = 50;
+    let speed = 90;
 
 // Function Change Speed
     function setSpeed(t) {
@@ -167,7 +236,10 @@
         speed += ((maxSpeed - speed) / maxSpeed);
       } else if (speedDown) {
         speed += ((minSpeed - speed) / (minSpeed * 5));
-      };
+      } else if (!speedUp && !speedDown && speed > minSpeed) {
+        //foot off gas, slow decay
+        speed -= 0.25;
+      }
     };
 
 // Keyboard Speed Event Listeners
@@ -185,6 +257,31 @@
         speedDown = false;
       };
     });
+
+
+//////////////////////////////////////////////////////////////////////////////////
+//  //  //  //  //  //  //  //  DISTANCE FUNCTIONS  //  //  //  //  //  //  //  //
+//////////////////////////////////////////////////////////////////////////////////
+
+// Initialization Parameters
+    const trackLength = 2.5;
+    let distance = 0;
+    let distanceRemain = trackLength - distance;
+    let lastTimeDistanceSet = 0;
+
+// Function Set Distance
+    function setDistance(timestamp) {
+      let interval = (timestamp - lastTimeDistanceSet) / 1000;
+      distance += interval * (speed / 3600);
+      distanceRemain = trackLength - distance
+      lastTimeDistanceSet = timestamp;
+};
+
+// Function Reset Distance
+    function resetDistance(timestamp) {
+      distance = 0;
+      lastTimeDistanceSet = timestamp;
+    };
 
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -220,8 +317,9 @@
 // Function Move + Scale Dynamic Object Then Remove
     function moveBox(element, t) {
       let box = element;
+      let type = box.classList[0];
       let moveSpeed = speed;
-      if (box.classList[0] === 'enemy') {
+      if (type === 'enemy') {
         moveSpeed = (speed - enemySpeed);
       };
       let startLeft = box.classList[3] * w;
@@ -231,7 +329,7 @@
       let endLeft = box.classList[4] * w;
       let endTop = fullH;
       let endWidth = box.classList[6] * w;
-      let endHeight = endWidth * box.classList[5] * h;
+      let endHeight = (box.classList[6] / box.classList[5]) * h;
       let topMove = (endTop - startTop);
       let leftMove = (endLeft - startLeft);
       let heightMove = (endHeight - startHeight);
@@ -246,7 +344,10 @@
       box.style.top = startTop + (topMove * rate) + 'px';
       box.style.width = startWidth + (widthMove * rate) + 'px';
       box.style.height = startHeight + (heightMove * rate) + 'px';
-      clearObject(box);
+      let top = parseInt(element.style.top.replace(/px/g, ''));
+      if (top >= 9 * h) {
+        clearObject(box, type, top);
+      };
     };
 
 
@@ -289,9 +390,7 @@
     // };
 
 // Function Clear Background Objects
-    function clearObject(element) {
-      let top = parseInt(element.style.top.replace(/px/g, ''));
-      let type = element.classList[0];
+    function clearObject(element, type, top) {
       if (top > 9 * h && type !== 'enemy') {
         element.remove();
       } else if (top > 18 * h) {
@@ -308,7 +407,11 @@
     const enemiesToMake = 20;
     const distScaleEnemy = 20000;
     const enemySpeed = 50;
-    let lastEnemyT = 0;
+    // let lastEnemyT = 0;
+    const enemyD = 0.02;
+    let lastEnemyD = 0;
+    let lastEnemyLane = 2;
+    let lastEnemyDrawSpeed = speed;
 
 // Function Random Lane Generator
     function randomThree() {
@@ -317,23 +420,30 @@
 
 // Function Make Enemies
     function makeEnemies(t) {
-      let enemyInt = (distScaleEnemy / Math.min(enemySpeed, speed)) / (enemiesToMake / 3);
-      // let numEnemies = document.querySelectorAll('.enemy').length
-      if (t >= (lastEnemyT + enemyInt)) {
+      // console.log(document.querySelectorAll('.enemy').length)
+      // let enemyInt = (distScaleEnemy / speed) / (enemiesToMake / 3);
+      let numEnemies = document.querySelectorAll('.enemy').length
+      // if (t >= (lastEnemyT + enemyInt) && speed >= enemySpeed && numEnemies <= enemiesToMake) {
+      // if (distance >= (lastEnemyD + enemyD) && speed >= lastEnemyDrawSpeed && numEnemies <= enemiesToMake) {
+      if (distance >= (lastEnemyD + enemyD) && speed >= (lastEnemyDrawSpeed / 2)) {
         let lane = randomThree();
-        let color = randomThree() + 1;
-        switch(lane) {
-          case 1:
-            newGameObject(t, p6, 'enemy', `url('img/car${color}.png')`, 7, -0.5, 2, 6, distScaleEnemy);
-          break;
-          case 2:
-            newGameObject(t, p6, 'enemy', `url('img/car${color}.png')`, 8, 5, 2, 6, distScaleEnemy);
-          break;
-          case 3:
-            newGameObject(t, p6, 'enemy', `url('img/car${color}.png')`, 9, 10.5, 2, 6, distScaleEnemy);
-          break;
-        };
-        lastEnemyT = t;
+        // if (lane !== lastEnemyLane) {
+          let color = randomThree() + 1;
+          switch(lane) {
+            case 1:
+              newGameObject(t, p6, 'enemy', `url('img/car${color}.png')`, 7, -0.5, 2, 6, distScaleEnemy);
+            break;
+            case 2:
+              newGameObject(t, p6, 'enemy', `url('img/car${color}.png')`, 8, 5, 2, 6, distScaleEnemy);
+            break;
+            case 3:
+              newGameObject(t, p6, 'enemy', `url('img/car${color}.png')`, 9, 10.5, 2, 6, distScaleEnemy);
+            break;
+          };
+        // };
+        lastEnemyD = distance;
+        lastEnemyLane = lane;
+        lastEnemyDrawSpeed = speed;
       };
       enemyDeltaZ();
     };
@@ -352,8 +462,6 @@
         };
       };
     };
-
-
 
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -390,8 +498,8 @@
                         // FUNCTION MOVE PLAYER CAR //
                         //////////////////////////////
                           function movePlayerCar(key) {
-                            // playerCar.style.transitionDuration = '1s';
-                            // playerCar.style.TransitionTimingFunction = 'ease-in-out';
+                            playerCar.style.transitionDuration = '250ms';
+                            playerCar.style.TransitionTimingFunction = 'ease-in-out';
                             let left = parseInt(playerCar.style.left.replace(/px/g, ''));
                             let top = parseInt(playerCar.style.top.replace(/px/g, ''));
                         // move left
@@ -406,10 +514,10 @@
                               playerCar.style.top = top - (h * 2) + 'px';
                               setTimeout(function() {
                                 playerCar.style.top = top + 'px';
-                              }, 1000);
+                              }, 250);
                               setTimeout(function() {
                                 playerCar.classList.remove('jump');
-                              }, 2000);
+                              }, 500);
                             };
                           };
                         //////////////////////////////
@@ -426,6 +534,52 @@
 //  //  //  //  //  //  //  //  COLLISION FUNCTIONS  //  //  //  //  //  //  //  //
 ///////////////////////////////////////////////////////////////////////////////////
 
+// Initialization Parameters
+    let playerHitSpotLeft = 0;
+    let playerHitSpotTop = 0;
+
+// Function Get Player Hit Spot
+    function getPlayerHitSpot() {
+      let left = parseInt(playerCar.style.left.replace(/px/g, ''));
+      let top = parseInt(playerCar.style.top.replace(/px/g, ''));
+      let width = parseInt(playerCar.style.width.replace(/px/g, ''));
+      let height = parseInt(playerCar.style.height.replace(/px/g, ''));
+      playerHitSpotLeft = left + (width / 2);
+      playerHitSpotTop = top + (height / 2);
+    };
+
+// Function Get Enemy Hit Spot Left
+    function getEnemyHitSpotLeft(element) {
+      let left = parseInt(element.style.left.replace(/px/g, ''));
+      let width = parseInt(element.style.width.replace(/px/g, ''));
+      return (left + (width / 2));
+    };
+
+// Function Get Enemy Hit Spot Top
+    function getEnemyHitSpotTop(element) {
+      let top = parseInt(element.style.top.replace(/px/g, ''));
+      let height = parseInt(element.style.height.replace(/px/g, ''));
+      return (top + (height / 2));
+    };
+
+// Function Check For Hit
+    function checkForHit() {
+      let enemies = document.querySelectorAll('.enemy');
+      for (let i = 0; i < enemies.length; i++) {
+        let element = enemies[i];
+        let hitDistLeft = Math.abs(getEnemyHitSpotLeft(element) - playerHitSpotLeft);
+        let hitDistTop = Math.abs(getEnemyHitSpotTop(element) - playerHitSpotTop);
+        if (hitDistTop < h / 2 && hitDistLeft < w / 4 && playerCar.classList[0] !== 'jump') {
+          speed = enemySpeed * 0.9;
+          setTimeout(() => element.remove(), 500);
+        };
+      };
+    };
+
+
+///////////////////////////////////////////////////////////////////////////////////
+
+
 
                         //////////////////////////////////
                         // FUNCTION GET PLAYER CAR LANE //
@@ -441,11 +595,6 @@
                             };
                           };
                         //////////////////////////////////
-
-///////////////////////////////////////////////////////////////////////////////////
-
-
-
 
 
 

@@ -4,12 +4,21 @@
   text-align: center;
   margin: 0 auto;
   padding: 0;
-  font-family: helvetica;
+  /*font-family: helvetica;*/
   /*transition-duration: 16ms;*/
+  /*font-family: 'Faster One', cursive;*/
+  /*font-family: 'Seven Segment';*/
+  /*color: orange;*/
 }
 
 body {
 
+}
+
+#needle {
+  width: 100px;
+  height: 100px;
+  background-color: #fff;
 }
 
 main {
