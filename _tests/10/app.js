@@ -1,22 +1,66 @@
 
+/////////////////////////////////////////////////////////////////////////////////
+//  //  //  //  //  //  //  //  MASTER DRAW STACK  //  //  //  //  //  //  //  //
+/////////////////////////////////////////////////////////////////////////////////
+
+// Initialization Parameters
+    let t = 0;
+    let splashState = true;
+
+// Function Master Animation Frame Stack
+    function drawGame(timestamp) {
+      t = timestamp / 16;
+      window.requestAnimationFrame(drawGame);
+      redraw(timestamp, t);
+    };
+    window.requestAnimationFrame(drawGame);
+
+// Function Redraw All Moving Elements
+    function redraw(timestamp, t) {
+      bgElements(t);
+      if (splashState === false) {
+        gameStack(timestamp, t);
+      };
+      let movers = document.querySelectorAll('.moving');
+      for (let i = 0; i < movers.length; i++) {
+        moveBox(movers[i], t);
+      };
+    };
+
+// Function Refresh Global Variables
+    function globalRefresh(timestamp, t) {
+      setClock(timestamp);
+      setSpeed(t);
+      setDistance(timestamp);
+    };
+
+// Function Master Game Runtime Stack
+    function gameStack(timestamp, t) {
+      globalRefresh(timestamp, t)
+      refreshHud(t);
+      makeEnemies(t);
+      checkForHit();
+    };
+
+
 ////////////////////////////////////////////////////////////////////////////////////////
 //  //  //  //  //  //  //  //  INITIALIZATION FUNCTIONS  //  //  //  //  //  //  //  //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-// Set Global DOM Variables + Draw Dimension Constants
+// Set Global DOM Variables
     const body = document.querySelector('body');
     const header = document.querySelector('.header');
     const footer = document.querySelector('.footer');
     const par = document.getElementById('gamebox-parent');
-    const p1 = document.getElementById('plane1');       // buttons + click events
-    const p2 = document.getElementById('plane2');       // titles, tutorial, HUD
-    const p3 = document.getElementById('plane3');       // 'mute' layer during splash, 'flash' layer during collision event
-    const p4 = document.getElementById('plane4');       // enemy cars behind player car
+    const p1 = document.getElementById('plane1');       // user-interactive elements (buttons, etc.)
+    const p2 = document.getElementById('plane2');       // HUD display, titles, tutorial
+    const p3 = document.getElementById('plane3');       // 'mute' layer (transparent grayed out gamefield)   --- OR ---   powerups (*option)
+    const p4 = document.getElementById('plane4');       // enemy cars that pass player car
     const p5 = document.getElementById('plane5');       // player car
-    const p6 = document.getElementById('plane6');       // enemy cars ahead of player car
-    const p7 = document.getElementById('plane7');       // background elements (trees + lanes)
-    const p8 = document.getElementById('plane8');       // road backplate
-    const p9 = document.getElementById('plane9');       // sky
+    const p6 = document.getElementById('plane6');       // enemy cars
+    const p7 = document.getElementById('plane7');       // background elements (trees, lanes, etc)
+    const p8 = document.getElementById('plane8');       // road backplane
+    const p9 = document.getElementById('plane9');       // sky (parallax?)
     const p10 = document.getElementById('plane10');     //
     const displayUnit = Math.floor(Math.min(window.innerWidth / 18, window.innerHeight / 11));
     const fullW = displayUnit * 16;
@@ -31,7 +75,10 @@
       par.style.height = fullH + 'px';
       header.style.height = gameboxPadding + 'px';
       footer.style.height = gameboxPadding + 'px';
+      // body.style.fontSize = gameboxPadding / 2 + 'px';
+      // body.style.lineHeight = gameboxPadding + 'px';
     };
+    buildGamePage();
 
 // Function Create Player Car
     function makePlayerCar(gamePlane) {
@@ -53,6 +100,31 @@
 //  //  //  //  //  //  //  //  SPLASH FUNCTIONS  //  //  //  //  //  //  //  //
 ////////////////////////////////////////////////////////////////////////////////
 
+// Initialization Parameters
+      makePlayerCar(p5);
+      makeSplashElements();
+
+// Function Splash Master Stack
+    function splash() {
+      p3.style.backgroundColor = 'black';
+      p3.style.opacity = 0.5;
+      titleFlyIn();
+      setTimeout(() => playButtonAppear(), 1200);
+      playButton.addEventListener('click', () => togglePlay());
+    };
+
+// Function Clear Splash
+    function togglePlay() {
+      setTimeout(() => playButton.remove(), 2000);
+      initializePlayerCar();
+      titleFlyOut();
+      playButtonExplode();
+      p3.style.transitionDuration = '2s';
+      setTimeout(() => p3.style.opacity = 0, 500);
+      splashState = false;
+      playStack();
+    };
+
 // Function Make Title Text Boxes
     function makeTitleBox(gamePlane, id, text, top, width, height) {
       let div = document.createElement('div');
@@ -61,8 +133,9 @@
       div.style.position = 'absolute';
       div.style.transitionDuration = '1s';
       div.style.transitionTimingFunction = 'ease-in-out';
+      // div.style.textAlign = 'center';
+      // div.style.backgroundColor = 'rgba(0,0,0,.5)';
       div.innerText = text;
-      div.style.textShadow = '5px 5px 5px #222222';
       div.style.fontFamily = `'Faster One', cursive`;
       div.style.color = 'red';
       div.style.fontSize = height * h + 'px';
@@ -73,28 +146,7 @@
       gamePlane.appendChild(div);
     };
 
-// Function Make Play Button
-    function makePlayButton(gamePlane, id, text, bgColor) {
-      let button = document.createElement('button');
-      button.id = id;
-      button.classList.add('button');
-      button.style.position = 'absolute';
-      button.style.backgroundColor = bgColor;
-      button.style.boxShadow = '5px 5px 5px #222222';
-      button.style.border = '1px solid black'
-      button.style.borderRadius = w / 2 + 'px';
-      button.innerText = text;
-      button.style.fontFamily = `'Faster One', cursive`;
-      button.style.opacity = 0;
-      button.style.fontSize = 0;
-      button.style.left = 8 * w + 'px';
-      button.style.top = 7.5 * h + 'px';
-      button.style.width = 0;
-      button.style.height = 0;
-      gamePlane.appendChild(button);
-    };
-
-// Function Make Title Screen Elements
+// Function Make Title
     function makeSplashElements() {
       makeTitleBox(p2, 'title1', 'Drive', 0, 10, 2);
       makeTitleBox(p2, 'title2', 'My', 2, 10, 2);
@@ -105,16 +157,42 @@
 // Function Titles Fly In
     function titleFlyIn() {
       title1.style.left = 3 * h + 'px';
-      setTimeout(() => title2.style.left = 3 * h + 'px', 200);
-      setTimeout(() => title3.style.left = 3 * h + 'px', 400);
+      setTimeout(() =>
+        title2.style.left = 3 * h + 'px'
+      , 200);
+      setTimeout(() =>
+        title3.style.left = 3 * h + 'px'
+      , 400);
     };
 
-// Function Titles Fly Out + Removed
+// Function Titles Fly Out
     function titleFlyOut() {
       title1.style.left = 16 * h + 'px';
-      setTimeout(() => title2.style.left = 16 * h + 'px', 200);
-      setTimeout(() => title3.style.left = 16 * h + 'px', 400);
-      setTimeout(() => title1.remove() || title2.remove() || title3.remove(), 2000)
+      setTimeout(() =>
+        title2.style.left = 16 * h + 'px'
+      , 200);
+      setTimeout(() =>
+        title3.style.left = 16 * h + 'px'
+      , 400);
+    };
+
+// Function Make Play Button
+    function makePlayButton(gamePlane, id, text, bgColor) {
+      let button = document.createElement('button');
+      button.id = id;
+      button.classList.add('button');
+      button.style.position = 'absolute';
+      button.style.backgroundColor = bgColor;
+      button.style.borderRadius = w / 2 + 'px';
+      button.innerText = text;
+      button.style.fontFamily = `'Faster One', cursive`;
+      button.style.opacity = 0;
+      button.style.fontSize = 0;
+      button.style.left = 8 * w + 'px';
+      button.style.top = 7.5 * h + 'px';
+      button.style.width = 0;
+      button.style.height = 0;
+      gamePlane.appendChild(button);
     };
 
 // Function Make Play Button Appear
@@ -129,17 +207,15 @@
       playButton.style.opacity = 0.8;
     };
 
-// Function Explode Play Button + Remove
+// Function Explode Play Button
     function playButtonExplode() {
       playButton.style.transitionDuration = '250ms';
-      playButton.style.borderRadius = w + 'px';
       playButton.style.left = 5 * w + 'px';
       playButton.style.top = 6.5 * h + 'px';
       playButton.style.width = 6 * w + 'px';
       playButton.style.height = 2 * h + 'px';
       playButton.style.fontSize = (h / 1.5) * 2 + 'px';
       playButton.style.opacity = 0;
-      setTimeout(() => playButton.remove(), 2000);
     };
 
 // Function Slide Player Car Into Gamefield
@@ -149,10 +225,40 @@
       playerCar.style.top = 7 * h + 'px';
     };
 
+window.onload = () => splash();
+
 
 /////////////////////////////////////////////////////////////////////////////
 //  //  //  //  //  //  //  //  HUD FUNCTIONS  //  //  //  //  //  //  //  //
 /////////////////////////////////////////////////////////////////////////////
+
+// Function Master HUD Refresh Stack
+    function refreshHud(t) {
+      speedBoxRefresh();
+      timeBoxRefresh();
+      distBoxRefresh();
+    };
+
+// Function Draw HUD
+    function makeHud() {
+      makeHudBox(p2, 'speedBox', -3, 1, 3, 2, 'right', 0.75, 'rgba(255,0,0,0.3)');
+      makeHudBox(p2, 'timeBox', 6, -2, 4, 2, 'center', 1.5, 'rgba(0,255,0,0.3)');
+      makeHudBox(p2, 'distBox', 16, 1, 2.5, 2, 'right', 0.75, 'rgba(0,0,255,0.3)');
+      makeNeedle();
+    };
+    // makeHud();
+
+// Function HUD Fade In
+    function hudFadeIn() {
+      let huds = document.querySelectorAll('.HUD');
+      for (let i = 0; i < huds.length; i++) {
+        huds[i].style.transitionDuration = '1s';
+        huds[i].style.opacity = 1;
+      };
+      speedBox.style.left = 0 + 'px';
+      timeBox.style.top = 1 * h + 'px';
+      distBox.style.left = 13 * w + 'px';
+    };
 
 // Function Make Arbitrary HUD Box
     function makeHudBox(gamePlane, id, left, top, width, height, textAlign, fontScale, color) {
@@ -162,17 +268,18 @@
       div.style.position = 'absolute';
       div.style.opacity = 0;
       div.style.fontFamily = 'Seven Segment';
+      // div.style.backgroundColor = 'rgba(5,5,5,0.5)'
       div.style.color = 'orange';
+      gamePlane.appendChild(div);
+      let textBox = document.createElement('div');
+      // textBox.style.backgroundColor = color;
+      textBox.style.textAlign = textAlign;
+      textBox.id = id + 'Text';
+      div.appendChild(textBox);
       div.style.left = left * w + 'px';
       div.style.top = top * h + 'px';
       div.style.width = width * w + 'px';
       div.style.height = height * h + 'px';
-      gamePlane.appendChild(div);
-      let textBox = document.createElement('div');
-      textBox.style.textAlign = textAlign;
-      textBox.style.textShadow = '5px 5px 5px #222222';
-      textBox.id = id + 'Text';
-      div.appendChild(textBox);
       textBox.style.fontSize = h * fontScale + 'px';
     };
 
@@ -194,18 +301,6 @@
       speedBox.style.backgroundRepeat = 'no-repeat';
     };
 
-// Function HUD Boxes Fade In
-    function hudFadeIn() {
-      let huds = document.querySelectorAll('.HUD');
-      for (let i = 0; i < huds.length; i++) {
-        huds[i].style.transitionDuration = '1s';
-        huds[i].style.opacity = 1;
-      };
-      speedBox.style.left = 0 + 'px';
-      timeBox.style.top = 1 * h + 'px';
-      distBox.style.left = 13 * w + 'px';
-    };
-
 // Function Add Leading Zeros To Integer
     function leadZeros(num, digits) {
       let str = String(num);
@@ -222,7 +317,7 @@
       needle.style.transform = `rotate(${rotation}deg)`;
     };
 
-// Function Refresh Speed Text + Needle
+// Function Refresh Speed Text
     function speedBoxRefresh() {
       speedBoxText.innerText = Math.floor(speed) + ' mph';
       rotateNeedle()
@@ -249,38 +344,17 @@
       distBoxText.innerText = distanceRemain.toFixed(2) + ' mi';
     };
 
-// Function Draw HUD
-    function makeHud() {
-      makeHudBox(p2, 'speedBox', -3, 1, 3, 2, 'right', 0.75, 'rgba(255,0,0,0.3)');
-      makeHudBox(p2, 'timeBox', 6, -2, 4, 2, 'center', 1.5, 'rgba(0,255,0,0.3)');
-      makeHudBox(p2, 'distBox', 16, 1, 2.5, 2, 'right', 0.75, 'rgba(0,0,255,0.3)');
-      makeNeedle();
-    };
-
-// Function Master HUD Refresh Stack
-    function refreshHud() {
-      speedBoxRefresh();
-      timeBoxRefresh();
-      distBoxRefresh();
-    };
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+function playStack() {
+  makeHud()
+  setTimeout(() => hudFadeIn(), 500)
+  // hudFadeIn();
+  runTimeElapsed = 0;
+  distance = 0;
+  // resetClock();
+  // resetDistance();
+}
 
 
 
@@ -447,16 +521,16 @@
 // Function Master Background Stack
     function bgElements(t) {
       makeTrees(t);
-      makeLanes(t);
+      // makeLanes(t);
     };
 
 // Initialization Parameters
     const treesToMake = 20;
     const distScaleTree = 7500;
-    const lanesToMake = 16;
-    const distScaleLanes = 7500;
+    // const lanesToMake = 10;
+    // const distScaleLanes = null;
     let lastTreeT = 0;
-    let lastLaneT = 0;
+    // let lastLaneT = 0;
 
 // Function Make Trees
     function makeTrees(t) {
@@ -469,14 +543,14 @@
     };
 
 // Function Make Lanes
-    function makeLanes(t) {
-      let laneInt = (distScaleLanes / speed) / (lanesToMake / 2);
-      if (t >= (lastLaneT + laneInt)) {
-        newGameObject(t, p7, 'lane', `url('img/laneL.png')`, 7.5, 4.5, 1, 2, distScaleLanes);
-        newGameObject(t, p7, 'lane', `url('img/laneR.png')`, 8.5, 9.5, 1, 2, distScaleLanes);
-        lastLaneT = t;
-      };
-    };
+    // function makeLanes(t) {
+    //   let laneInt = (distScaleLanes / speed) / (lanesToMake / 2);
+    //   if (t >= (lastLaneT + laneInt)) {
+    //     newGameObject(t, p7, 'lane', imgSrc, startL, endL, aspect, endW, distScaleLanes);
+    //     newGameObject(t, p7, 'lane', imgSrc, startL, endL, aspect, endW, distScaleLanes);
+    //     lastLaneT = t;
+    //   };
+    // };
 
 // Function Clear Background Objects
     function clearObject(element, type, top) {
@@ -494,8 +568,8 @@
 
 // Initialization Parameters
     // const enemiesToMake = 20;
-    // const distScaleEnemy = 20000;
-    const distScaleEnemy = 7500;
+    const distScaleEnemy = 20000;
+    // const distScaleEnemy = 7500;
     const enemySpeed = 35;
     // let lastEnemyT = 0;
     const enemyD = 0.02;
@@ -653,22 +727,12 @@
         let hitDistLeft = Math.abs(getEnemyHitSpotLeft(element) - playerHitSpotLeft);
         let hitDistTop = Math.abs(getEnemyHitSpotTop(element) - playerHitSpotTop);
         if (hitDistTop < h / 2 && hitDistLeft < w / 4 && playerCar.classList[0] !== 'jump') {
-          collisionEvent(element);
+          speed = enemySpeed * 0.9;
+          setTimeout(() => element.remove(), 500);
         };
       };
     };
 
-// Function Collision Event
-
-function collisionEvent(element) {
-  speed = enemySpeed * 0.9;
-  setTimeout(() => element.remove(), 100);
-  p3.style.opacity = 0;
-  p3.style.transitionDuration = '100ms';
-  p3.style.backgroundColor = '#FFFFFF'
-  p3.style.opacity = 0.5;
-  setTimeout(() => p3.style.opacity = 0, 100);
-};
 
 ///////////////////////////////////////////////////////////////////////////////////
 
@@ -678,95 +742,54 @@ function collisionEvent(element) {
 
 
 
-/////////////////////////////////////////////////////////////////////////////////////
-//  //  //  //  //  //  //  //  MASTER RUNTIME STACKS  //  //  //  //  //  //  //  //
-/////////////////////////////////////////////////////////////////////////////////////
 
-// Initialization Parameters + Functions
-    let t = 0;
-    let splashState = true;
-    buildGamePage();
-    makePlayerCar(p5);
-    makeSplashElements();
-    window.onload = () => splash();
 
-// Function Splash Master Stack
-    function splash() {
-      p3.style.backgroundColor = 'black';
-      p3.style.opacity = 0.5;
-      titleFlyIn();
-      setTimeout(() => playButtonAppear(), 1200);
-      playButton.addEventListener('click', () => togglePlay());
+
+
+
+
+
+
+//////////////////////////////////
+// FUNCTION GET PLAYER CAR LANE //
+//////////////////////////////////
+  function getPlayerLane() {
+    left = parseInt(playerCar.style.left.replace(/px/g, ''));
+    if (left >= w * 8) {
+      return 3;
+    } else if (left >= 4 * w) {
+      return 2;
+    } else {
+      return 1;
     };
-
-// Function Clear Splash
-    function togglePlay() {
-      initializePlayerCar();
-      titleFlyOut();
-      playButtonExplode();
-      p3.style.transitionDuration = '2s';
-      setTimeout(() => p3.style.opacity = 0, 500);
-      splashState = false;
-      playStack();
-    };
+  };
+//////////////////////////////////
 
 
 
 
-
-// Function Play Game Stack
-    function playStack() {
-      makeHud()
-      setTimeout(() => hudFadeIn(), 500)
-      // hudFadeIn();
-      runTimeElapsed = 0;
-      distance = 0;
-      // resetClock();
-      // resetDistance();
-    };
-
-
-/////////////////////////////////////////////////////////////////////////////////
-//  //  //  //  //  //  //  //  MASTER DRAW STACK  //  //  //  //  //  //  //  //
-/////////////////////////////////////////////////////////////////////////////////
-
-
-// Function Master Animation Frame Stack
-    function drawGame(timestamp) {
-      t = timestamp / 16;
-      window.requestAnimationFrame(drawGame);
-      redraw(timestamp, t);
-    };
-    window.requestAnimationFrame(drawGame);
-
-// Function Redraw All Moving Elements
-    function redraw(timestamp, t) {
-      bgElements(t);
-      if (splashState === false) {
-        gameStack(timestamp, t);
-      };
-      let movers = document.querySelectorAll('.moving');
-      for (let i = 0; i < movers.length; i++) {
-        moveBox(movers[i], t);
-      };
-    };
-
-// Function Refresh Global Variables
-    function globalRefresh(timestamp, t) {
-      setClock(timestamp);
-      setSpeed(t);
-      setDistance(timestamp);
-    };
-
-// Function Master Game Runtime Stack
-    function gameStack(timestamp, t) {
-      globalRefresh(timestamp, t)
-      refreshHud(t);
-      makeEnemies(t);
-      checkForHit();
-    };
+// moving = box.classList[1]
+// timetamp = box.classList[2]
+// startL = box.classList[3]
+// endL = box.classList[4]
+// aspect = box.classList[5]
+// endW = box.classList[6]
+// distScale = box.classList[7]
 
 
 
+///////////////
+//GET KEYCODE//
+///////////////
+// document.addEventListener('keydown', function(event) {
+//   console.log(event.keyCode)
+// });
+///////////////
+// 37 left
+// 39 right
+// 32 spacebar
+// 38 up
+// 40 down
+///////////////
 
 
