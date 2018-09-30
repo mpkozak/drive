@@ -15,7 +15,7 @@
     const p5 = document.getElementById('plane5');       // player car
     const p6 = document.getElementById('plane6');       // enemy cars ahead of player car
     const p7 = document.getElementById('plane7');       // background elements (trees + lanes)
-    const p8 = document.getElementById('plane8');       // road backplate
+    const p8 = document.getElementById('plane8');       // road backplane
     const p9 = document.getElementById('plane9');       // sky
     const p10 = document.getElementById('plane10');     //
     const displayUnit = Math.floor(Math.min(window.innerWidth / 18, window.innerHeight / 11));
@@ -31,6 +31,13 @@
       par.style.height = fullH + 'px';
       header.style.height = gameboxPadding + 'px';
       footer.style.height = gameboxPadding + 'px';
+    };
+
+// Function Create Backplane
+    function makeBackplane() {
+      p8.style.backgroundImage = `url('img/backplane.png')`;
+      p8.style.backgroundSize = '100%';
+      p8.style.backgroundRepeat = 'no-repeat';
     };
 
 // Function Create Player Car
@@ -191,6 +198,64 @@
       playerCar.style.transitionDuration = '1s';
       playerCar.style.transitionTimingFunction = 'ease-in-out';
       playerCar.style.top = 7 * h + 'px';
+    };
+
+
+//////////////////////////////////////////////////////////////////////////////////
+//  //  //  //  //  //  //  //  TUTORIAL FUNCTIONS  //  //  //  //  //  //  //  //
+//////////////////////////////////////////////////////////////////////////////////
+
+// Function Make Tutorial Style + Size Conform
+    function makeTutorial() {
+      let instructions = document.querySelector('.instructions');
+      instructions.style.left = 1 * w + 'px';
+      instructions.style.top = h / 2 + 'px';
+      instructions.style.width = w * 14 + 'px';
+      instructions.style.fontSize = h / 2 + 'px';
+      let keyMap = document.querySelector('.key-map')
+      keyMap.style.backgroundColor = 'rgba(1,1,1,0.2)';
+      keyMap.style.padding = w / 5 + 'px';
+      keyMap.style.left = 5.55 * w + 'px';
+      keyMap.style.top = 2 * h + 'px';
+      keyMap.style.width = 4.5 * w + 'px';
+      keyMap.style.fontSize = h / 2 + 'px';
+      let keys = document.querySelectorAll('kbd');
+      for (let i = 0; i < keys.length; i++) {
+        keys[i].style.marginTop = (1 / 8) * h + 'px';
+        keys[i].style.marginLeft = (3 / 4) * w + 'px';
+        keys[i].style.width = (3 / 4) * w + 'px';
+        keys[i].style.height = (3 / 4) * h + 'px';
+        keys[i].style.fontSize = (3 / 8) * h + 'px';
+        keys[i].style.lineHeight = (3 / 4) * w + 'px';
+      };
+      let space = document.querySelector('.space');
+      space.style.marginLeft = '0';
+      space.style.width = 1.5 * w + 'px';
+      let cont = document.querySelector('.continue');
+      cont.style.left = 1 * w + 'px';
+      cont.style.top = 8 * h + 'px';
+      cont.style.width = w * 14 + 'px';
+      cont.style.fontSize = h / 2 + 'px';
+      tutorial = document.querySelector('.tutorial');
+      tutorial.style.display = 'block';
+      tutorial.style.opacity = 0;
+      tutorial.remove();
+      p2.appendChild(tutorial);
+    };
+
+// Function Tutorial Appear
+    function tutorialAppear() {
+      tutorial.style.transitionDuration = '1s';
+      tutorial.style.transitionTimingFunction = 'ease-in';
+      tutorial.style.opacity = 1;
+    };
+
+// Function Tutorial Remove
+    function tutorialRemove() {
+      tutorial.style.transitionDuration = '500ms';
+      tutorial.style.transitionTimingFunction = 'ease-in';
+      tutorial.style.opacity = 0;
+      setTimeout(() => tutorial.remove(), 500);
     };
 
 
@@ -360,7 +425,7 @@
 // Function Refresh Speed
     function setSpeed(t) {
       if (speedUp) {
-        speed += ((maxSpeed - speed) / maxSpeed);
+        speed += ((maxSpeed - speed) / maxSpeed)
       } else if (speedDown) {
         speed += ((minSpeed - speed) / (minSpeed * 5));
       } else if (speedInput && !speedUp && !speedDown && speed > minSpeed + 1) {
@@ -711,8 +776,9 @@
     let finishLine = false;
     let finished = false;
 
-// Initialization Functions
+// Initialization Functions Master Stack
     buildGamePage();
+    makeBackplane();
     makePlayerCar(p5);
     makeSplashElements();
     window.onload = () => splash();
@@ -726,25 +792,28 @@
       playButton.addEventListener('click', togglePlay);
     };
 
-// Function Clear Splash Stack
+// Function Clear Splash Master Stack
     function togglePlay() {
-      playButton.removeEventListener('click', togglePlay)
-      resetClock();
-      resetDistance();
+      playButton.removeEventListener('click', togglePlay);
       initializePlayerCar();
       titleFlyOut();
       playButtonExplode();
       tutorial();
     };
 
-// Function Tutorial
+// Function Tutorial Master Stack
     function tutorial() {
-      //TUTORIAL GOES HERE
-      initializeGamePlay();
+      makeTutorial();
+      setTimeout(() => tutorialAppear(), 200);
+      document.addEventListener('keydown', initializeGamePlay);
     };
 
-// Function Initialize Gameplay Stack
+// Function Initialize Gameplay Master Stack
     function initializeGamePlay() {
+      resetClock();
+      resetDistance();
+      document.removeEventListener('keydown', initializeGamePlay);
+      tutorialRemove();
       splashState = false;
       p3.style.transitionDuration = '2s';
       setTimeout(() => p3.style.opacity = 0, 500);
@@ -753,7 +822,7 @@
       setTimeout(() => hudFadeIn() || resetClock() || resetDistance(), 500);
     };
 
-// Function Master Gameplay Runtime Stack
+// Function Gameplay Runtime Master Stack
     function gameStack(timestamp, t) {
       if (!finished) {
         if (distanceRemain > 0 && runTimeRemain > 0) {
@@ -768,7 +837,7 @@
       };
     };
 
-// Function Master Endgame Stack
+// Function Endgame Master Stack
     function endgame() {
       finished = true;
       removeKeyListener();
@@ -793,7 +862,7 @@
       setTimeout(() => playButtonAppear(), 500);
     };
 
-// Function Master Replay Stack
+// Function Replay Master Stack
     function replay() {
       playButton.removeEventListener('click', replay)
       endgameFlyOut();
@@ -813,9 +882,9 @@
     };
 
 
-/////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
 //  //  //  //  //  //  //  //  MASTER DRAW STACKS  //  //  //  //  //  //  //  //
-/////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
 
 // Function Refresh Global Variables
     function globalRefresh(timestamp, t) {
