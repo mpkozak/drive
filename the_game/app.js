@@ -692,7 +692,7 @@
 // Global Constant Declarations
     const horizon = 3 * h;
     const runTimeTotal = 60;
-    const trackLength = .1;
+    const trackLength = 1.5;
     const maxSpeed = 120;
     const minSpeed = 10;
     const startSpeed = 65;
@@ -771,9 +771,6 @@
 // Function Master Endgame Stack
     function endgame() {
       finished = true;
-      p3.style.transitionDuration = '1s';
-      p3.style.backgroundColor = 'black';
-      p3.style.opacity = 0.5;
       removeKeyListener();
       speedInput = false;
       speedUp = false;
@@ -785,9 +782,14 @@
       } else {
         makeEndgameBox('You Win!');
       };
-      endgamePopIn();
       makePlayButton(p1, 'playButton', 'More?', 'yellow');
       playButton.addEventListener('click', replay);
+      setTimeout(() => {
+        p3.style.transitionDuration = '1s';
+        p3.style.backgroundColor = 'black';
+        p3.style.opacity = 0.5;
+        endgamePopIn();
+      }, 100);
       setTimeout(() => playButtonAppear(), 500);
     };
 
