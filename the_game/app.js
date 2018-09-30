@@ -183,7 +183,7 @@
       playButton.style.height = 2 * h + 'px';
       playButton.style.fontSize = (h / 1.5) * 2 + 'px';
       playButton.style.opacity = 0;
-      setTimeout(() => playButton.remove(), 2000);
+      setTimeout(() => playButton.remove(), 300);
     };
 
 // Function Slide Player Car Into Gamefield
@@ -723,11 +723,12 @@
       p3.style.opacity = 0.5;
       titleFlyIn();
       setTimeout(() => playButtonAppear(), 1200);
-      playButton.addEventListener('click', () => togglePlay());
+      playButton.addEventListener('click', togglePlay);
     };
 
 // Function Clear Splash Stack
     function togglePlay() {
+      playButton.removeEventListener('click', togglePlay)
       resetClock();
       resetDistance();
       initializePlayerCar();
@@ -786,12 +787,13 @@
       };
       endgamePopIn();
       makePlayButton(p1, 'playButton', 'More?', 'yellow');
-      playButton.addEventListener('click', () => replay());
+      playButton.addEventListener('click', replay);
       setTimeout(() => playButtonAppear(), 500);
     };
 
 // Function Master Replay Stack
     function replay() {
+      playButton.removeEventListener('click', replay)
       endgameFlyOut();
       playButtonExplode();
       resetDistance();
