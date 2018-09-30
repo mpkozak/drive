@@ -756,8 +756,8 @@
 
 // Global Constant Declarations
     const horizon = 3 * h;
-    const runTimeTotal = 60;
-    const trackLength = 1.5;
+    const runTimeTotal = 10;
+    const trackLength = .2;
     const maxSpeed = 120;
     const minSpeed = 10;
     const startSpeed = 65;
@@ -812,6 +812,15 @@
     function initializeGamePlay() {
       resetClock();
       resetDistance();
+      window.cancelAnimationFrame(drawGame);
+      tStamp = 0;
+      t = 0;
+      speed = startSpeed;
+      lastEnemyD = 0;
+      splashState = true;
+      finishLine = false;
+      finished = false;
+      window.requestAnimationFrame(drawGame);
       document.removeEventListener('keydown', initializeGamePlay);
       tutorialRemove();
       splashState = false;
@@ -867,17 +876,6 @@
       playButton.removeEventListener('click', replay)
       endgameFlyOut();
       playButtonExplode();
-      resetDistance();
-      resetClock();
-      window.cancelAnimationFrame(drawGame);
-      tStamp = 0;
-      t = 0;
-      speed = startSpeed;
-      lastEnemyD = 0;
-      splashState = true;
-      finishLine = false;
-      finished = false;
-      window.requestAnimationFrame(drawGame);
       initializeGamePlay();
     };
 
