@@ -16,8 +16,8 @@
     const p6 = document.getElementById('plane6');       // enemy cars ahead of player car
     const p7 = document.getElementById('plane7');       // background elements (trees + lanes)
     const p8 = document.getElementById('plane8');       // road backplane
-    const p9 = document.getElementById('plane9');       // sky
-    const p10 = document.getElementById('plane10');     //
+    const p9 = document.getElementById('plane9');       // mountains (post-mvp)
+    const p10 = document.getElementById('plane10');     // sky
     const displayUnit = Math.floor(Math.min(window.innerWidth / 18, window.innerHeight / 11));
     const fullW = displayUnit * 16;
     const fullH = displayUnit * 9;
@@ -42,8 +42,8 @@
 
 // Function Create Sky
     function makeSky() {
-      p9.style.backgroundColor = '00BFFF';
-    }
+      p10.style.backgroundColor = '#00BFFF';
+    };
 
 // Function Create Player Car
     function makePlayerCar(gamePlane) {
@@ -787,17 +787,17 @@
     let finished = false;
 
 // Initialization Functions Master Stack
+    p3.style.backgroundColor = 'black';
+    p3.style.opacity = 0.5;
     buildGamePage();
     makeBackplane();
-    makeSky();
+    setTimeout(() => makeSky(), 1);
     makePlayerCar(p5);
     makeSplashElements();
     window.onload = () => splash();
 
 // Function Splash Master Stack
     function splash() {
-      p3.style.backgroundColor = 'black';
-      p3.style.opacity = 0.5;
       titleFlyIn();
       setTimeout(() => playButtonAppear(), 1200);
       playButton.addEventListener('click', togglePlay);
