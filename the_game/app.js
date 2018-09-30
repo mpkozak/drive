@@ -81,7 +81,7 @@
       button.style.position = 'absolute';
       button.style.backgroundColor = bgColor;
       button.style.boxShadow = '5px 5px 5px #222222';
-      button.style.border = '1px solid black'
+      button.style.border = '1px solid black';
       button.style.borderRadius = w / 2 + 'px';
       button.innerText = text;
       button.style.fontFamily = `'Faster One', cursive`;
@@ -114,7 +114,7 @@
       title1.style.left = 16 * h + 'px';
       setTimeout(() => title2.style.left = 16 * h + 'px', 200);
       setTimeout(() => title3.style.left = 16 * h + 'px', 400);
-      setTimeout(() => title1.remove() || title2.remove() || title3.remove(), 2000)
+      setTimeout(() => title1.remove() || title2.remove() || title3.remove(), 2000);
     };
 
 // Function Make Play Button Appear
@@ -155,7 +155,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 // Function Make Arbitrary HUD Box
-    function makeHudBox(gamePlane, id, left, top, width, height, textAlign, fontScale, color) {
+    function makeHudBox(gamePlane, id, left, top, width, height, textAlign, fontScale) {
       let div = document.createElement('div');
       div.id = id;
       div.classList.add('HUD');
@@ -170,7 +170,7 @@
       gamePlane.appendChild(div);
       let textBox = document.createElement('div');
       textBox.style.textAlign = textAlign;
-      textBox.style.textShadow = '5px 5px 5px #222222';
+      textBox.style.textShadow = '2px 2px 5px #222222';
       textBox.id = id + 'Text';
       div.appendChild(textBox);
       textBox.style.fontSize = h * fontScale + 'px';
@@ -180,7 +180,7 @@
     function makeNeedle() {
       let div = document.createElement('div');
       div.style.position = 'absolute';
-      div.style.backgroundColor = 'black';
+      div.style.backgroundColor = 'red';
       div.style.transitionDuration = '100ms';
       div.style.transformOrigin = '100% 100%';
       div.style.left = '21%';
@@ -194,7 +194,7 @@
       speedBox.style.backgroundRepeat = 'no-repeat';
     };
 
-// Function HUD Boxes Fade In
+// Function HUD Boxes Fade + Slide In
     function hudFadeIn() {
       let huds = document.querySelectorAll('.HUD');
       for (let i = 0; i < huds.length; i++) {
@@ -218,7 +218,7 @@
 
 // Function Rotate Speed Needle
     function rotateNeedle() {
-      let rotation = (speed / maxSpeed) * 170;
+      let rotation = (speed / maxSpeed) * 190 - 10;
       needle.style.transform = `rotate(${rotation}deg)`;
     };
 
@@ -251,9 +251,9 @@
 
 // Function Draw HUD
     function makeHud() {
-      makeHudBox(p2, 'speedBox', -3, 1, 3, 2, 'right', 0.75, 'rgba(255,0,0,0.3)');
-      makeHudBox(p2, 'timeBox', 6, -2, 4, 2, 'center', 1.5, 'rgba(0,255,0,0.3)');
-      makeHudBox(p2, 'distBox', 16, 1, 2.5, 2, 'right', 0.75, 'rgba(0,0,255,0.3)');
+      makeHudBox(p2, 'speedBox', -3, 1, 3, 2, 'right', 0.75);
+      makeHudBox(p2, 'timeBox', 6, -2, 4, 2, 'center', 1.5);
+      makeHudBox(p2, 'distBox', 16, 1, 2.5, 2, 'right', 0.75);
       makeNeedle();
     };
 
@@ -265,46 +265,24 @@
     };
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //////////////////////////////////////////////////////////////////////////////
 //  //  //  //  //  //  //  //  TIME FUNCTIONS  //  //  //  //  //  //  //  //
 //////////////////////////////////////////////////////////////////////////////
 
-// Initialization Parameters
-    const runTimeTotal = 90;
+// Variable Initial States
+    let runTimeStart = 0;
     let runTimeElapsed = 0;
-    let runTimeRemain = runTimeTotal - runTimeElapsed;
-
-// Function Update Clock
-    function setClock(timestamp) {
-      runTimeElapsed = Math.floor(timestamp / 1000);
-      runTimeRemain = runTimeTotal - runTimeElapsed;
-    };
+    let runTimeRemain = 0;
 
 // Function Reset Clock
     function resetClock() {
-      runTimeElapsed = 0;
+      runTimeStart = Math.floor(tStamp / 1000);
+    };
+
+// Function Refresh Clock
+    function setClock(timestamp) {
+      runTimeElapsed = Math.floor(timestamp / 1000) - runTimeStart;
+      runTimeRemain = runTimeTotal - runTimeElapsed;
     };
 
 
@@ -312,30 +290,18 @@
 //  //  //  //  //  //  //  //  SPEED FUNCTIONS  //  //  //  //  //  //  //  //
 ///////////////////////////////////////////////////////////////////////////////
 
-// Initialization Parameters
-    const maxSpeed = 120;
-    const minSpeed = 10;
+// Variable Initial States
+    let speedInput = false;
     let speedUp = false;
     let speedDown = false;
-    let speed = 65;
-
-// Function Change Speed
-    function setSpeed(t) {
-      if (speedUp) {
-        speed += ((maxSpeed - speed) / maxSpeed);
-      } else if (speedDown) {
-        speed += ((minSpeed - speed) / (minSpeed * 5));
-      } else if (!speedUp && !speedDown && speed > minSpeed) {
-        //foot off gas, slow decay
-        speed -= 0.25;
-      }
-    };
 
 // Keyboard Speed Event Listeners
     document.addEventListener('keydown', function(event) {
       if (event.keyCode === 38) {
+        speedInput = true;
         speedUp = true;
       } else if (event.keyCode === 40) {
+        speedInput = true;
         speedDown = true;
       };
     });
@@ -347,38 +313,45 @@
       };
     });
 
+// Function Refresh Speed
+    function setSpeed(t) {
+      if (speedUp) {
+        speed += ((maxSpeed - speed) / maxSpeed);
+      } else if (speedDown) {
+        speed += ((minSpeed - speed) / (minSpeed * 5));
+      } else if (speedInput && !speedUp && !speedDown && speed > minSpeed + 1) {
+        speed *= 0.995;
+      }
+    };
+
 
 //////////////////////////////////////////////////////////////////////////////////
 //  //  //  //  //  //  //  //  DISTANCE FUNCTIONS  //  //  //  //  //  //  //  //
 //////////////////////////////////////////////////////////////////////////////////
 
-// Initialization Parameters
-    const trackLength = 2.5;
+// Variable Initial States
     let distance = 0;
-    let distanceRemain = trackLength - distance;
+    let distanceRemain = 0;
     let lastTimeDistanceSet = 0;
 
-// Function Set Distance
+// Function Reset Distance
+    function resetDistance() {
+      distance = 0;
+      lastTimeDistanceSet = tStamp;
+    };
+
+// Function Refresh Distance
     function setDistance(timestamp) {
       let interval = (timestamp - lastTimeDistanceSet) / 1000;
       distance += interval * (speed / 3600);
-      distanceRemain = trackLength - distance
-      lastTimeDistanceSet = timestamp;
-};
-
-// Function Reset Distance
-    function resetDistance(timestamp) {
-      distance = 0;
+      distanceRemain = trackLength - distance;
       lastTimeDistanceSet = timestamp;
     };
 
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  //  //  //  //  //  //  //  MOVING OBJECT FUNCTIONS  //  //  //  //  //  //  //  //
-///////////////////////////////////////////////////////////////////////////////////////
-
-// Initialization Parameters
-    const horizon = 3 * h;
+/////////////////////////////////////////////////////////////////////////////////////////////////
+//  //  //  //  //  //  //  //  OBJECT MOTION + SCALING FUNCTIONS  //  //  //  //  //  //  //  //
+/////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Function Make Dynamic Object
     function newGameObject(timestamp, gamePlane, objectClass, imgSrc, startL, endL, aspect, endW, distScale) {
@@ -392,17 +365,6 @@
       return div;
     };
 
-// Moving Object ClassList
-    // [0]'tree'
-    // [1]'moving'
-    // [2](timestamp)
-    // [3](startL)
-    // [4](endL)
-    // [5](aspect)
-    // [6](endW)
-    // [7](distScale)
-    // [8](distMoved)
-
 // Function Move + Scale Dynamic Object Then Remove
     function moveBox(element, t) {
       let box = element;
@@ -414,6 +376,9 @@
       let startLeft = box.classList[3] * w;
       let startTop = horizon;
       let startWidth = 0;
+      if (type === 'finish') {
+        startWidth = 3 * w;
+      }
       let startHeight = 0;
       let endLeft = box.classList[4] * w;
       let endTop = fullH;
@@ -434,47 +399,12 @@
       box.style.width = startWidth + (widthMove * rate) + 'px';
       box.style.height = startHeight + (heightMove * rate) + 'px';
       let top = parseInt(element.style.top.replace(/px/g, ''));
+      if (type === 'enemy' && top >= 6) {
+        checkForHit(box);
+        enemyDeltaZ(box, top);
+      };
       if (top >= 9 * h) {
         clearObject(box, type, top);
-      };
-    };
-
-
-/////////////////////////////////////////////////////////////////////////////////////////
-//  //  //  //  //  //  //  //  BACKGROUND DRAW FUNCTIONS  //  //  //  //  //  //  //  //
-/////////////////////////////////////////////////////////////////////////////////////////
-
-// Function Master Background Stack
-    function bgElements(t) {
-      makeTrees(t);
-      makeLanes(t);
-    };
-
-// Initialization Parameters
-    const treesToMake = 20;
-    const distScaleTree = 7500;
-    const lanesToMake = 16;
-    const distScaleLanes = 7500;
-    let lastTreeT = 0;
-    let lastLaneT = 0;
-
-// Function Make Trees
-    function makeTrees(t) {
-      let treeInt = (distScaleTree / speed) / (treesToMake / 2);
-      if (t >= (lastTreeT + treeInt)) {
-        newGameObject(t, p7, 'tree', `url('img/tree.png')`, 6.25, -12.5, 0.5, 6, distScaleTree);
-        newGameObject(t, p7, 'tree', `url('img/tree.png')`, 9.75, 22.5, 0.5, 6, distScaleTree);
-        lastTreeT = t;
-      };
-    };
-
-// Function Make Lanes
-    function makeLanes(t) {
-      let laneInt = (distScaleLanes / speed) / (lanesToMake / 2);
-      if (t >= (lastLaneT + laneInt)) {
-        newGameObject(t, p7, 'lane', `url('img/laneL.png')`, 7.5, 4.5, 1, 2, distScaleLanes);
-        newGameObject(t, p7, 'lane', `url('img/laneR.png')`, 8.5, 9.5, 1, 2, distScaleLanes);
-        lastLaneT = t;
       };
     };
 
@@ -488,20 +418,55 @@
     };
 
 
+/////////////////////////////////////////////////////////////////////////////////////////
+//  //  //  //  //  //  //  //  BACKGROUND DRAW FUNCTIONS  //  //  //  //  //  //  //  //
+/////////////////////////////////////////////////////////////////////////////////////////
+
+// Variable Initial States
+    let bgDist = 0;
+    let lastTimeBgDistSet = 0;
+    let lastTreeD = 0;
+    let lastLaneD = 0;
+
+// Function Make Trees
+    function makeTrees(t) {
+      if (bgDist >= lastTreeD + treeSpacing) {
+        newGameObject(t, p7, 'tree', `url('img/tree.png')`, 6.25, -12.5, 0.5, 6, drawDistScale);
+        newGameObject(t, p7, 'tree', `url('img/tree.png')`, 9.75, 22.5, 0.5, 6, drawDistScale);
+        lastTreeD = bgDist;
+      };
+    };
+
+// Function Make Lanes
+    function makeLanes(t) {
+      if (bgDist >= lastLaneD + laneSpacing) {
+        newGameObject(t, p7, 'lane', `url('img/laneL.png')`, 7.5, 4.5, 1, 2, drawDistScale);
+        newGameObject(t, p7, 'lane', `url('img/laneR.png')`, 8.5, 9.5, 1, 2, drawDistScale);
+        lastLaneD = bgDist;
+      };
+    };
+
+// Function Background Distance Refresh
+    function bgDistRefresh() {
+      let interval = (tStamp - lastTimeBgDistSet) / 1000;
+      bgDist += interval * (speed / 3600);
+      lastTimeBgDistSet = tStamp;
+    };
+
+// Function Master Background Stack
+    function bgElements(t) {
+      bgDistRefresh();
+      makeTrees(t);
+      makeLanes(t);
+    };
+
+
 ////////////////////////////////////////////////////////////////////////////////////
 //  //  //  //  //  //  //  //  ENEMY DRAW FUNCTIONS  //  //  //  //  //  //  //  //
 ////////////////////////////////////////////////////////////////////////////////////
 
-// Initialization Parameters
-    // const enemiesToMake = 20;
-    // const distScaleEnemy = 20000;
-    const distScaleEnemy = 7500;
-    const enemySpeed = 35;
-    // let lastEnemyT = 0;
-    const enemyD = 0.02;
+// Variable Initial States
     let lastEnemyD = 0;
-    // let lastEnemyLane = 2;
-    // let lastEnemyDrawSpeed = speed;
 
 // Function Random Lane Generator
     function randomThree() {
@@ -510,59 +475,133 @@
 
 // Function Make Enemies
     function makeEnemies(t) {
-      // console.log(document.querySelectorAll('.enemy').length)
-      // let enemyInt = (distScaleEnemy / speed) / (enemiesToMake / 3);
-      // let numEnemies = document.querySelectorAll('.enemy').length
-      // if (t >= (lastEnemyT + enemyInt) && speed >= enemySpeed && numEnemies <= enemiesToMake) {
-      // if (distance >= (lastEnemyD + enemyD) && speed >= lastEnemyDrawSpeed && numEnemies <= enemiesToMake) {
-      // if (distance >= (lastEnemyD + enemyD) && speed >= (lastEnemyDrawSpeed / 2)) {
-      if (distance >= (lastEnemyD + enemyD) && speed > (enemySpeed * 2)) {
-
+      if (distance >= lastEnemyD + enemySpacing && speed > enemySpeed * 2) {
         let lane = randomThree();
-        // let lane = 2
-        // if (lane !== lastEnemyLane) {
-          let color = randomThree() + 1;
-          switch(lane) {
-            case 1:
-              newGameObject(t, p6, 'enemy', `url('img/car${color}.png')`, 7, -0.5, 2, 6, distScaleEnemy);
-            break;
-            case 2:
-              newGameObject(t, p6, 'enemy', `url('img/car${color}.png')`, 8, 5, 2, 6, distScaleEnemy);
-            break;
-            case 3:
-              newGameObject(t, p6, 'enemy', `url('img/car${color}.png')`, 9, 10.5, 2, 6, distScaleEnemy);
-            break;
-          };
-        // };
+        let color = randomThree() + 1;
+        switch(lane) {
+          case 1:
+            newGameObject(t, p6, 'enemy', `url('img/car${color}.png')`, 7, -0.5, 2, 6, drawDistScale);
+          break;
+          case 2:
+            newGameObject(t, p6, 'enemy', `url('img/car${color}.png')`, 8, 5, 2, 6, drawDistScale);
+          break;
+          case 3:
+            newGameObject(t, p6, 'enemy', `url('img/car${color}.png')`, 9, 10.5, 2, 6, drawDistScale);
+          break;
+        };
         lastEnemyD = distance;
-        // lastEnemyLane = lane;
-        // lastEnemyDrawSpeed = speed;
       };
-      enemyDeltaZ();
     };
 
 // Function Change Enemy Z-Index
-    function enemyDeltaZ() {
-      let enemies = document.querySelectorAll('.enemy');
-      for (let i = 0; i < enemies.length; i++) {
-        let top = parseInt(enemies[i].style.top.replace(/px/g, ''));
-        if (top >= 7 * h) {
-          enemies[i].parentNode.removeChild(enemies[i]);
-          p4.appendChild(enemies[i]);
-        } else if (top < 7 * h) {
-          enemies[i].parentNode.removeChild(enemies[i]);
-          p6.appendChild(enemies[i]);
-        };
+    function enemyDeltaZ(element, top) {
+      if (top >= 7 * h) {
+        element.remove();
+        p4.appendChild(element);
+      } else if (top < 7 * h) {
+        element.remove();
+        p6.appendChild(element);
       };
     };
+
+
+///////////////////////////////////////////////////////////////////////////////////
+//  //  //  //  //  //  //  //  COLLISION FUNCTIONS  //  //  //  //  //  //  //  //
+///////////////////////////////////////////////////////////////////////////////////
+
+// Variable Initial States
+    let playerHitSpotLeft = 0;
+    let playerHitSpotTop = 0;
+
+// Function Get Player Hit Spot
+    function getPlayerHitSpot() {
+      let left = parseInt(playerCar.style.left.replace(/px/g, ''));
+      let top = parseInt(playerCar.style.top.replace(/px/g, ''));
+      let width = parseInt(playerCar.style.width.replace(/px/g, ''));
+      let height = parseInt(playerCar.style.height.replace(/px/g, ''));
+      playerHitSpotLeft = left + (width / 2);
+      playerHitSpotTop = top + (height / 2);
+    };
+
+// Function Get Enemy Hit Spot Left
+    function getEnemyHitSpotLeft(element) {
+      let left = parseInt(element.style.left.replace(/px/g, ''));
+      let width = parseInt(element.style.width.replace(/px/g, ''));
+      return (left + (width / 2));
+    };
+
+// Function Get Enemy Hit Spot Top
+    function getEnemyHitSpotTop(element) {
+      let top = parseInt(element.style.top.replace(/px/g, ''));
+      let height = parseInt(element.style.height.replace(/px/g, ''));
+      return (top + (height / 2));
+    };
+
+// Function Check For Hit
+    function checkForHit(element) {
+      getPlayerHitSpot();
+      let hitDistLeft = Math.abs(getEnemyHitSpotLeft(element) - playerHitSpotLeft);
+      let hitDistTop = Math.abs(getEnemyHitSpotTop(element) - playerHitSpotTop);
+      if (hitDistTop < h / 2 && hitDistLeft < w / 4 && playerCar.classList[0] !== 'jump') {
+        collisionEvent(element);
+      };
+    };
+
+// Function Collision Event
+    function collisionEvent(element) {
+      speed = enemySpeed * 0.9;
+      setTimeout(() => element.remove(), 100);
+      p3.style.opacity = 0;
+      p3.style.transitionDuration = '100ms';
+      p3.style.backgroundColor = '#FFFFFF'
+      p3.style.opacity = 0.5;
+      setTimeout(() => p3.style.opacity = 0, 100);
+    };
+
+
+/////////////////////////////////////////////////////////////////////////////////
+//  //  //  //  //  //  //  //  ENDGAME FUNCTIONS  //  //  //  //  //  //  //  //
+/////////////////////////////////////////////////////////////////////////////////
+
+// Variable Initial States
+    let finishLine = false;
+
+// Function Make Finish
+    function makeFinish(t) {
+      newGameObject(t, p7, 'finish', `url('img/finish.png')`, 6.5, 1, 12, 14, drawDistScale);
+      finishLine = true;
+    };
+
+// Function Master Endgame Stack
+    function endgame() {
+      finished = true;
+      // resetClock();
+      // resetDistance();
+      p2.style.transitionDuration = '1000ms';
+      p2.style.opacity = 0;
+      if (distanceRemain > 0) {
+        console.log('lose');
+        alert('You Lose!');
+      } else {
+        console.log('win');
+        alert('You Win!');
+      };
+      setTimeout(() => document.location.reload(), 5000);
+    };
+
+
+
+
+
+
+
+
+
 
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //  //  //  //  //  //  //  //  PLAYER MOVEMENT FUNCTIONS  //  //  //  //  //  //  //  //
 /////////////////////////////////////////////////////////////////////////////////////////
-
-
-
 
 
                         ////////////////////////////////
@@ -605,70 +644,16 @@
                         //////////////////////////////
 
 
+    // document.addEventListener('keydown', function(event) {
+    //   if (event.keyCode === 38) {
+    //     speedInput = true;
+    //     speedUp = true;
+    //   } else if (event.keyCode === 40) {
+    //     speedInput = true;
+    //     speedDown = true;
+    //   };
+    // });
 
-
-
-
-
-
-
-///////////////////////////////////////////////////////////////////////////////////
-//  //  //  //  //  //  //  //  COLLISION FUNCTIONS  //  //  //  //  //  //  //  //
-///////////////////////////////////////////////////////////////////////////////////
-
-// Initialization Parameters
-    let playerHitSpotLeft = 0;
-    let playerHitSpotTop = 0;
-
-// Function Get Player Hit Spot
-    function getPlayerHitSpot() {
-      let left = parseInt(playerCar.style.left.replace(/px/g, ''));
-      let top = parseInt(playerCar.style.top.replace(/px/g, ''));
-      let width = parseInt(playerCar.style.width.replace(/px/g, ''));
-      let height = parseInt(playerCar.style.height.replace(/px/g, ''));
-      playerHitSpotLeft = left + (width / 2);
-      playerHitSpotTop = top + (height / 2);
-    };
-
-// Function Get Enemy Hit Spot Left
-    function getEnemyHitSpotLeft(element) {
-      let left = parseInt(element.style.left.replace(/px/g, ''));
-      let width = parseInt(element.style.width.replace(/px/g, ''));
-      return (left + (width / 2));
-    };
-
-// Function Get Enemy Hit Spot Top
-    function getEnemyHitSpotTop(element) {
-      let top = parseInt(element.style.top.replace(/px/g, ''));
-      let height = parseInt(element.style.height.replace(/px/g, ''));
-      return (top + (height / 2));
-    };
-
-// Function Check For Hit
-    function checkForHit() {
-      getPlayerHitSpot();
-      let enemies = document.querySelectorAll('.enemy');
-      for (let i = 0; i < enemies.length; i++) {
-        let element = enemies[i];
-        let hitDistLeft = Math.abs(getEnemyHitSpotLeft(element) - playerHitSpotLeft);
-        let hitDistTop = Math.abs(getEnemyHitSpotTop(element) - playerHitSpotTop);
-        if (hitDistTop < h / 2 && hitDistLeft < w / 4 && playerCar.classList[0] !== 'jump') {
-          collisionEvent(element);
-        };
-      };
-    };
-
-// Function Collision Event
-
-function collisionEvent(element) {
-  speed = enemySpeed * 0.9;
-  setTimeout(() => element.remove(), 100);
-  p3.style.opacity = 0;
-  p3.style.transitionDuration = '100ms';
-  p3.style.backgroundColor = '#FFFFFF'
-  p3.style.opacity = 0.5;
-  setTimeout(() => p3.style.opacity = 0, 100);
-};
 
 ///////////////////////////////////////////////////////////////////////////////////
 
@@ -682,9 +667,26 @@ function collisionEvent(element) {
 //  //  //  //  //  //  //  //  MASTER RUNTIME STACKS  //  //  //  //  //  //  //  //
 /////////////////////////////////////////////////////////////////////////////////////
 
-// Initialization Parameters + Functions
+// Global Constant Declarations
+    const horizon = 3 * h;
+    const runTimeTotal = 30;
+    const trackLength = 0.5;
+    const maxSpeed = 120;
+    const minSpeed = 10;
+    const enemySpeed = 35;
+    const drawDistScale = 7500;
+    const treeSpacing = 0.004;
+    const laneSpacing = 0.005;
+    const enemySpacing = 0.01;
+
+// Global Variable Initial States
+    let tStamp = 0;
     let t = 0;
+    let speed = 65;
     let splashState = true;
+    let finished = false;
+
+// Initialization Functions
     buildGamePage();
     makePlayerCar(p5);
     makeSplashElements();
@@ -699,57 +701,35 @@ function collisionEvent(element) {
       playButton.addEventListener('click', () => togglePlay());
     };
 
-// Function Clear Splash
+// Function Clear Splash Stack
     function togglePlay() {
       initializePlayerCar();
       titleFlyOut();
       playButtonExplode();
       p3.style.transitionDuration = '2s';
       setTimeout(() => p3.style.opacity = 0, 500);
+      tutorial();
+    };
+
+// Function Tutorial
+    function tutorial() {
+      //TUTORIAL GOES HERE
       splashState = false;
-      playStack();
+      initializeGamePlay();
+    };
+
+// Function Initialize Gameplay Stack
+    function initializeGamePlay() {
+      makeHud();
+      setTimeout(() => hudFadeIn() || resetClock() || resetDistance(), 500);
     };
 
 
-
-
-
-// Function Play Game Stack
-    function playStack() {
-      makeHud()
-      setTimeout(() => hudFadeIn(), 500)
-      // hudFadeIn();
-      runTimeElapsed = 0;
-      distance = 0;
-      // resetClock();
-      // resetDistance();
-    };
 
 
 /////////////////////////////////////////////////////////////////////////////////
 //  //  //  //  //  //  //  //  MASTER DRAW STACK  //  //  //  //  //  //  //  //
 /////////////////////////////////////////////////////////////////////////////////
-
-
-// Function Master Animation Frame Stack
-    function drawGame(timestamp) {
-      t = timestamp / 16;
-      window.requestAnimationFrame(drawGame);
-      redraw(timestamp, t);
-    };
-    window.requestAnimationFrame(drawGame);
-
-// Function Redraw All Moving Elements
-    function redraw(timestamp, t) {
-      bgElements(t);
-      if (splashState === false) {
-        gameStack(timestamp, t);
-      };
-      let movers = document.querySelectorAll('.moving');
-      for (let i = 0; i < movers.length; i++) {
-        moveBox(movers[i], t);
-      };
-    };
 
 // Function Refresh Global Variables
     function globalRefresh(timestamp, t) {
@@ -760,13 +740,138 @@ function collisionEvent(element) {
 
 // Function Master Game Runtime Stack
     function gameStack(timestamp, t) {
-      globalRefresh(timestamp, t)
-      refreshHud(t);
-      makeEnemies(t);
-      checkForHit();
+      if (!finished) {
+        if (distanceRemain > 0 && runTimeRemain > 0) {
+          refreshHud(t);
+          makeEnemies(t);
+          if (distanceRemain < 0.038 && !finishLine) {
+            makeFinish(t);
+          };
+        } else if (distanceRemain <= 0 || runTimeRemain <= 0) {
+          endgame();
+        };
+      };
     };
 
+// Function Redraw All Moving Elements
+    function redraw(timestamp, t) {
+      globalRefresh(timestamp, t)
+      bgElements(t);
+      if (splashState === false) {
+        gameStack(timestamp, t);
+      };
+      let movers = document.querySelectorAll('.moving');
+      for (let i = 0; i < movers.length; i++) {
+        moveBox(movers[i], t);
+      };
+    };
+
+// Function Master Animation Frame Stack
+    function drawGame(timestamp) {
+      tStamp = timestamp;
+      t = timestamp / 16;
+      redraw(timestamp, t);
+      window.requestAnimationFrame(drawGame);
+    };
+    window.requestAnimationFrame(drawGame);
 
 
 
+
+
+// /////////////////////////////////////////////////////////////////////////////////////////
+// //  //  //  //  //  //  //  //  BACKGROUND DRAW FUNCTIONS  //  //  //  //  //  //  //  //
+// /////////////////////////////////////////////////////////////////////////////////////////
+
+// // Initialization Parameters
+//     const distScale = 7500;
+//     const treesToMake = 20;
+//     const lanesToMake = 16;
+//     let lastTreeT = 0;
+//     let lastLaneT = 0;
+
+// // Function Make Trees
+//     function makeTrees(t) {
+//       let treeInt = (distScale / speed) / (treesToMake / 2);
+//       if (t >= (lastTreeT + treeInt)) {
+//         newGameObject(t, p7, 'tree', `url('img/tree.png')`, 6.25, -12.5, 0.5, 6, distScale);
+//         newGameObject(t, p7, 'tree', `url('img/tree.png')`, 9.75, 22.5, 0.5, 6, distScale);
+//         lastTreeT = t;
+//       };
+//     };
+
+// // Function Make Lanes
+//     function makeLanes(t) {
+//       let laneInt = (distScale / speed) / (lanesToMake / 2);
+//       if (t >= (lastLaneT + laneInt)) {
+//         newGameObject(t, p7, 'lane', `url('img/laneL.png')`, 7.5, 4.5, 1, 2, distScale);
+//         newGameObject(t, p7, 'lane', `url('img/laneR.png')`, 8.5, 9.5, 1, 2, distScale);
+//         lastLaneT = t;
+//       };
+//     };
+
+// // Function Master Background Stack
+//     function bgElements(t) {
+//       makeTrees(t);
+//       makeLanes(t);
+//     };
+
+
+
+
+
+
+
+// ////////////////////////////////////////////////////////////////////////////////////
+// //  //  //  //  //  //  //  //  ENEMY DRAW FUNCTIONS  //  //  //  //  //  //  //  //
+// ////////////////////////////////////////////////////////////////////////////////////
+
+// // Initialization Parameters
+//     // const enemiesToMake = 20;
+//     // const distScaleEnemy = 20000;
+//     // const distScaleEnemy = 7500;
+//     // const enemySpeed = 35;
+//     // // let lastEnemyT = 0;
+//     // const enemyD = 0.02;
+//     // let lastEnemyD = 0;
+//     // let lastEnemyLane = 2;
+//     // let lastEnemyDrawSpeed = speed;
+
+// // Function Random Lane Generator
+//     function randomThree() {
+//       return Math.floor(Math.random() * 3) + 1;
+//     };
+
+// // Function Make Enemies
+//     // function makeEnemies(t) {
+//     //   // console.log(document.querySelectorAll('.enemy').length)
+//     //   // let enemyInt = (distScaleEnemy / speed) / (enemiesToMake / 3);
+//     //   // let numEnemies = document.querySelectorAll('.enemy').length
+//     //   // if (t >= (lastEnemyT + enemyInt) && speed >= enemySpeed && numEnemies <= enemiesToMake) {
+//     //   // if (distance >= (lastEnemyD + enemyD) && speed >= lastEnemyDrawSpeed && numEnemies <= enemiesToMake) {
+//     //   // if (distance >= (lastEnemyD + enemyD) && speed >= (lastEnemyDrawSpeed / 2)) {
+//     //   if (distance >= (lastEnemyD + enemyD) && speed > (enemySpeed * 2)) {
+
+//     //     let lane = randomThree();
+//     //     // let lane = 2
+//     //     // if (lane !== lastEnemyLane) {
+//     //       let color = randomThree() + 1;
+//     //       switch(lane) {
+//     //         case 1:
+//     //           newGameObject(t, p6, 'enemy', `url('img/car${color}.png')`, 7, -0.5, 2, 6, distScaleEnemy);
+//     //         break;
+//     //         case 2:
+//     //           newGameObject(t, p6, 'enemy', `url('img/car${color}.png')`, 8, 5, 2, 6, distScaleEnemy);
+//     //         break;
+//     //         case 3:
+//     //           newGameObject(t, p6, 'enemy', `url('img/car${color}.png')`, 9, 10.5, 2, 6, distScaleEnemy);
+//     //         break;
+//     //       };
+//     //     // };
+//     //     lastEnemyD = distance;
+//     //     // lastEnemyLane = lane;
+//     //     // lastEnemyDrawSpeed = speed;
+//     //   };
+//     //   // enemyDeltaZ();
+//     // };
 
