@@ -271,7 +271,7 @@
       div.style.position = 'absolute';
       div.style.transitionDuration = '1s'
       div.style.opacity = 0;
-      div.style.fontFamily = 'Seven Segment';
+      div.style.fontFamily = `'Seven Segment', Helvetica, sans-serif`;
       div.style.color = 'orange';
       div.style.left = left * w + 'px';
       div.style.top = top * h + 'px';
@@ -614,11 +614,16 @@
       return Math.floor(Math.random() * 3) + 1;
     };
 
+// Function Random Car Color Generator
+    function randomFive() {
+      return Math.floor(Math.random() * 5) + 2;
+    };
+
 // Function Make Enemies
     function makeEnemies(t) {
       if (distance >= lastEnemyD + enemySpacing && speed > enemySpeed * 2) {
         let lane = randomThree();
-        let color = randomThree() + 1;
+        let color = randomFive();
         switch(lane) {
           case 1:
             newGameObject(t, p6, 'enemy', `url('img/car${color}.png')`, 7, -0.5, 2, 6, drawDistScale);

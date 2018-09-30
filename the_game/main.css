@@ -1,3 +1,8 @@
+@font-face {
+  font-family: 'Seven Segment';
+  src: url('fonts/7 Segment.ttf');
+}
+
 * {
   text-align: center;
   margin: 0 auto;
