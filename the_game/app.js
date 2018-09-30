@@ -525,10 +525,10 @@
       let endTop = fullH;
       let endWidth = box.classList[6] * w;
       let endHeight = (box.classList[6] / box.classList[5]) * h;
-      let topMove = (endTop - startTop);
-      let leftMove = (endLeft - startLeft);
-      let heightMove = (endHeight - startHeight);
-      let widthMove = (endWidth - startWidth);
+      let topMove = endTop - startTop;
+      let leftMove = endLeft - startLeft;
+      let heightMove = endHeight - startHeight;
+      let widthMove = endWidth - startWidth;
       let distanceTotal = box.classList[7];
       let distanceOld = parseInt(box.classList[8]);
       let distance = distanceOld + moveSpeed * (t - box.classList[2]);
@@ -708,7 +708,7 @@
 
 // Function Make Finish Line
     function makeFinish(t) {
-      newGameObject(t, p7, 'finish', `url('img/finish.png')`, 6.5, 1, 12, 14, drawDistScale);
+      newGameObject(t, p7, 'finish', `url('img/finish.png')`, 6.5, 1.875, 12, 12.25, drawDistScale);
       finishLine = true;
     };
 
@@ -756,8 +756,8 @@
 
 // Global Constant Declarations
     const horizon = 3 * h;
-    const runTimeTotal = 10;
-    const trackLength = .2;
+    const runTimeTotal = 60;
+    const trackLength = 1.5;
     const maxSpeed = 120;
     const minSpeed = 10;
     const startSpeed = 65;
