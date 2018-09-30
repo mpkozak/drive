@@ -40,6 +40,11 @@
       p8.style.backgroundRepeat = 'no-repeat';
     };
 
+// Function Create Sky
+    function makeSky() {
+      p9.style.backgroundColor = '00BFFF';
+    }
+
 // Function Create Player Car
     function makePlayerCar(gamePlane) {
       let div = document.createElement('div');
@@ -784,6 +789,7 @@
 // Initialization Functions Master Stack
     buildGamePage();
     makeBackplane();
+    makeSky();
     makePlayerCar(p5);
     makeSplashElements();
     window.onload = () => splash();
