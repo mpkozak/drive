@@ -821,6 +821,7 @@
 
 // Function Initialize Gameplay Master Stack
     function initializeGamePlay() {
+      document.querySelector('#music').play();                //music play
       resetClock();
       resetDistance();
       window.cancelAnimationFrame(drawGame);
