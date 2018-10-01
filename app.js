@@ -121,7 +121,7 @@
       div.innerText = text;
       div.style.textShadow = '5px 5px 5px #222222';
       div.style.fontFamily = `'Faster One', Futura, sans-serif`;
-      div.style.color = 'red';
+      div.style.color = '#FB0006';
       div.style.fontSize = height * h + 'px';
       div.style.left = -10 * w + 'px';
       div.style.top = top * h + 'px';
@@ -140,7 +140,7 @@
       button.style.transitionTimingFunction = 'ease-in';
       button.style.backgroundColor = bgColor;
       button.style.boxShadow = '5px 5px 5px #222222';
-      button.style.border = '1px solid black';
+      button.style.border = '1px solid #000000';
       button.style.borderRadius = w / 2 + 'px';
       button.innerText = text;
       button.style.fontFamily = `'Faster One', Futura, sans-serif`;
@@ -158,7 +158,7 @@
       makeTitleBox(p2, 'title1', 'Drive', 0, 10, 2);
       makeTitleBox(p2, 'title2', 'My', 2, 10, 2);
       makeTitleBox(p2, 'title3', 'Car', 4, 10, 2);
-      makePlayButton(p1, 'playButton', 'Play!', 'yellow');
+      makePlayButton(p1, 'playButton', 'Play!', '#FFFF0C');
     };
 
 // Function Titles Fly In
@@ -277,7 +277,7 @@
       div.style.transitionDuration = '1s'
       div.style.opacity = 0;
       div.style.fontFamily = `'Seven Segment', Helvetica, sans-serif`;
-      div.style.color = 'orange';
+      div.style.color = '#FD9408';
       div.style.left = left * w + 'px';
       div.style.top = top * h + 'px';
       div.style.width = width * w + 'px';
@@ -296,7 +296,7 @@
       let div = document.createElement('div');
       div.style.position = 'absolute';
       div.style.transitionDuration = '100ms';
-      div.style.backgroundColor = 'red';
+      div.style.backgroundColor = '#FB0006';
       div.style.boxShadow = '2px 2px 5px #222222';
       div.style.transformOrigin = '100% 100%';
       div.style.left = '21%';
@@ -731,7 +731,7 @@
       div.innerText = text;
       div.style.textShadow = '5px 5px 5px #222222';
       div.style.fontFamily = `'Faster One', Futura, sans-serif`;
-      div.style.color = 'red';
+      div.style.color = '#FB0006';
       div.style.opacity = 0;
       div.style.fontSize = 0;
       div.style.left = 8 * w + 'px';
@@ -787,7 +787,7 @@
     let finished = false;
 
 // Initialization Functions Master Stack
-    p3.style.backgroundColor = 'black';
+    p3.style.backgroundColor = '#000000';
     p3.style.opacity = 0.5;
     buildGamePage();
     makeBackplane();
@@ -875,7 +875,7 @@
       playButton.addEventListener('click', replay);
       setTimeout(() => {
         p3.style.transitionDuration = '1s';
-        p3.style.backgroundColor = 'black';
+        p3.style.backgroundColor = '#000000';
         p3.style.opacity = 0.5;
         endgamePopIn();
       }, 100);
@@ -887,7 +887,8 @@
       playButton.removeEventListener('click', replay)
       endgameFlyOut();
       playButtonExplode();
-      initializeGamePlay();
+      // initializeGamePlay();                            // reenable for deploy
+      setTimeout(() => window.location.reload(), 1000)    // temporary -- for exhibition only (remove for deploy)
     };
 
 
