@@ -824,15 +824,15 @@
       document.querySelector('#music').play();                //music play
       resetClock();
       resetDistance();
-      window.cancelAnimationFrame(drawGame);
-      tStamp = 0;
-      t = 0;
+      // window.cancelAnimationFrame(drawGame);
+      // tStamp = 0;
+      // t = 0;
       speed = startSpeed;
       lastEnemyD = 0;
-      splashState = true;
+      // splashState = true;
       finishLine = false;
       finished = false;
-      window.requestAnimationFrame(drawGame);
+      // window.requestAnimationFrame(drawGame);
       document.removeEventListener('keydown', initializeGamePlay);
       tutorialRemove();
       splashState = false;
@@ -888,8 +888,8 @@
       playButton.removeEventListener('click', replay)
       endgameFlyOut();
       playButtonExplode();
-      // initializeGamePlay();                            // reenable for deploy
-      setTimeout(() => window.location.reload(), 1000)    // temporary -- for exhibition only (remove for deploy)
+      initializeGamePlay();                               // reenable for deploy
+      // setTimeout(() => window.location.reload(), 1000)    // temporary -- for exhibition only (remove for deploy)
     };
 
 
