@@ -1,4 +1,11 @@
 @font-face {
+  font-family: 'Faster One';
+  font-style: normal;
+  font-weight: 400;
+  src: url('fonts/Faster One.woff2') format('woff2'), url('fonts/Faster One.woff') format('woff');
+}
+
+@font-face {
   font-family: 'Seven Segment';
   src: url('fonts/7 Segment.ttf');
 }
