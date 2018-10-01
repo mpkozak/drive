@@ -305,7 +305,7 @@
       div.style.height = '1%';
       div.id = 'needle';
       speedBox.appendChild(div);
-      speedBox.style.backgroundImage = `url('img/speedometer.png')`
+      speedBox.style.backgroundImage = `url('img/speedometer.png')`;
       speedBox.style.backgroundSize = '100%';
       speedBox.style.backgroundRepeat = 'no-repeat';
     };
@@ -430,7 +430,7 @@
 // Function Refresh Speed
     function setSpeed(t) {
       if (speedUp) {
-        speed += ((maxSpeed - speed) / maxSpeed)
+        speed += ((maxSpeed - speed) / maxSpeed);
       } else if (speedDown) {
         speed += ((minSpeed - speed) / (minSpeed * 5));
       } else if (speedInput && !speedUp && !speedDown && speed > minSpeed + 1) {
@@ -524,7 +524,7 @@
       let startWidth = 0;
       if (type === 'finish') {
         startWidth = 3 * w;
-      }
+      };
       let startHeight = 0;
       let endLeft = box.classList[4] * w;
       let endTop = fullH;
@@ -705,7 +705,7 @@
       if (!finished) {
         p3.style.opacity = 0;
         p3.style.transitionDuration = '100ms';
-        p3.style.backgroundColor = '#FFFFFF'
+        p3.style.backgroundColor = '#FFFFFF';
         p3.style.opacity = 0.5;
         setTimeout(() => p3.style.opacity = 0, 100);
       };
@@ -904,7 +904,7 @@
 
 // Function Redraw All Moving Elements
     function redraw(timestamp, t) {
-      globalRefresh(timestamp, t)
+      globalRefresh(timestamp, t);
       bgElements(t);
       if (!splashState) {
         gameStack(timestamp, t);
