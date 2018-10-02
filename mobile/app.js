@@ -6,7 +6,7 @@ var touchstartY = 0;
 var touchendX = 0;
 var touchendY = 0;
 
-var gesuredZone = document.getElementById('gesuredZone');
+var gesuredZone = document.getElementById('gamebox-parent');
 
 gesuredZone.addEventListener('touchstart', function(event) {
     touchstartX = event.screenX;
