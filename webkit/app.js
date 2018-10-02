@@ -912,13 +912,25 @@
       };
     };
 
+// Pulled From https://gist.github.com/amsul/3691721 //
+    window.requestAnimFrame = (function(){
+      return  window.requestAnimationFrame    ||
+        window.webkitRequestAnimationFrame  ||
+        window.mozRequestAnimationFrame   ||
+        window.oRequestAnimationFrame   ||
+        window.msRequestAnimationFrame    ||
+        function( drawGame ){
+          window.setTimeout(drawGame, 1000 / 60);
+        };
+    })();
+
 // Function Master Animation Frame Stack
     function drawGame(timestamp) {
       tStamp = timestamp;
       t = timestamp / 16;
       redraw(timestamp, t);
-      window.webkitRequestAnimationFrame(drawGame);
+      window.requestAnimFrame(drawGame);
     };
 
 // rAF Initialize
-    window.webkitRequestAnimationFrame(drawGame);
+    window.requestAnimFrame(drawGame);
