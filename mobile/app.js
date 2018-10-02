@@ -859,14 +859,15 @@ function handleGesure() {
       initializePlayerCar();
       titleFlyOut();
       playButtonExplode();
-      tutorial();
+      // tutorial();
+      initializeGamePlay();
     };
 
 // Function Tutorial Master Stack
     function tutorial() {
-      makeTutorial();
-      setTimeout(() => { tutorialAppear() }, 200);
-      document.addEventListener('keydown', initializeGamePlay);
+      // makeTutorial();
+      // setTimeout(() => { tutorialAppear() }, 200);
+      // document.addEventListener('keydown', initializeGamePlay);
     };
 
 // Function Initialize Gameplay Master Stack
