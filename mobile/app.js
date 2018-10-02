@@ -812,12 +812,12 @@
     function splash() {
       titleFlyIn();
       setTimeout(() => { playButtonAppear() }, 1200);
-      playButton.addEventListener('click', togglePlay);
+      playButton.addEventListener('touchstart', togglePlay);
     };
 
 // Function Clear Splash Master Stack
     function togglePlay() {
-      playButton.removeEventListener('click', togglePlay);
+      playButton.removeEventListener('touchstart', togglePlay);
       initializePlayerCar();
       titleFlyOut();
       playButtonExplode();
@@ -828,7 +828,7 @@
     function tutorial() {
       makeTutorial();
       setTimeout(() => { tutorialAppear() }, 200);
-      document.addEventListener('click', initializeGamePlay);
+      document.addEventListener('touchstart', initializeGamePlay);
     };
 
 // Function Initialize Gameplay Master Stack
@@ -840,7 +840,7 @@
       lastEnemyD = 0;
       finishLine = false;
       finished = false;
-      document.removeEventListener('keydown', initializeGamePlay);
+      document.removeEventListener('touchstart', initializeGamePlay);
       tutorialRemove();
       splashState = false;
       p3.style.transitionDuration = '2s';
@@ -884,7 +884,7 @@
         makeEndgameBox('You Win!');
       };
       makePlayButton(p1, 'playButton', 'More?', 'yellow');
-      playButton.addEventListener('click', replay);
+      playButton.addEventListener('touchstart', replay);
       setTimeout(() => {
         p3.style.transitionDuration = '1s';
         p3.style.backgroundColor = '#000000';
@@ -896,7 +896,7 @@
 
 // Function Replay Master Stack
     function replay() {
-      playButton.removeEventListener('click', replay)
+      playButton.removeEventListener('touchstart', replay)
       endgameFlyOut();
       playButtonExplode();
       initializeGamePlay();                                   // reenable for deploy -- disable for demo
@@ -951,13 +951,13 @@ let touchendY = 0;
 const gestureZone = document.querySelector('main');
 
 gestureZone.addEventListener('touchstart', function(event) {
-    // event.preventDefault();
+    event.preventDefault();
     touchstartX = event.changedTouches[0].screenX;
     touchstartY = event.changedTouches[0].screenY;
 }, false);
 
 gestureZone.addEventListener('touchend', function(event) {
-    // event.preventDefault();
+    event.preventDefault();
     touchendX = event.changedTouches[0].screenX;
     touchendY = event.changedTouches[0].screenY;
     handleGesture();
