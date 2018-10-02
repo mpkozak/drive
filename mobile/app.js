@@ -972,18 +972,18 @@ gestureZone.addEventListener('touchend', function(event) {
 }, false);
 
 function handleGesture() {
-    if (touchendX <= touchstartX) {
-        console.log('Swiped left');
+    if (touchendX <= touchstartX && Math.abs(touchendY - touchstartY) <= 50) {
+        // console.log('Swiped left');
         moveLeft();
     }
 
-    if (touchendX >= touchstartX) {
-        console.log('Swiped right');
+    if (touchendX >= touchstartX && Math.abs(touchendY - touchstartY) <= 50) {
+        // console.log('Swiped right');
         moveRight();
     }
 
     if (touchendY <= touchstartY && Math.abs(touchendX - touchstartX) <= 50) {
-        console.log('Swiped up');
+        // console.log('Swiped up');
         jump();
     }
 
