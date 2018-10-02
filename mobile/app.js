@@ -18,8 +18,8 @@
     const p8 = document.getElementById('plane8');       // road backplane
     const p9 = document.getElementById('plane9');       // mountains (post-mvp)
     const p10 = document.getElementById('plane10');     // sky
-    const displayUnit = Math.floor(Math.min(window.innerWidth / 18, window.innerHeight / 11));
-    const fullW = displayUnit * 16;
+    const displayUnit = Math.floor(Math.min(window.innerWidth / 16, window.innerHeight / 9));
+    const fullW = displayUnit * 14;
     const fullH = displayUnit * 9;
     const w = fullW / 16;
     const h = fullH / 9;
