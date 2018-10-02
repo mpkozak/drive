@@ -1,12 +1,4 @@
 
-
-
-
-
-
-
-
-
 ////////////////////////////////////////////////////////////////////////////////////////
 //  //  //  //  //  //  //  //  INITIALIZATION FUNCTIONS  //  //  //  //  //  //  //  //
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -442,7 +434,7 @@
 // Function Refresh Speed
     function setSpeed(t) {
       if (speedUp) {
-        speed += ((maxSpeed - speed) / maxSpeed);
+        speed += ((maxSpeed - speed) / (maxSpeed * 2));
       } else if (speedDown) {
         speed += ((minSpeed - speed) / (minSpeed * 5));
       } else if (speedInput && !speedUp && !speedDown && speed > minSpeed + 1) {
@@ -982,7 +974,7 @@ function handleGesture() {
         moveRight();
     }
 
-    if (touchendY <= touchstartY && Math.abs(touchendX - touchstartX) <= 50) {
+    if ((touchstartY - touchendY) >= 50 && Math.abs(touchendX - touchstartX) <= 50) {
         // console.log('Swiped up');
         jump();
     }
