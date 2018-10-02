@@ -164,16 +164,20 @@
 // Function Titles Fly In
     function titleFlyIn() {
       title1.style.left = 3 * h + 'px';
-      setTimeout(() => title2.style.left = 3 * h + 'px', 200);
-      setTimeout(() => title3.style.left = 3 * h + 'px', 400);
+      setTimeout(() => { title2.style.left = 3 * h + 'px' }, 200);
+      setTimeout(() => { title3.style.left = 3 * h + 'px' }, 400);
     };
 
 // Function Titles Fly Out + Removed
     function titleFlyOut() {
       title1.style.left = 16 * h + 'px';
-      setTimeout(() => title2.style.left = 16 * h + 'px', 200);
-      setTimeout(() => title3.style.left = 16 * h + 'px', 400);
-      setTimeout(() => title1.remove() || title2.remove() || title3.remove(), 2000);
+      setTimeout(() => { title2.style.left = 16 * h + 'px' }, 200);
+      setTimeout(() => { title3.style.left = 16 * h + 'px' }, 400);
+      setTimeout(() => {
+        title1.remove();
+        title2.remove();
+        title3.remove();
+      }, 2000);
     };
 
 // Function Make Play Button Appear
@@ -195,7 +199,7 @@
       playButton.style.height = 2 * h + 'px';
       playButton.style.fontSize = (h / 1.5) * 2 + 'px';
       playButton.style.opacity = 0;
-      setTimeout(() => playButton.remove(), 300);
+      setTimeout(() => { playButton.remove() }, 300);
     };
 
 // Function Slide Player Car Into Gamefield
@@ -260,7 +264,7 @@
       tutorial.style.transitionDuration = '500ms';
       tutorial.style.transitionTimingFunction = 'ease-in';
       tutorial.style.opacity = 0;
-      setTimeout(() => tutorial.remove(), 500);
+      setTimeout(() => { tutorial.remove() }, 500);
     };
 
 
@@ -489,8 +493,8 @@
       if (top >= w * 7 && playerCar.classList[0] !== 'jump') {
         playerCar.classList.add('jump');
         playerCar.style.top = top - (h * 2) + 'px';
-        setTimeout(() => playerCar.style.top = top + 'px', 250);
-        setTimeout(() => playerCar.classList.remove('jump'), 500);
+        setTimeout(() => { playerCar.style.top = top + 'px' }, 250);
+        setTimeout(() => { playerCar.classList.remove('jump') }, 500);
       };
     };
 
@@ -701,13 +705,13 @@
 // Function Collision Event
     function collisionEvent(element) {
       speed = enemySpeed * 0.9;
-      setTimeout(() => element.remove(), 100);
+      setTimeout(() => { element.remove() }, 100);
       if (!finished) {
         p3.style.opacity = 0;
         p3.style.transitionDuration = '100ms';
         p3.style.backgroundColor = '#FFFFFF';
         p3.style.opacity = 0.5;
-        setTimeout(() => p3.style.opacity = 0, 100);
+        setTimeout(() => { p3.style.opacity = 0 }, 100);
       };
     };
 
@@ -756,7 +760,7 @@
 // Function Endgame Text Fly Out
     function endgameFlyOut() {
       endgameText.style.left = 16 * h + 'px';
-      setTimeout(() => endgameText.remove(), 2000);
+      setTimeout(() => { endgameText.remove() }, 2000);
     };
 
 
@@ -791,7 +795,7 @@
     p3.style.opacity = 0.5;
     buildGamePage();
     makeBackplane();
-    setTimeout(() => makeSky(), 1);
+    setTimeout(() => { makeSky() }, 1);
     makePlayerCar(p5);
     makeSplashElements();
     window.onload = () => splash();
@@ -799,7 +803,7 @@
 // Function Splash Master Stack
     function splash() {
       titleFlyIn();
-      setTimeout(() => playButtonAppear(), 1200);
+      setTimeout(() => { playButtonAppear() }, 1200);
       playButton.addEventListener('click', togglePlay);
     };
 
@@ -815,7 +819,7 @@
 // Function Tutorial Master Stack
     function tutorial() {
       makeTutorial();
-      setTimeout(() => tutorialAppear(), 200);
+      setTimeout(() => { tutorialAppear() }, 200);
       document.addEventListener('keydown', initializeGamePlay);
     };
 
@@ -832,10 +836,14 @@
       tutorialRemove();
       splashState = false;
       p3.style.transitionDuration = '2s';
-      setTimeout(() => p3.style.opacity = 0, 500);
+      setTimeout(() => { p3.style.opacity = 0 }, 500);
       makeHud();
       addKeyListener();
-      setTimeout(() => hudFadeIn() || resetClock() || resetDistance(), 500);
+      setTimeout(() => {
+        hudFadeIn();
+        resetClock();
+        resetDistance();
+      }, 500);
     };
 
 // Function Gameplay Runtime Master Stack
@@ -861,7 +869,7 @@
       speedUp = false;
       speedDown = false;
       hudFadeOut();
-      setTimeout(() => removeHud(), 1000);
+      setTimeout(() => { removeHud() }, 1000);
       if (distanceRemain > 0) {
         makeEndgameBox('You Lose!');
       } else {
@@ -875,7 +883,7 @@
         p3.style.opacity = 0.5;
         endgamePopIn();
       }, 100);
-      setTimeout(() => playButtonAppear(), 500);
+      setTimeout(() => { playButtonAppear() }, 500);
     };
 
 // Function Replay Master Stack
@@ -883,8 +891,8 @@
       playButton.removeEventListener('click', replay)
       endgameFlyOut();
       playButtonExplode();
-      initializeGamePlay();                               // reenable for deploy
-      // setTimeout(() => window.location.reload(), 1000)    // temporary -- for exhibition only (remove for deploy)
+      initializeGamePlay();                                   // reenable for deploy -- disable for demo
+      // setTimeout(() => { window.location.reload() }, 1000)    // temporary -- for demo exhibition only (remove for deploy)
     };
 
 
@@ -922,3 +930,30 @@
 
 // rAF Initialize
     window.requestAnimationFrame(drawGame);
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+// NOT MY CODE --- ATTEMPT TO ADD LEGACY BROWSER SUPPORT FOR requestAnimationFrame --- DOESN'T WORK //
+// Pulled From https://gist.github.com/amsul/3691721 //
+    // window.requestAnimFrame = (function(){
+    //   return  window.requestAnimationFrame    ||
+    //     window.webkitRequestAnimationFrame  ||
+    //     window.mozRequestAnimationFrame   ||
+    //     window.oRequestAnimationFrame   ||
+    //     window.msRequestAnimationFrame    ||
+    //     function( callback ){
+    //       window.setTimeout(callback, 1000 / 60);
+    //     };
+    // })();
+
+// Function Master Animation Frame Stack
+    // function drawGame(timestamp) {
+    //   tStamp = timestamp;
+    //   t = timestamp / 16;
+    //   redraw(timestamp, t);
+    //   window.requestAnimFrame(drawGame);
+    // };
+
+// rAF Initialize
+    // window.requestAnimFrame(drawGame);
+///////////////////////////////////////////////////////////////////////////////////////////////////////
