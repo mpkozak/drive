@@ -29,7 +29,7 @@
     function buildGamePage() {
       par.style.width = fullW + 'px';
       par.style.height = fullH + 'px';
-      header.style.height = 0;
+      header.style.height = gameboxPadding + 'px';
       footer.style.height = gameboxPadding + 'px';
     };
 
