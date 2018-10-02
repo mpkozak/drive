@@ -61,7 +61,7 @@
     };
 
 
-    window.scrollTo(0,1)
+    // window.scrollTo(0,1)
 
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -97,17 +97,61 @@
     // };
 
 // Function Add Key Listeners
-    function addKeyListener() {
-      // document.addEventListener('keydown', keyDownHandler);
-      // document.addEventListener('keyup', keyUpHandler);
-    };
+    // function addKeyListener() {
+    //   document.addEventListener('keydown', keyDownHandler);
+    //   document.addEventListener('keyup', keyUpHandler);
+    // };
 
 // Function Remove Key Listeners
-    function removeKeyListener() {
-      // document.removeEventListener('keydown', keyDownHandler);
-      // document.removeEventListener('keyup', keyUpHandler);
-    };
+    // function removeKeyListener() {
+    //   document.removeEventListener('keydown', keyDownHandler);
+    //   document.removeEventListener('keyup', keyUpHandler);
+    // };
+let xTouchStart = 0;
+let xTouchEnd = 0;
+let deltaX = 0;
+let yTouchStart = 0;
+let yTouchEnd = 0;
+let deltaY = 0;
+let xSwipe = fullW * 0.05;
+let ySwipe = fullH * 0.05;
 
+function touchStart(event) {
+  event.preventDefault();
+  xTouchStart = event.changedTouches[0].screenX;
+  yTouchStart = event.changedTouches[0].screenY;
+};
+
+function touchEnd(event) {
+  event.preventDefault();
+  xTouchEnd = event.changedTouches[0].screenX;
+  yTouchEnd = event.changedTouches[0].screenY;
+  deltaX = Math.abs(xTouchEnd - xTouchStart);
+  deltaY = Math.abs(yTouchEnd - yTouchStart);
+  swipeMover();
+};
+
+function addKeyListener() {
+  par.addEventListener('touchstart', touchStart);
+  par.addEventListener('touchend', touchEnd);
+};
+
+function removeKeyListener() {
+  par.removeEventListener('touchstart', touchStart);
+  par.removeEventListener('touchend', touchEnd);
+};
+
+function swipeMover() {
+  if (deltaX > deltaY && xTouchStart - xTouchEnd >= xSwipe) {
+    moveLeft();
+  };
+  if (deltaX > deltaY && xTouchEnd - xTouchStart >= xSwipe) {
+    moveRight();
+  };
+  if (deltaY > deltaX && yTouchStart - yTouchEnd >= ySwipe) {
+    jump();
+  };
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 //  //  //  //  //  //  //  //  SPLASH FUNCTIONS  //  //  //  //  //  //  //  //
@@ -813,23 +857,24 @@
     function splash() {
       titleFlyIn();
       setTimeout(() => { playButtonAppear() }, 1200);
-      playButton.addEventListener('touchstart', togglePlay);
+      playButton.addEventListener('click', togglePlay);
     };
 
 // Function Clear Splash Master Stack
     function togglePlay() {
-      playButton.removeEventListener('touchstart', togglePlay);
+      playButton.removeEventListener('click', togglePlay);
       initializePlayerCar();
       titleFlyOut();
       playButtonExplode();
-      tutorial();
+      // tutorial();
+      initializeGamePlay();
     };
 
 // Function Tutorial Master Stack
     function tutorial() {
-      makeTutorial();
-      setTimeout(() => { tutorialAppear() }, 200);
-      document.addEventListener('touchstart', initializeGamePlay);
+      // makeTutorial();
+      // setTimeout(() => { tutorialAppear() }, 200);
+      // par.addEventListener('click', initializeGamePlay);
     };
 
 // Function Initialize Gameplay Master Stack
@@ -841,8 +886,8 @@
       lastEnemyD = 0;
       finishLine = false;
       finished = false;
-      document.removeEventListener('touchstart', initializeGamePlay);
-      tutorialRemove();
+      // par.removeEventListener('click', initializeGamePlay);
+      // tutorialRemove();
       splashState = false;
       p3.style.transitionDuration = '2s';
       setTimeout(() => { p3.style.opacity = 0 }, 500);
@@ -887,7 +932,7 @@
         makeEndgameBox('You Win!');
       };
       makePlayButton(p1, 'playButton', 'More?', 'yellow');
-      playButton.addEventListener('touchstart', replay);
+      playButton.addEventListener('click', replay);
       setTimeout(() => {
         p3.style.transitionDuration = '1s';
         p3.style.backgroundColor = '#000000';
@@ -899,7 +944,7 @@
 
 // Function Replay Master Stack
     function replay() {
-      playButton.removeEventListener('touchstart', replay)
+      playButton.removeEventListener('click', replay)
       endgameFlyOut();
       playButtonExplode();
       initializeGamePlay();                                   // reenable for deploy -- disable for demo
@@ -952,40 +997,70 @@
 // Swipe Stack
 // ADAPTED FROM CODE @: https://gist.github.com/SleepWalker/da5636b1abcbaff48c4d //
 // const touchBox = par
-let xTouchStart = 0;
-let xTouchEnd = 0;
-let deltaX = 0;
-let yTouchStart = 0;
-let yTouchEnd = 0;
-let deltaY = 0;
-let xSwipe = fullW * 0.05;
-let ySwipe = fullH * 0.05;
+// let xTouchStart = 0;
+// let xTouchEnd = 0;
+// let deltaX = 0;
+// let yTouchStart = 0;
+// let yTouchEnd = 0;
+// let deltaY = 0;
+// let xSwipe = fullW * 0.05;
+// let ySwipe = fullH * 0.05;
 
-par.addEventListener('touchstart', function(event) {
-  event.preventDefault();
-  xTouchStart = event.changedTouches[0].screenX;
-  yTouchStart = event.changedTouches[0].screenY;
-});
 
-par.addEventListener('touchend', function(event) {
-  event.preventDefault();
-  xTouchEnd = event.changedTouches[0].screenX;
-  yTouchEnd = event.changedTouches[0].screenY;
-  deltaX = Math.abs(xTouchEnd - xTouchStart);
-  deltaY = Math.abs(yTouchEnd - yTouchStart);
-  swipeMover();
-});
+// par.addEventListener('touchstart', function(event) {
+//   event.preventDefault();
+//   xTouchStart = event.changedTouches[0].screenX;
+//   yTouchStart = event.changedTouches[0].screenY;
+// });
+// par.addEventListener('touchend', function(event) {
+//   event.preventDefault();
+//   xTouchEnd = event.changedTouches[0].screenX;
+//   yTouchEnd = event.changedTouches[0].screenY;
+//   deltaX = Math.abs(xTouchEnd - xTouchStart);
+//   deltaY = Math.abs(yTouchEnd - yTouchStart);
+//   swipeMover();
+// });
 
-function swipeMover() {
-  if (deltaX > deltaY && xTouchStart - xTouchEnd >= xSwipe) {
-    moveLeft();
-  };
-  if (deltaX > deltaY && xTouchEnd - xTouchStart >= xSwipe) {
-    moveRight();
-  };
-  if (deltaY > deltaX && yTouchStart - yTouchEnd >= ySwipe) {
-    jump();
-  };
-};
+
+// function touchStart(event) {
+//   event.preventDefault();
+//   xTouchStart = event.changedTouches[0].screenX;
+//   yTouchStart = event.changedTouches[0].screenY;
+// };
+
+// function touchEnd(event) {
+//   event.preventDefault();
+//   xTouchEnd = event.changedTouches[0].screenX;
+//   yTouchEnd = event.changedTouches[0].screenY;
+//   deltaX = Math.abs(xTouchEnd - xTouchStart);
+//   deltaY = Math.abs(yTouchEnd - yTouchStart);
+//   swipeMover();
+// };
+
+// function addKeyListener() {
+//   par.addEventListener('touchstart', touchStart(event));
+//   par.addEventListener('touchend', touchEnd(event));
+// };
+
+// function removeKeyListener() {
+//   par.removeEventListener('touchstart', touchStart(event));
+//   par.removeEventListener('touchend', touchEnd(event));
+// };
+
+// function swipeMover() {
+//   if (deltaX > deltaY && xTouchStart - xTouchEnd >= xSwipe) {
+//     moveLeft();
+//   };
+//   if (deltaX > deltaY && xTouchEnd - xTouchStart >= xSwipe) {
+//     moveRight();
+//   };
+//   if (deltaY > deltaX && yTouchStart - yTouchEnd >= ySwipe) {
+//     jump();
+//   };
+// };
+
+
+
+
 
 
