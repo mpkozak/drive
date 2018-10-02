@@ -401,7 +401,8 @@
       tutorial.style.opacity = 0;
       tutorial.remove();
       p2.appendChild(tutorial);
-      setTimeout(() => { document.addEventListener('click', initializeGamePlay) }, 100);
+      // setTimeout(() => { document.addEventListener('click', initializeGamePlay) }, 100);
+      document.addEventListener('click', initializeGamePlay);
     };
 
 // Function Select Tutorial
