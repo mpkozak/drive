@@ -27,7 +27,7 @@
     const p9 = document.getElementById('plane9');       // mountains (post-mvp)
     const p10 = document.getElementById('plane10');     // sky
     const displayUnit = Math.floor(Math.min(window.innerWidth / 18, window.innerHeight / 11));
-    const fullW = displayUnit * 16;
+    const fullW = displayUnit * 18;
     const fullH = displayUnit * 9;
     const w = fullW / 16;
     const h = fullH / 9;
@@ -951,11 +951,13 @@ let touchendY = 0;
 const gestureZone = document.querySelector('main');
 
 gestureZone.addEventListener('touchstart', function(event) {
+    event.preventDefault();
     touchstartX = event.changedTouches[0].screenX;
     touchstartY = event.changedTouches[0].screenY;
 }, false);
 
 gestureZone.addEventListener('touchend', function(event) {
+    event.preventDefault();
     touchendX = event.changedTouches[0].screenX;
     touchendY = event.changedTouches[0].screenY;
     handleGesture();
@@ -972,7 +974,7 @@ function handleGesture() {
         moveRight();
     }
 
-    if (touchendY <= touchstartY) {
+    if (touchendY <= touchstartY && Math.abs(touchendX - touchstartX) < 25) {
         console.log('Swiped up');
         jump();
     }
