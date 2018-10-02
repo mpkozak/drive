@@ -18,11 +18,11 @@
     const p8 = document.getElementById('plane8');       // road backplane
     const p9 = document.getElementById('plane9');       // mountains (post-mvp)
     const p10 = document.getElementById('plane10');     // sky
-    const displayUnit = Math.floor(Math.min(window.innerWidth / 16, window.innerHeight / 9));
-    const fullW = displayUnit * 14;
-    const fullH = displayUnit * 9;
+    const displayUnit = Math.floor(Math.min(window.innerWidth / 16, window.innerHeight / 12));
+    const fullW = displayUnit * 16;
+    const fullH = displayUnit * 12;
     const w = fullW / 16;
-    const h = fullH / 9;
+    const h = fullH / 12;
     const gameboxPadding = Math.floor((window.innerHeight - fullH) / 2);
 
 // Function Build Page Layout
