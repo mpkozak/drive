@@ -25,6 +25,7 @@
     const h = fullH / 12;
     const gameboxPadding = Math.floor((window.innerHeight - fullH) / 2);
 
+
 // Function Build Page Layout
     function buildGamePage() {
       par.style.width = fullW + 'px';
