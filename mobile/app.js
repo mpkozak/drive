@@ -28,9 +28,9 @@
     const p10 = document.getElementById('plane10');     // sky
     const displayUnit = Math.floor(Math.min(window.innerWidth / 18, window.innerHeight / 11));
     const fullW = displayUnit * 18;
-    const fullH = displayUnit * 9;
-    const w = fullW / 16;
-    const h = fullH / 9;
+    const fullH = displayUnit * 12;
+    const w = fullW / 18;
+    const h = fullH / 12;
     const gameboxPadding = Math.floor((window.innerHeight - fullH) / 2);
 
 // Function Build Page Layout
@@ -852,6 +852,8 @@
         resetClock();
         resetDistance();
       }, 500);
+      speedInput = true;
+      speedUp = true;
     };
 
 // Function Gameplay Runtime Master Stack
@@ -974,7 +976,7 @@ function handleGesture() {
         moveRight();
     }
 
-    if (touchendY <= touchstartY && Math.abs(touchendX - touchstartX) < 25) {
+    if (touchendY <= touchstartY && Math.abs(touchendX - touchstartX) <= 100) {
         console.log('Swiped up');
         jump();
     }
