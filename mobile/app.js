@@ -18,19 +18,19 @@
     const p8 = document.getElementById('plane8');       // road backplane
     const p9 = document.getElementById('plane9');       // mountains (post-mvp)
     const p10 = document.getElementById('plane10');     // sky
-    const displayUnit = Math.floor(Math.min(window.innerWidth / 16, window.innerHeight / 11));
+    const displayUnit = Math.floor(Math.min(window.innerWidth / 16, window.innerHeight / 10));
     const fullW = displayUnit * 16;
     const fullH = displayUnit * 9;
     const w = fullW / 16;
     const h = fullH / 9;
-    const gameboxPadding = Math.floor((window.innerHeight - fullH) / 2);
+    const gameboxPadding = Math.floor(window.innerHeight - fullH);
 
 // Function Build Page Layout
     function buildGamePage() {
       par.style.width = fullW + 'px';
       par.style.height = fullH + 'px';
       header.style.height = gameboxPadding + 'px';
-      footer.style.height = gameboxPadding + 'px';
+      footer.style.height = 0;
     };
 
 // Function Create Backplane
@@ -964,20 +964,20 @@ gestureZone.addEventListener('touchend', function(event) {
 }, false);
 
 function handleGesture() {
-    if (touchstartX - touchendX >= 25 && Math.abs(touchendY - touchstartY) <= 50) {
+    if (touchstartX - touchendX >= 25 && Math.abs(touchendY - touchstartY) <= 15) {
         // console.log('Swiped left');
         moveLeft();
     }
 
-    if (touchendX - touchstartX >= 25 && Math.abs(touchendY - touchstartY) <= 50) {
+    if (touchendX - touchstartX >= 25 && Math.abs(touchendY - touchstartY) <= 15) {
         // console.log('Swiped right');
         moveRight();
     }
 
-    // if ((touchstartY - touchendY) >= 50 && Math.abs(touchendX - touchstartX) <= 50) {
-    //     // console.log('Swiped up');
-    //     jump();
-    // }
+    if ((touchstartY - touchendY) > 15 && Math.abs(touchendX - touchstartX) < 25) {
+        // console.log('Swiped up');
+        jump();
+    }
 
     // if (touchendY >= touchstartY) {
     //     console.log('Swiped down');
