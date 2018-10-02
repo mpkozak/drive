@@ -18,19 +18,19 @@
     const p8 = document.getElementById('plane8');       // road backplane
     const p9 = document.getElementById('plane9');       // mountains (post-mvp)
     const p10 = document.getElementById('plane10');     // sky
-    const displayUnit = Math.floor(Math.min(window.innerWidth / 16, window.innerHeight / 10));
+    const displayUnit = Math.floor(Math.min(window.innerWidth / 16, window.innerHeight / 11));
     const fullW = displayUnit * 16;
     const fullH = displayUnit * 9;
     const w = fullW / 16;
     const h = fullH / 9;
-    const gameboxPadding = Math.floor(window.innerHeight - fullH);
+    const gameboxPadding = Math.floor((window.innerHeight - fullH) / 2);
 
 // Function Build Page Layout
     function buildGamePage() {
       par.style.width = fullW + 'px';
       par.style.height = fullH + 'px';
       header.style.height = gameboxPadding + 'px';
-      footer.style.height = 0;
+      footer.style.height = gameboxPadding + 'px';
     };
 
 // Function Create Backplane
@@ -941,52 +941,48 @@
 
 
 
-// swipe stack
 
-let touchstartX = 0;
-let touchstartY = 0;
-let touchendX = 0;
-let touchendY = 0;
 
-const gestureZone = document.querySelector('main');
 
-gestureZone.addEventListener('touchstart', function(event) {
-    event.preventDefault();
-    touchstartX = event.changedTouches[0].screenX;
-    touchstartY = event.changedTouches[0].screenY;
-}, false);
 
-gestureZone.addEventListener('touchend', function(event) {
-    event.preventDefault();
-    touchendX = event.changedTouches[0].screenX;
-    touchendY = event.changedTouches[0].screenY;
-    handleGesture();
-}, false);
 
-function handleGesture() {
-    if (touchstartX - touchendX >= 25) {
-        // console.log('Swiped left');
-        moveLeft();
-    }
+// Swipe Stack
+// ADAPTED FROM CODE @: https://gist.github.com/SleepWalker/da5636b1abcbaff48c4d //
+const touchBox = document.querySelector('main');
+let xTouchStart = 0;
+let xTouchEnd = 0;
+let deltaX = 0;
+let yTouchStart = 0;
+let yTouchEnd = 0;
+let deltaY = 0;
+let xSwipe = fullW * 0.15;
+let ySwipe = fullH * 0.1;
 
-    if (touchendX - touchstartX >= 25) {
-        // console.log('Swiped right');
-        moveRight();
-    }
+touchBox.addEventListener('touchstart', function(event) {
+  event.preventDefault();
+  xTouchStart = event.changedTouches[0].screenX;
+  yTouchStart = event.changedTouches[0].screenY;
+});
 
-    if ((touchstartY - touchendY) > 15 && Math.abs(touchendX - touchstartX) < 25) {
-        // console.log('Swiped up');
-        jump();
-    }
+touchBox.addEventListener('touchend', function(event) {
+  event.preventDefault();
+  xTouchEnd = event.changedTouches[0].screenX;
+  yTouchEnd = event.changedTouches[0].screenY;
+  deltaX = Math.abs(xTouchEnd - xTouchStart);
+  deltaY = Math.abs(yTouchEnd - yTouchStart);
+  swipeMover();
+});
 
-    // if (touchendY >= touchstartY) {
-    //     console.log('Swiped down');
-    // }
-
-    // if (touchendY === touchstartY && touchendX === touchendY) {
-    //     // console.log('Tap');
-    //     jump();
-    // }
-}
+function swipeMover() {
+  if (deltaX > deltaY && xTouchStart - xTouchEnd >= xSwipe) {
+    moveLeft();
+  };
+  if (deltaX > deltaY && xTouchEnd - xTouchStart >= xSwipe) {
+    moveRight();
+  };
+  if (deltaY > deltaX && yTouchStart - yTouchEnd >= ySwipe) {
+    jump();
+  };
+};
 
 
