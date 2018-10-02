@@ -798,7 +798,7 @@
     setTimeout(() => { makeSky() }, 1);
     makePlayerCar(p5);
     makeSplashElements();
-    window.onload = () => splash();
+    window.onload = () => { splash() };
 
 // Function Splash Master Stack
     function splash() {
@@ -930,30 +930,3 @@
 
 // rAF Initialize
     window.requestAnimationFrame(drawGame);
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////
-// NOT MY CODE --- ATTEMPT TO ADD LEGACY BROWSER SUPPORT FOR requestAnimationFrame --- DOESN'T WORK //
-// Pulled From https://gist.github.com/amsul/3691721 //
-    // window.requestAnimFrame = (function(){
-    //   return  window.requestAnimationFrame    ||
-    //     window.webkitRequestAnimationFrame  ||
-    //     window.mozRequestAnimationFrame   ||
-    //     window.oRequestAnimationFrame   ||
-    //     window.msRequestAnimationFrame    ||
-    //     function( callback ){
-    //       window.setTimeout(callback, 1000 / 60);
-    //     };
-    // })();
-
-// Function Master Animation Frame Stack
-    // function drawGame(timestamp) {
-    //   tStamp = timestamp;
-    //   t = timestamp / 16;
-    //   redraw(timestamp, t);
-    //   window.requestAnimFrame(drawGame);
-    // };
-
-// rAF Initialize
-    // window.requestAnimFrame(drawGame);
-///////////////////////////////////////////////////////////////////////////////////////////////////////
