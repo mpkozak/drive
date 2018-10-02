@@ -964,12 +964,12 @@ gestureZone.addEventListener('touchend', function(event) {
 }, false);
 
 function handleGesture() {
-    if (touchendX <= touchstartX && Math.abs(touchendY - touchstartY) <= 50) {
+    if (touchstartX - touchendX >= 25 && Math.abs(touchendY - touchstartY) <= 50) {
         // console.log('Swiped left');
         moveLeft();
     }
 
-    if (touchendX >= touchstartX && Math.abs(touchendY - touchstartY) <= 50) {
+    if (touchendX - touchstartX >= 25 && Math.abs(touchendY - touchstartY) <= 50) {
         // console.log('Swiped right');
         moveRight();
     }
@@ -983,7 +983,7 @@ function handleGesture() {
     //     console.log('Swiped down');
     // }
 
-    if (touchendY === touchstartY) {
+    if (touchendY === touchstartY && Math.abs(touchendX - touchstartX) <= 25) {
         // console.log('Tap');
         jump();
     }
