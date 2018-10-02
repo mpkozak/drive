@@ -912,6 +912,8 @@
       };
     };
 
+
+
 // Pulled From https://gist.github.com/amsul/3691721 //
     window.requestAnimFrame = (function(){
       return  window.requestAnimationFrame    ||
@@ -923,6 +925,8 @@
           window.setTimeout(drawGame, 1000 / 60);
         };
     })();
+
+
 
 // Function Master Animation Frame Stack
     function drawGame(timestamp) {
