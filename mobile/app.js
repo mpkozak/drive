@@ -23,7 +23,7 @@
     const fullH = displayUnit * 9;
     const w = fullW / 16;
     const h = fullH / 9;
-    const gameboxPadding = Math.floor((window.innerHeight - fullH) / 2);
+    const gameboxPadding = Math.floor((window.innerHeight - fullH) / 4);
 
 // Function Build Page Layout
     function buildGamePage() {
@@ -974,18 +974,19 @@ function handleGesture() {
         moveRight();
     }
 
-    if ((touchstartY - touchendY) >= 50 && Math.abs(touchendX - touchstartX) <= 50) {
-        // console.log('Swiped up');
-        jump();
-    }
+    // if ((touchstartY - touchendY) >= 50 && Math.abs(touchendX - touchstartX) <= 50) {
+    //     // console.log('Swiped up');
+    //     jump();
+    // }
 
     // if (touchendY >= touchstartY) {
     //     console.log('Swiped down');
     // }
 
-    // if (touchendY === touchstartY) {
-    //     console.log('Tap');
-    // }
+    if (touchendY === touchstartY) {
+        // console.log('Tap');
+        jump();
+    }
 }
 
 
