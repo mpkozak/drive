@@ -955,8 +955,8 @@ let deltaX = 0;
 let yTouchStart = 0;
 let yTouchEnd = 0;
 let deltaY = 0;
-let xSwipe = fullW * 0.15;
-let ySwipe = fullH * 0.1;
+let xSwipe = fullW * 0.1;
+let ySwipe = fullH * 0.08;
 
 touchBox.addEventListener('touchstart', function(event) {
   event.preventDefault();
