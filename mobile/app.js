@@ -74,43 +74,43 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 // Function Key Down Handler
-    function keyDownHandler(event) {
-      playerCar.style.transitionDuration = '250ms';
-      playerCar.style.TransitionTimingFunction = 'ease-in-out';
-      if (event.keyCode === 38) {
-        speedInput = true;
-        speedUp = true;
-      } else if (event.keyCode === 40) {
-        speedInput = true;
-        speedDown = true;
-      } else if (event.keyCode === 37) {
-        moveLeft();
-      } else if (event.keyCode === 39) {
-        moveRight();
-      } else if (event.keyCode === 32) {
-        jump();
-      };
-    };
+    // function keyDownHandler(event) {
+    //   playerCar.style.transitionDuration = '250ms';
+    //   playerCar.style.TransitionTimingFunction = 'ease-in-out';
+    //   if (event.keyCode === 38) {
+    //     speedInput = true;
+    //     speedUp = true;
+    //   } else if (event.keyCode === 40) {
+    //     speedInput = true;
+    //     speedDown = true;
+    //   } else if (event.keyCode === 37) {
+    //     moveLeft();
+    //   } else if (event.keyCode === 39) {
+    //     moveRight();
+    //   } else if (event.keyCode === 32) {
+    //     jump();
+    //   };
+    // };
 
 // Function Key Up Handler
-    function keyUpHandler(event) {
-      if (event.keyCode === 38) {
-        speedUp = false;
-      } else if (event.keyCode === 40) {
-        speedDown = false;
-      };
-    };
+    // function keyUpHandler(event) {
+    //   if (event.keyCode === 38) {
+    //     speedUp = false;
+    //   } else if (event.keyCode === 40) {
+    //     speedDown = false;
+    //   };
+    // };
 
 // Function Add Key Listeners
     function addKeyListener() {
-      document.addEventListener('keydown', keyDownHandler);
-      document.addEventListener('keyup', keyUpHandler);
+      // document.addEventListener('keydown', keyDownHandler);
+      // document.addEventListener('keyup', keyUpHandler);
     };
 
 // Function Remove Key Listeners
     function removeKeyListener() {
-      document.removeEventListener('keydown', keyDownHandler);
-      document.removeEventListener('keyup', keyUpHandler);
+      // document.removeEventListener('keydown', keyDownHandler);
+      // document.removeEventListener('keyup', keyUpHandler);
     };
 
 
@@ -481,6 +481,8 @@
 
 // Function Move Left
     function moveLeft() {
+      playerCar.style.transitionDuration = '250ms';
+      playerCar.style.TransitionTimingFunction = 'ease-in-out';
       let left = parseInt(playerCar.style.left.replace(/px/g, ''));
       if (left >= w * 6) {
         playerCar.style.left = left - (w * 4) + 'px';
@@ -489,6 +491,8 @@
 
 // Function Move Right
     function moveRight() {
+      playerCar.style.transitionDuration = '250ms';
+      playerCar.style.TransitionTimingFunction = 'ease-in-out';
       let left = parseInt(playerCar.style.left.replace(/px/g, ''));
       if (left <= w * 6) {
         playerCar.style.left = left + (w * 4) + 'px';
@@ -497,6 +501,8 @@
 
 // Function Jump
     function jump() {
+      playerCar.style.transitionDuration = '250ms';
+      playerCar.style.TransitionTimingFunction = 'ease-in-out';
       let top = parseInt(playerCar.style.top.replace(/px/g, ''));
       if (top >= w * 7 && playerCar.classList[0] !== 'jump') {
         playerCar.classList.add('jump');
@@ -976,7 +982,7 @@ function handleGesture() {
         moveRight();
     }
 
-    if (touchendY <= touchstartY && Math.abs(touchendX - touchstartX) <= 100) {
+    if (touchendY <= touchstartY && Math.abs(touchendX - touchstartX) <= 50) {
         console.log('Swiped up');
         jump();
     }
@@ -989,3 +995,5 @@ function handleGesture() {
     //     console.log('Tap');
     // }
 }
+
+
