@@ -122,6 +122,10 @@ main {
   position: absolute;
 }
 
+.swipe-map {
+  position: absolute;
+}
+
 .tutorial li {
   text-align: left;
   list-style: none;
@@ -136,6 +140,12 @@ kbd {
   font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
   color: #444444;
   text-shadow: 0 1px 0 #FFFFFF;
+}
+
+.swipe {
+  display: inline-block;
+  font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+  font-weight: 800;
 }
 
 .continue {

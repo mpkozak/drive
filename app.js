@@ -1,3 +1,43 @@
+///////////////////////////////////////////////////////////////////////////////////
+// // *** NOT MY CODE *** // // *** NOT MY CODE *** // // *** NOT MY CODE *** // //
+///////////////////////////////////////////////////////////////////////////////////
+
+// requestAnimationFrame Polyfill  ---  Adapted From https://gist.github.com/amsul/3691721
+    window.requestAnimFrame = (function(){
+      return  window.requestAnimationFrame ||
+        window.webkitRequestAnimationFrame ||
+        window.mozRequestAnimationFrame ||
+        window.oRequestAnimationFrame ||
+        window.msRequestAnimationFrame ||
+        function(callback){
+          window.setTimeout(callback, 1000 / 60);
+        };
+      })();
+
+// Function Detect Mobile Browser  ---  Adapted From https://stackoverflow.com/questions/11381673/detecting-a-mobile-browser
+    function isMobile() {
+      if (navigator.userAgent.match(/Android/i)
+        || navigator.userAgent.match(/webOS/i)
+        || navigator.userAgent.match(/iPhone/i)
+        || navigator.userAgent.match(/iPad/i)
+        || navigator.userAgent.match(/iPod/i)
+        || navigator.userAgent.match(/BlackBerry/i)
+        || navigator.userAgent.match(/Windows Phone/i)
+      ) {
+        return true;
+      } else {
+        return false;
+      };
+    };
+    let mobile = isMobile();
+
+///////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+
+
+
+
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //  //  //  //  //  //  //  //  INITIALIZATION FUNCTIONS  //  //  //  //  //  //  //  //
@@ -18,7 +58,7 @@
     const p8 = document.getElementById('plane8');       // road backplane
     const p9 = document.getElementById('plane9');       // mountains (post-mvp)
     const p10 = document.getElementById('plane10');     // sky
-    const displayUnit = Math.floor(Math.min(window.innerWidth / 16, window.innerHeight / 9));
+    const displayUnit = Math.floor(Math.min(window.innerWidth / 18, window.innerHeight / 11));
     const fullW = displayUnit * 16;
     const fullH = displayUnit * 9;
     const w = fullW / 16;
@@ -29,8 +69,8 @@
     function buildGamePage() {
       par.style.width = fullW + 'px';
       par.style.height = fullH + 'px';
-      header.style.height = '1px';
-      footer.style.height = gameboxPadding * 2 + 'px';
+      header.style.height = gameboxPadding + 'px';
+      footer.style.height = gameboxPadding + 'px';
     };
 
 // Function Create Backplane
@@ -61,97 +101,124 @@
     };
 
 
-    // window.scrollTo(0,1)
-
-
 ////////////////////////////////////////////////////////////////////////////////////////
 //  //  //  //  //  //  //  //  KEYBOARD EVENT FUNCTIONS  //  //  //  //  //  //  //  //
 ////////////////////////////////////////////////////////////////////////////////////////
 
 // Function Key Down Handler
-    // function keyDownHandler(event) {
-    //   playerCar.style.transitionDuration = '250ms';
-    //   playerCar.style.TransitionTimingFunction = 'ease-in-out';
-    //   if (event.keyCode === 38) {
-    //     speedInput = true;
-    //     speedUp = true;
-    //   } else if (event.keyCode === 40) {
-    //     speedInput = true;
-    //     speedDown = true;
-    //   } else if (event.keyCode === 37) {
-    //     moveLeft();
-    //   } else if (event.keyCode === 39) {
-    //     moveRight();
-    //   } else if (event.keyCode === 32) {
-    //     jump();
-    //   };
-    // };
+    function keyDownHandler(event) {
+      if (event.keyCode === 38) {
+        speedInput = true;
+        speedUp = true;
+      } else if (event.keyCode === 40) {
+        speedInput = true;
+        speedDown = true;
+      } else if (event.keyCode === 37) {
+        moveLeft();
+      } else if (event.keyCode === 39) {
+        moveRight();
+      } else if (event.keyCode === 32) {
+        jump();
+      };
+    };
 
 // Function Key Up Handler
-    // function keyUpHandler(event) {
-    //   if (event.keyCode === 38) {
-    //     speedUp = false;
-    //   } else if (event.keyCode === 40) {
-    //     speedDown = false;
-    //   };
-    // };
+    function keyUpHandler(event) {
+      if (event.keyCode === 38) {
+        speedUp = false;
+      } else if (event.keyCode === 40) {
+        speedDown = false;
+      };
+    };
 
 // Function Add Key Listeners
-    // function addKeyListener() {
-    //   document.addEventListener('keydown', keyDownHandler);
-    //   document.addEventListener('keyup', keyUpHandler);
-    // };
+    function addKeyListener() {
+      document.addEventListener('keydown', keyDownHandler);
+      document.addEventListener('keyup', keyUpHandler);
+    };
 
 // Function Remove Key Listeners
-    // function removeKeyListener() {
-    //   document.removeEventListener('keydown', keyDownHandler);
-    //   document.removeEventListener('keyup', keyUpHandler);
-    // };
-let xTouchStart = 0;
-let xTouchEnd = 0;
-let deltaX = 0;
-let yTouchStart = 0;
-let yTouchEnd = 0;
-let deltaY = 0;
-let xSwipe = fullW * 0.05;
-let ySwipe = fullH * 0.05;
+    function removeKeyListener() {
+      document.removeEventListener('keydown', keyDownHandler);
+      document.removeEventListener('keyup', keyUpHandler);
+    };
 
-function touchStart(event) {
-  event.preventDefault();
-  xTouchStart = event.changedTouches[0].screenX;
-  yTouchStart = event.changedTouches[0].screenY;
-};
 
-function touchEnd(event) {
-  event.preventDefault();
-  xTouchEnd = event.changedTouches[0].screenX;
-  yTouchEnd = event.changedTouches[0].screenY;
-  deltaX = Math.abs(xTouchEnd - xTouchStart);
-  deltaY = Math.abs(yTouchEnd - yTouchStart);
-  swipeMover();
-};
+/////////////////////////////////////////////////////////////////////////////////////
+//  //  //  //  //  //  //  //  SWIPE EVENT FUNCTIONS  //  //  //  //  //  //  //  //
+/////////////////////////////////////////////////////////////////////////////////////
 
-function addKeyListener() {
-  par.addEventListener('touchstart', touchStart);
-  par.addEventListener('touchend', touchEnd);
-};
+// Variable Initial States
+    let xStart = 0;
+    let xEnd = 0;
+    let deltaX = 0;
+    let yStart = 0;
+    let yEnd = 0;
+    let deltaY = 0;
 
-function removeKeyListener() {
-  par.removeEventListener('touchstart', touchStart);
-  par.removeEventListener('touchend', touchEnd);
-};
+// Function Touch Start
+    function touchStart(event) {
+      event.preventDefault();
+      xStart = event.changedTouches[0].screenX;
+      yStart = event.changedTouches[0].screenY;
+    };
 
-function swipeMover() {
-  if (deltaX > deltaY && xTouchStart - xTouchEnd >= xSwipe) {
-    moveLeft();
-  };
-  if (deltaX > deltaY && xTouchEnd - xTouchStart >= xSwipe) {
-    moveRight();
-  };
-  if (deltaY > deltaX && yTouchStart - yTouchEnd >= ySwipe) {
-    jump();
-  };
-};
+// Function Touch End
+    function touchEnd(event) {
+      event.preventDefault();
+      xEnd = event.changedTouches[0].screenX;
+      yEnd = event.changedTouches[0].screenY;
+      deltaX = Math.abs(xEnd - xStart);
+      deltaY = Math.abs(yEnd - yStart);
+      swipeHandler();
+    };
+
+// Function Swipe Handler
+    function swipeHandler() {
+      if (deltaX > deltaY && xEnd < xStart) {
+        moveLeft();
+      } else if (deltaX > deltaY && xEnd > xStart) {
+        moveRight();
+      } else if (deltaX < deltaY && yEnd < yStart) {
+        jump();
+      };
+    };
+
+// Function Add Swipe Listeners
+    function addSwipeListener() {
+      par.addEventListener('touchstart', touchStart);
+      par.addEventListener('touchend', touchEnd);
+    };
+
+// Function Remove Swipe Listeners
+    function removeSwipeListener() {
+      par.removeEventListener('touchstart', touchStart);
+      par.removeEventListener('touchend', touchEnd);
+    };
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+//  //  //  //  //  //  //  //  INPUT EVENT FUNCTIONS  //  //  //  //  //  //  //  //
+/////////////////////////////////////////////////////////////////////////////////////
+
+// Function Add User Input Listener
+    function addInputListener() {
+      if(!mobile) {
+        addKeyListener();
+      } else {
+        addSwipeListener();
+      };
+    };
+
+// Function Remove User Input Listener
+    function removeInputListener() {
+      if(!mobile) {
+        removeKeyListener();
+      } else {
+        removeSwipeListener();
+      };
+    };
+
 
 ////////////////////////////////////////////////////////////////////////////////
 //  //  //  //  //  //  //  //  SPLASH FUNCTIONS  //  //  //  //  //  //  //  //
@@ -254,6 +321,9 @@ function swipeMover() {
       playerCar.style.transitionDuration = '1s';
       playerCar.style.transitionTimingFunction = 'ease-in-out';
       playerCar.style.top = 7 * h + 'px';
+      setTimeout( () => {
+        playerCar.style.transitionDuration = '250ms';
+      }, 1000);
     };
 
 
@@ -261,9 +331,9 @@ function swipeMover() {
 //  //  //  //  //  //  //  //  TUTORIAL FUNCTIONS  //  //  //  //  //  //  //  //
 //////////////////////////////////////////////////////////////////////////////////
 
-// Function Make Tutorial Style + Size Conform
-    function makeTutorial() {
-      let instructions = document.querySelector('.instructions');
+// Function Desktop Tutorial Style + Size Conform
+    function drawTutorialDesktop() {
+      let instructions = document.getElementById('instructions-desktop');
       instructions.style.left = 1 * w + 'px';
       instructions.style.top = h / 2 + 'px';
       instructions.style.width = w * 14 + 'px';
@@ -287,16 +357,60 @@ function swipeMover() {
       let space = document.querySelector('.space');
       space.style.marginLeft = '0';
       space.style.width = 1.5 * w + 'px';
-      let cont = document.querySelector('.continue');
+      let cont = document.getElementById('continue-desktop');
       cont.style.left = 1 * w + 'px';
       cont.style.top = 8 * h + 'px';
       cont.style.width = w * 14 + 'px';
       cont.style.fontSize = h / 2 + 'px';
-      tutorial = document.querySelector('.tutorial');
+      tutorial = document.getElementById('tutorial-desktop');
       tutorial.style.display = 'block';
       tutorial.style.opacity = 0;
       tutorial.remove();
       p2.appendChild(tutorial);
+      document.addEventListener('keydown', initializeGamePlay);
+    };
+
+// Function Mobile Tutorial Style + Size Conform
+    function drawTutorialMobile() {
+      let instructions = document.getElementById('instructions-mobile');
+      instructions.style.left = 1 * w + 'px';
+      instructions.style.top = h / 2 + 'px';
+      instructions.style.width = w * 14 + 'px';
+      instructions.style.fontSize = h / 2 + 'px';
+      let swipeMap = document.querySelector('.swipe-map')
+      swipeMap.style.backgroundColor = 'rgba(1,1,1,0.2)';
+      swipeMap.style.padding = w / 5 + 'px';
+      swipeMap.style.left = 5.55 * w + 'px';
+      swipeMap.style.top = 2.5 * h + 'px';
+      swipeMap.style.width = 4.5 * w + 'px';
+      swipeMap.style.fontSize = h / 2 + 'px';
+      let swipes = document.querySelectorAll('.swipe')
+      for (let i = 0; i < swipes.length; i++) {
+        swipes[i].style.marginTop = (1 / 8) * h + 'px';
+        swipes[i].style.marginLeft = w + 'px';
+        swipes[i].style.width = (3 / 4) * w + 'px';
+        swipes[i].style.height = (3 / 4) * h + 'px';
+      };
+      let cont = document.getElementById('continue-mobile');
+      cont.style.left = 1 * w + 'px';
+      cont.style.top = 8 * h + 'px';
+      cont.style.width = w * 14 + 'px';
+      cont.style.fontSize = h / 2 + 'px';
+      tutorial = document.getElementById('tutorial-mobile');
+      tutorial.style.display = 'block';
+      tutorial.style.opacity = 0;
+      tutorial.remove();
+      p2.appendChild(tutorial);
+      setTimeout(() => { document.addEventListener('click', initializeGamePlay) }, 100);
+    };
+
+// Function Select Tutorial
+    function makeTutorial() {
+      if (!mobile) {
+        drawTutorialDesktop();
+      } else {
+        drawTutorialMobile();
+      };
     };
 
 // Function Tutorial Appear
@@ -309,7 +423,6 @@ function swipeMover() {
 // Function Tutorial Remove
     function tutorialRemove() {
       tutorial.style.transitionDuration = '500ms';
-      tutorial.style.transitionTimingFunction = 'ease-in';
       tutorial.style.opacity = 0;
       setTimeout(() => { tutorial.remove() }, 500);
     };
@@ -520,8 +633,6 @@ function swipeMover() {
 
 // Function Move Left
     function moveLeft() {
-      playerCar.style.transitionDuration = '150ms';
-      playerCar.style.TransitionTimingFunction = 'ease-in-out';
       let left = parseInt(playerCar.style.left.replace(/px/g, ''));
       if (left >= w * 6) {
         playerCar.style.left = left - (w * 4) + 'px';
@@ -530,8 +641,6 @@ function swipeMover() {
 
 // Function Move Right
     function moveRight() {
-      playerCar.style.transitionDuration = '150ms';
-      playerCar.style.TransitionTimingFunction = 'ease-in-out';
       let left = parseInt(playerCar.style.left.replace(/px/g, ''));
       if (left <= w * 6) {
         playerCar.style.left = left + (w * 4) + 'px';
@@ -540,8 +649,6 @@ function swipeMover() {
 
 // Function Jump
     function jump() {
-      playerCar.style.transitionDuration = '250ms';
-      playerCar.style.TransitionTimingFunction = 'ease-in-out';
       let top = parseInt(playerCar.style.top.replace(/px/g, ''));
       if (top >= w * 7 && playerCar.classList[0] !== 'jump') {
         playerCar.classList.add('jump');
@@ -866,15 +973,13 @@ function swipeMover() {
       initializePlayerCar();
       titleFlyOut();
       playButtonExplode();
-      // tutorial();
-      initializeGamePlay();
+      tutorial();
     };
 
 // Function Tutorial Master Stack
     function tutorial() {
-      // makeTutorial();
-      // setTimeout(() => { tutorialAppear() }, 200);
-      // par.addEventListener('click', initializeGamePlay);
+      makeTutorial();
+      setTimeout(() => { tutorialAppear() }, 200);
     };
 
 // Function Initialize Gameplay Master Stack
@@ -886,20 +991,21 @@ function swipeMover() {
       lastEnemyD = 0;
       finishLine = false;
       finished = false;
-      // par.removeEventListener('click', initializeGamePlay);
-      // tutorialRemove();
+      document.removeEventListener('keydown', initializeGamePlay);
+      tutorialRemove();
       splashState = false;
       p3.style.transitionDuration = '2s';
       setTimeout(() => { p3.style.opacity = 0 }, 500);
       makeHud();
-      addKeyListener();
+      addInputListener();
       setTimeout(() => {
         hudFadeIn();
         resetClock();
         resetDistance();
       }, 500);
-      speedInput = true;
-      speedUp = true;
+      if (mobile) {
+        setTimeout( () => { speedUp = true }, 1000);
+      };
     };
 
 // Function Gameplay Runtime Master Stack
@@ -920,7 +1026,7 @@ function swipeMover() {
 // Function Endgame Master Stack
     function endgame() {
       finished = true;
-      removeKeyListener();
+      removeInputListener();
       speedInput = false;
       speedUp = false;
       speedDown = false;
@@ -981,86 +1087,8 @@ function swipeMover() {
       tStamp = timestamp;
       t = timestamp / 16;
       redraw(timestamp, t);
-      window.requestAnimationFrame(drawGame);
+      window.requestAnimFrame(drawGame);
     };
 
 // rAF Initialize
-    window.requestAnimationFrame(drawGame);
-
-
-
-
-
-
-
-
-// Swipe Stack
-// ADAPTED FROM CODE @: https://gist.github.com/SleepWalker/da5636b1abcbaff48c4d //
-// const touchBox = par
-// let xTouchStart = 0;
-// let xTouchEnd = 0;
-// let deltaX = 0;
-// let yTouchStart = 0;
-// let yTouchEnd = 0;
-// let deltaY = 0;
-// let xSwipe = fullW * 0.05;
-// let ySwipe = fullH * 0.05;
-
-
-// par.addEventListener('touchstart', function(event) {
-//   event.preventDefault();
-//   xTouchStart = event.changedTouches[0].screenX;
-//   yTouchStart = event.changedTouches[0].screenY;
-// });
-// par.addEventListener('touchend', function(event) {
-//   event.preventDefault();
-//   xTouchEnd = event.changedTouches[0].screenX;
-//   yTouchEnd = event.changedTouches[0].screenY;
-//   deltaX = Math.abs(xTouchEnd - xTouchStart);
-//   deltaY = Math.abs(yTouchEnd - yTouchStart);
-//   swipeMover();
-// });
-
-
-// function touchStart(event) {
-//   event.preventDefault();
-//   xTouchStart = event.changedTouches[0].screenX;
-//   yTouchStart = event.changedTouches[0].screenY;
-// };
-
-// function touchEnd(event) {
-//   event.preventDefault();
-//   xTouchEnd = event.changedTouches[0].screenX;
-//   yTouchEnd = event.changedTouches[0].screenY;
-//   deltaX = Math.abs(xTouchEnd - xTouchStart);
-//   deltaY = Math.abs(yTouchEnd - yTouchStart);
-//   swipeMover();
-// };
-
-// function addKeyListener() {
-//   par.addEventListener('touchstart', touchStart(event));
-//   par.addEventListener('touchend', touchEnd(event));
-// };
-
-// function removeKeyListener() {
-//   par.removeEventListener('touchstart', touchStart(event));
-//   par.removeEventListener('touchend', touchEnd(event));
-// };
-
-// function swipeMover() {
-//   if (deltaX > deltaY && xTouchStart - xTouchEnd >= xSwipe) {
-//     moveLeft();
-//   };
-//   if (deltaX > deltaY && xTouchEnd - xTouchStart >= xSwipe) {
-//     moveRight();
-//   };
-//   if (deltaY > deltaX && yTouchStart - yTouchEnd >= ySwipe) {
-//     jump();
-//   };
-// };
-
-
-
-
-
-
+    window.requestAnimFrame(drawGame);

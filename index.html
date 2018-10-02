@@ -13,8 +13,8 @@
     <audio id="music" loop>
       <source src="audio/dmc.mp3" type="audio/mpeg" preload>
     </audio>
-    <div class="tutorial">
-      <div class="instructions">
+    <div class="tutorial" id="tutorial-desktop">
+      <div class="instructions" id="instructions-desktop">
         <p>Can You Cross The Finish Line Before Time Runs Out?</p>
         <p>Watch Out For Other Cars On The Road!</p>
       </div>
@@ -26,8 +26,23 @@
         <li><kbd class="arrow">&rarr;</kbd> Move Right</li>
         <li><kbd class="space">space</kbd> Jump</li>
       </ul>
-      <div class="continue">
+      <div class="continue" id="continue-desktop">
         <p>Press Any Key To Continue.</p>
+      </div>
+    </div>
+    <div class="tutorial" id="tutorial-mobile">
+      <div class="instructions" id="instructions-mobile">
+        <p>Can You Cross The Finish Line Before Time Runs Out?</p>
+        <p>Watch Out For Other Cars On The Road!</p>
+      </div>
+      <ul class="swipe-map">
+        <li>&nbsp;&nbsp;Swipe To Move:</li>
+        <li><span class="swipe">&nbsp;&larr;&nbsp;</span> Left</li>
+        <li><span class="swipe">&nbsp;&rarr;&nbsp;</span> Right</li>
+        <li><span class="swipe">&nbsp;&uarr;&nbsp;</span> Jump</li>
+      </ul>
+      <div class="continue" id="continue-mobile">
+        <p>Tap Anywhere To Continue.</p>
       </div>
     </div>
     <div class="header"></div>
