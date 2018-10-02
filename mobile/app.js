@@ -18,19 +18,20 @@
     const p8 = document.getElementById('plane8');       // road backplane
     const p9 = document.getElementById('plane9');       // mountains (post-mvp)
     const p10 = document.getElementById('plane10');     // sky
-    const displayUnit = Math.floor(Math.min(window.innerWidth / 16, window.innerHeight / 9));
+    const displayUnit = Math.floor(Math.min(window.innerWidth / 16, window.innerHeight / 10));
     const fullW = displayUnit * 16;
     const fullH = displayUnit * 9;
     const w = fullW / 16;
     const h = fullH / 9;
     const gameboxPadding = Math.floor((window.innerHeight - fullH) / 2);
+    window.scrollTo(0,1)
 
 // Function Build Page Layout
     function buildGamePage() {
       par.style.width = fullW + 'px';
       par.style.height = fullH + 'px';
-      header.style.height = gameboxPadding + 'px';
-      footer.style.height = gameboxPadding + 'px';
+      header.style.height = '1px';
+      footer.style.height = gameboxPadding * 2 + 'px';
     };
 
 // Function Create Backplane
