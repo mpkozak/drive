@@ -23,19 +23,22 @@ function handleGesure() {
     var swiped = 'swiped: ';
     if (touchendX < touchstartX) {
         alert(swiped + 'left!');
+        moveLeft();
     }
     if (touchendX > touchstartX) {
         alert(swiped + 'right!');
+        moveRight();
     }
     if (touchendY < touchstartY) {
         alert(swiped + 'down!');
+        jump();
     }
     if (touchendY > touchstartY) {
         alert(swiped + 'left!');
     }
-    if (touchendY == touchstartY) {
-        alert('tap!');
-    }
+    // if (touchendY == touchstartY) {
+    //     alert('tap!');
+    // }
 }
 
 
