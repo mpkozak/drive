@@ -23,7 +23,7 @@
     const fullH = displayUnit * 9;
     const w = fullW / 16;
     const h = fullH / 9;
-    const gameboxPadding = Math.floor((window.innerHeight - fullH) / 4);
+    const gameboxPadding = Math.floor((window.innerHeight - fullH) / 2);
 
 // Function Build Page Layout
     function buildGamePage() {
@@ -434,7 +434,7 @@
 // Function Refresh Speed
     function setSpeed(t) {
       if (speedUp) {
-        speed += ((maxSpeed - speed) / (maxSpeed * 2));
+        speed += ((maxSpeed - speed) / maxSpeed);
       } else if (speedDown) {
         speed += ((minSpeed - speed) / (minSpeed * 5));
       } else if (speedInput && !speedUp && !speedDown && speed > minSpeed + 1) {
@@ -473,7 +473,7 @@
 
 // Function Move Left
     function moveLeft() {
-      playerCar.style.transitionDuration = '250ms';
+      playerCar.style.transitionDuration = '150ms';
       playerCar.style.TransitionTimingFunction = 'ease-in-out';
       let left = parseInt(playerCar.style.left.replace(/px/g, ''));
       if (left >= w * 6) {
@@ -483,7 +483,7 @@
 
 // Function Move Right
     function moveRight() {
-      playerCar.style.transitionDuration = '250ms';
+      playerCar.style.transitionDuration = '150ms';
       playerCar.style.TransitionTimingFunction = 'ease-in-out';
       let left = parseInt(playerCar.style.left.replace(/px/g, ''));
       if (left <= w * 6) {
@@ -983,7 +983,7 @@ function handleGesture() {
     //     console.log('Swiped down');
     // }
 
-    if (touchendY === touchstartY && Math.abs(touchendX - touchstartX) <= 25) {
+    if (touchendY === touchstartY && touchendX === touchendY) {
         // console.log('Tap');
         jump();
     }
