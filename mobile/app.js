@@ -18,7 +18,7 @@
     const p8 = document.getElementById('plane8');       // road backplane
     const p9 = document.getElementById('plane9');       // mountains (post-mvp)
     const p10 = document.getElementById('plane10');     // sky
-    const displayUnit = Math.floor(Math.min(window.innerWidth / 16, window.innerHeight / 11));
+    const displayUnit = Math.floor(Math.min(window.innerWidth / 16, window.innerHeight / 9));
     const fullW = displayUnit * 16;
     const fullH = displayUnit * 9;
     const w = fullW / 16;
@@ -948,7 +948,7 @@
 
 // Swipe Stack
 // ADAPTED FROM CODE @: https://gist.github.com/SleepWalker/da5636b1abcbaff48c4d //
-const touchBox = document.querySelector('main');
+// const touchBox = par
 let xTouchStart = 0;
 let xTouchEnd = 0;
 let deltaX = 0;
@@ -958,13 +958,13 @@ let deltaY = 0;
 let xSwipe = fullW * 0.05;
 let ySwipe = fullH * 0.05;
 
-touchBox.addEventListener('touchstart', function(event) {
+par.addEventListener('touchstart', function(event) {
   event.preventDefault();
   xTouchStart = event.changedTouches[0].screenX;
   yTouchStart = event.changedTouches[0].screenY;
 });
 
-touchBox.addEventListener('touchend', function(event) {
+par.addEventListener('touchend', function(event) {
   event.preventDefault();
   xTouchEnd = event.changedTouches[0].screenX;
   yTouchEnd = event.changedTouches[0].screenY;
