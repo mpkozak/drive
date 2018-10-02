@@ -951,13 +951,13 @@ let touchendY = 0;
 const gestureZone = document.querySelector('main');
 
 gestureZone.addEventListener('touchstart', function(event) {
-    event.preventDefault();
+    // event.preventDefault();
     touchstartX = event.changedTouches[0].screenX;
     touchstartY = event.changedTouches[0].screenY;
 }, false);
 
 gestureZone.addEventListener('touchend', function(event) {
-    event.preventDefault();
+    // event.preventDefault();
     touchendX = event.changedTouches[0].screenX;
     touchendY = event.changedTouches[0].screenY;
     handleGesture();
