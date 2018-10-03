@@ -93,17 +93,7 @@
       par.style.height = fullH + 'px';
       header.style.display = 'none';
       footer.style.display = 'none';
-      // header.style.height = 0 + 'px';
-      // footer.style.height = 0 + 'px';
-      // window.scrollTo(0,1);
     };
-
-
-
-
-
-
-
 
 // Function Create Backplane
     function makeBackplane() {
@@ -133,42 +123,37 @@
     };
 
 
-function showMobileGamebox() {
-  if (window.innerWidth < window.innerHeight) {
-    par.style.display = 'none';
-  } else {
-    par.style.display = 'block';
-  }
-}
-showMobileGamebox();
+/////////////////////////////////////////////////////////////////////////////////////////
+//  //  //  //  //  //  //  //  SCREEN ROTATION FUNCTIONS  //  //  //  //  //  //  //  //
+/////////////////////////////////////////////////////////////////////////////////////////
 
+// Function Show Or Hide Mobile Gamebox
+    function showMobileGamebox() {
+      let rotate = document.getElementById('rotate');
+      if (window.innerWidth < window.innerHeight) {
+        par.style.display = 'none';
+        rotate.style.display = 'block';
+      } else {
+        rotate.style.display = 'none';
+        par.style.display = 'block';
+      }
+    }
+    showMobileGamebox();
 
+// Rotation Event Listener
+    window.addEventListener('orientationchange', rotationHandler);
 
-
-window.addEventListener('orientationchange', rotationHandler);
-
-function rotationHandler() {
-  let orientation = Math.abs(window.orientation);
-  if (orientation === 90) {
-    par.style.display = 'block';
-    // if (window.innerWidth < window.innerHeight) {
-    //   console.log('good');
-    // }
-  } else {
-    par.style.display = 'none';
-  }
-
-
-  // if (window.innerWidth > window.innerHeight) {
-  //   alert('good')
-  // } else if (window.innerWidth < window.innerHeight) {
-  //   alert('bad')
-  // };
-};
-
-
-
-
+// Function Rotation Handler
+    function rotationHandler() {
+      let orientation = Math.abs(window.orientation);
+      if (orientation === 90) {
+        rotate.style.display = 'none';
+        par.style.display = 'block';
+      } else {
+        par.style.display = 'none';
+        rotate.style.display = 'block';
+      };
+    };
 
 
 ////////////////////////////////////////////////////////////////////////////////////////

@@ -35,6 +35,15 @@ main {
   overflow: hidden;
 }
 
+#rotate {
+  display: none;
+  margin: 5vh;
+  font-size: 10vw;
+  font-family: Futura, Helvetica, sans-serif;
+  font-style: italic;
+  color: #DDDDDD;
+}
+
 .gamebox-child {
   position: absolute;
   overflow: hidden;
