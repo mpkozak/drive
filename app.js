@@ -92,8 +92,9 @@
       par.style.width = fullW + 'px';
       par.style.height = fullH + 'px';
       footer.style.display = 'none';
-      header.style.height = 0 + 'px';
-      footer.style.height = 0 + 'px';
+      header.style.height = 1 + 'px';
+      // footer.style.height = 0 + 'px';
+      window.scrollTo(0,1);
     };
 
 
