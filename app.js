@@ -981,7 +981,10 @@
     const horizon = 3 * h;
     const runTimeTotal = 60;
     const trackLength = 1.5;
-    const maxSpeed = 120;
+    let maxSpeed = 120;
+    if (mobile) {
+      maxSpeed = 100;
+    };
     const minSpeed = 10;
     const startSpeed = 65;
     const enemySpeed = 35;
