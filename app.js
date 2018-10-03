@@ -1,3 +1,4 @@
+
 ///////////////////////////////////////////////////////////////////////////////////
 // // *** NOT MY CODE *** // // *** NOT MY CODE *** // // *** NOT MY CODE *** // //
 ///////////////////////////////////////////////////////////////////////////////////
@@ -34,9 +35,6 @@
 ///////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////
-
-
-
 
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -548,13 +546,6 @@
       makeNeedle();
     };
 
-// Function Remove HUD
-    function removeHud() {
-      speedBox.remove()
-      timeBox.remove()
-      distBox.remove()
-    };
-
 // Function Master HUD Refresh Stack
     function refreshHud() {
       speedBoxRefresh();
@@ -974,6 +965,7 @@
       initializePlayerCar();
       titleFlyOut();
       playButtonExplode();
+      makeHud();
       tutorial();
     };
 
@@ -997,7 +989,6 @@
       splashState = false;
       p3.style.transitionDuration = '2s';
       setTimeout(() => { p3.style.opacity = 0 }, 500);
-      makeHud();
       addInputListener();
       setTimeout(() => {
         hudFadeIn();
@@ -1032,7 +1023,6 @@
       speedUp = false;
       speedDown = false;
       hudFadeOut();
-      setTimeout(() => { removeHud() }, 1000);
       if (distanceRemain > 0) {
         makeEndgameBox('You Lose!');
       } else {
