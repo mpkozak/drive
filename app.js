@@ -1,4 +1,3 @@
-
 ///////////////////////////////////////////////////////////////////////////////////
 // // *** NOT MY CODE *** // // *** NOT MY CODE *** // // *** NOT MY CODE *** // //
 ///////////////////////////////////////////////////////////////////////////////////
@@ -32,12 +31,10 @@
     };
     let mobile = isMobile();
 
-///////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////
 
-
-
+/////////////////////////////////////////////////////////////////////////////////////////////
+// // *** MY CODE *** \\ // *** MY CODE *** \\ // *** MY CODE *** \\ // *** MY CODE *** // //
+/////////////////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //  //  //  //  //  //  //  //  INITIALIZATION FUNCTIONS  //  //  //  //  //  //  //  //
@@ -136,9 +133,8 @@
       } else {
         rotate.style.display = 'none';
         par.style.display = 'block';
-      }
-    }
-    showMobileGamebox();
+      };
+    };
 
 // Rotation Event Listener
     window.addEventListener('orientationchange', rotationHandler);
@@ -457,7 +453,6 @@
       tutorial.remove();
       p2.appendChild(tutorial);
       setTimeout(() => { par.addEventListener('click', initializeGamePlay) }, 100);
-      // document.addEventListener('click', initializeGamePlay);
     };
 
 // Function Select Tutorial
@@ -648,7 +643,7 @@
         speed += ((minSpeed - speed) / (minSpeed * 5));
       } else if (speedInput && !speedUp && !speedDown && speed > minSpeed + 1) {
         speed *= 0.995;
-      }
+      };
     };
 
 
@@ -972,11 +967,11 @@
       setTimeout(() => { endgameText.remove() }, 2000);
     };
 
-// Function Make Harder
+// Function Increase Difficulty On Next Play
     function makeHarder() {
       trackLength += 0.1;
-      if (enemySpacing > 0.004) {
-        enemySpacing -= 0.002;
+      if (enemySpacing > 0.005) {
+        enemySpacing -= 0.001;
       };
       if (maxSpeed < 200) {
         maxSpeed += 10;
@@ -998,7 +993,7 @@
     const treeSpacing = 0.004;
     const laneSpacing = 0.005;
 
-// Global Incrementing Variable Initial States
+// Global Difficulty Variable Initial States
     let trackLength = 1.5;
     let maxSpeed = 120;
     if (mobile) {
@@ -1016,6 +1011,9 @@
     let finished = false;
 
 // Initialization Functions Master Stack
+    if (mobile) {
+      showMobileGamebox();
+    };
     p3.style.backgroundColor = '#000000';
     p3.style.opacity = 0.5;
     buildGamePage();
@@ -1050,7 +1048,7 @@
 
 // Function Initialize Gameplay Master Stack
     function initializeGamePlay() {
-      document.querySelector('#music').play();                //music play
+      // document.querySelector('#music').play();                //music play
       resetClock();
       resetDistance();
       speed = startSpeed;
@@ -1118,8 +1116,7 @@
       playButton.removeEventListener('click', replay)
       endgameFlyOut();
       playButtonExplode();
-      initializeGamePlay();                                   // reenable for deploy -- disable for demo
-      // setTimeout(() => { window.location.reload() }, 1000)    // temporary -- for demo exhibition only (remove for deploy)
+      initializeGamePlay();
     };
 
 
