@@ -37,11 +37,13 @@
 ///////////////////////////////////////////////////////////////////////////////////
 
 
+
+
 ////////////////////////////////////////////////////////////////////////////////////////
 //  //  //  //  //  //  //  //  INITIALIZATION FUNCTIONS  //  //  //  //  //  //  //  //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-// Set Global DOM Variables + Draw Dimension Constants
+// Set Global DOM Constands
     const body = document.querySelector('body');
     const header = document.querySelector('.header');
     const footer = document.querySelector('.footer');
@@ -56,20 +58,50 @@
     const p8 = document.getElementById('plane8');       // road backplane
     const p9 = document.getElementById('plane9');       // mountains (post-mvp)
     const p10 = document.getElementById('plane10');     // sky
-    const displayUnit = Math.floor(Math.min(window.innerWidth / 18, window.innerHeight / 11));
-    const fullW = displayUnit * 16;
-    const fullH = displayUnit * 9;
-    const w = fullW / 16;
-    const h = fullH / 9;
-    const gameboxPadding = Math.floor((window.innerHeight - fullH) / 2);
+
+// Set Global Draw Dimension Variables
+    let displayUnit = Math.floor(Math.min(window.innerWidth / 18, window.innerHeight / 11));
+    if (mobile) {
+      displayUnit = Math.floor(Math.max(window.innerWidth, window.innerHeight) / 16);
+    };
+    let fullW = displayUnit * 16;
+    let fullH = displayUnit * 9;
+    let w = fullW / 16;
+    let h = fullH / 9;
+    let gameboxPadding = Math.floor((window.innerHeight - fullH) / 2);
 
 // Function Build Page Layout
     function buildGamePage() {
+      if (mobile) {
+        makeMobileLayout();
+      } else {
+        makeDesktopLayout();
+      };
+    };
+
+// Function Build Desktop Page Layout
+    function makeDesktopLayout() {
       par.style.width = fullW + 'px';
       par.style.height = fullH + 'px';
       header.style.height = gameboxPadding + 'px';
       footer.style.height = gameboxPadding + 'px';
     };
+
+// Function Build Mobile Page Layout
+    function makeMobileLayout() {
+      par.style.width = fullW + 'px';
+      par.style.height = fullH + 'px';
+      footer.style.display = 'none';
+      header.style.height = 0 + 'px';
+      footer.style.height = 0 + 'px';
+    };
+
+
+
+
+
+
+
 
 // Function Create Backplane
     function makeBackplane() {
@@ -97,6 +129,44 @@
       div.id = 'playerCar';
       gamePlane.appendChild(div);
     };
+
+
+function showMobileGamebox() {
+  if (window.innerWidth < window.innerHeight) {
+    par.style.display = 'none';
+  } else {
+    par.style.display = 'block';
+  }
+}
+showMobileGamebox();
+
+
+
+
+window.addEventListener('orientationchange', rotationHandler);
+
+function rotationHandler() {
+  let orientation = Math.abs(window.orientation);
+  if (orientation === 90) {
+    par.style.display = 'block';
+    // if (window.innerWidth < window.innerHeight) {
+    //   console.log('good');
+    // }
+  } else {
+    par.style.display = 'none';
+  }
+
+
+  // if (window.innerWidth > window.innerHeight) {
+  //   alert('good')
+  // } else if (window.innerWidth < window.innerHeight) {
+  //   alert('bad')
+  // };
+};
+
+
+
+
 
 
 ////////////////////////////////////////////////////////////////////////////////////////
