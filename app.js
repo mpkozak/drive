@@ -62,7 +62,7 @@
 // Set Global Draw Dimension Variables
     let displayUnit = Math.floor(Math.min(window.innerWidth / 18, window.innerHeight / 11));
     if (mobile) {
-      displayUnit = Math.floor(Math.max(window.innerWidth, window.innerHeight) / 16);
+      displayUnit = Math.floor(Math.min(window.innerWidth, window.innerHeight) / 9);
     };
     let fullW = displayUnit * 16;
     let fullH = displayUnit * 9;
@@ -91,10 +91,11 @@
     function makeMobileLayout() {
       par.style.width = fullW + 'px';
       par.style.height = fullH + 'px';
+      header.style.display = 'none';
       footer.style.display = 'none';
-      header.style.height = 1 + 'px';
+      // header.style.height = 0 + 'px';
       // footer.style.height = 0 + 'px';
-      window.scrollTo(0,1);
+      // window.scrollTo(0,1);
     };
 
 
