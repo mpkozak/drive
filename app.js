@@ -972,6 +972,17 @@
       setTimeout(() => { endgameText.remove() }, 2000);
     };
 
+// Function Make Harder
+    function makeHarder() {
+      trackLength += 0.1;
+      if (enemySpacing > 0.004) {
+        enemySpacing -= 0.002;
+      };
+      if (maxSpeed < 200) {
+        maxSpeed += 10;
+      };
+    };
+
 
 /////////////////////////////////////////////////////////////////////////////////////
 //  //  //  //  //  //  //  //  MASTER RUNTIME STACKS  //  //  //  //  //  //  //  //
@@ -980,18 +991,20 @@
 // Global Constant Declarations
     const horizon = 3 * h;
     const runTimeTotal = 60;
-    const trackLength = 1.5;
-    let maxSpeed = 120;
-    if (mobile) {
-      maxSpeed = 100;
-    };
     const minSpeed = 10;
     const startSpeed = 65;
     const enemySpeed = 35;
     const drawDistScale = 7500;
     const treeSpacing = 0.004;
     const laneSpacing = 0.005;
-    const enemySpacing = 0.01;
+
+// Global Incrementing Variable Initial States
+    let trackLength = 1.5;
+    let maxSpeed = 120;
+    if (mobile) {
+      maxSpeed = 100;
+    };
+    let enemySpacing = 0.01;
 
 // Global Variable Initial States
     let tStamp = 0;
@@ -1037,7 +1050,7 @@
 
 // Function Initialize Gameplay Master Stack
     function initializeGamePlay() {
-      // document.querySelector('#music').play();                //music play
+      document.querySelector('#music').play();                //music play
       resetClock();
       resetDistance();
       speed = startSpeed;
@@ -1087,6 +1100,7 @@
         makeEndgameBox('You Lose!');
       } else {
         makeEndgameBox('You Win!');
+        makeHarder();
       };
       makePlayButton(p1, 'playButton', 'More?', 'yellow');
       playButton.addEventListener('click', replay);
