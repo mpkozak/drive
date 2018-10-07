@@ -696,15 +696,9 @@
       let distanceOld = parseInt(box.classList[8]);
       let distance = distanceOld + moveSpeed * (t - box.classList[2]);
 // es5 compatable
-      let c0 = box.classList[0];
-      let c1 = box.classList[1];
-      let c3 = box.classList[3];
-      let c4 = box.classList[4];
-      let c5 = box.classList[5];
-      let c6 = box.classList[6];
-      let c7 = box.classList[7];
+      let newClass = `${box.classList[0]} ${box.classList[1]} ${t} ${box.classList[3]} ${box.classList[4]} ${box.classList[5]} ${box.classList[6]} ${box.classList[7]} ${distance}`;
       box.className = "";
-      box.classList.add(c0, c1, t, c3, c4, c5, c6, c7, distance);
+      box.className = newClass;
 // es6 compatable
       // box.classList.replace(box.classList[2], t);
       // box.classList.replace(box.classList[8], distance);

@@ -453,22 +453,33 @@ function moveBox(a, b) {
     u = c.classList[7],
     v = parseInt(c.classList[8]),
     x = v + e * (b - c.classList[2]),
-    y = c.classList[0],
-    z = c.classList[1],
-    A = c.classList[3],
-    B = c.classList[4],
-    C = c.classList[5],
-    D = c.classList[6],
-    E = c.classList[7];
-  (c.className = ""), c.classList.add(y, z, b, A, B, C, D, E, x);
-  var F = Math.pow(x, 5) / Math.pow(u, 5);
-  (c.style.left = f + (l - f) * F + "px"),
-    (c.style.top = g + (fullH - g) * F + "px"),
-    (c.style.width = j + s * F + "px"),
-    (c.style.height = k + (o - k) * F + "px");
-  var G = parseInt(a.style.top.replace(/px/g, ""));
-  "enemy" === d && 6 <= G && (checkForHit(c), enemyDeltaZ(c, G));
-  G >= 9 * h && clearObject(c, d, G);
+    y =
+      c.classList[0] +
+      " " +
+      c.classList[1] +
+      " " +
+      b +
+      " " +
+      c.classList[3] +
+      " " +
+      c.classList[4] +
+      " " +
+      c.classList[5] +
+      " " +
+      c.classList[6] +
+      " " +
+      c.classList[7] +
+      " " +
+      x;
+  (c.className = ""), (c.className = y);
+  var z = Math.pow(x, 5) / Math.pow(u, 5);
+  (c.style.left = f + (l - f) * z + "px"),
+    (c.style.top = g + (fullH - g) * z + "px"),
+    (c.style.width = j + s * z + "px"),
+    (c.style.height = k + (o - k) * z + "px");
+  var A = parseInt(a.style.top.replace(/px/g, ""));
+  "enemy" === d && 6 <= A && (checkForHit(c), enemyDeltaZ(c, A));
+  A >= 9 * h && clearObject(c, d, A);
 }
 function clearObject(a, b, c) {
   c > 9 * h && "enemy" !== b ? a.remove() : c > 18 * h && a.remove();
