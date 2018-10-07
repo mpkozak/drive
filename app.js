@@ -677,20 +677,22 @@ function endgameFlyOut() {
     }, 2e3);
 }
 function makeHarder() {
-  (trackLength += 0.1), 5e-3 < enemySpacing && (enemySpacing -= 1e-3);
-  200 > maxSpeed && ((maxSpeed += 10), (enemySpeed += 5));
+  (trackLength += 0.1),
+    (runTimeTotal += 5),
+    5e-3 < enemySpacing && (enemySpacing -= 5e-4);
+  200 > maxSpeed && (maxSpeed += 5);
 }
 var horizon = 3 * h,
-  runTimeTotal = 60,
   minSpeed = 10,
   startSpeed = 65,
   drawDistScale = 7500,
   treeSpacing = 4e-3,
   laneSpacing = 5e-3,
+  runTimeTotal = 60,
   trackLength = 1.5,
   maxSpeed = 120;
 mobile && (maxSpeed = 100);
-var enemySpeed = 35,
+var enemySpeed = maxSpeed / 3,
   enemySpacing = 0.01,
   tStamp = 0,
   t = 0,

@@ -906,12 +906,12 @@
 // Function Increase Difficulty On Next Play
     function makeHarder() {
       trackLength += 0.1;
+      runTimeTotal += 5;
       if (enemySpacing > 0.005) {
-        enemySpacing -= 0.001;
+        enemySpacing -= 0.0005;
       };
       if (maxSpeed < 200) {
-        maxSpeed += 10;
-        enemySpeed += 5;
+        maxSpeed += 5;
       };
     };
 
@@ -922,7 +922,6 @@
 
 // Global Constant Declarations
     const horizon = 3 * h;
-    const runTimeTotal = 60;
     const minSpeed = 10;
     const startSpeed = 65;
     const drawDistScale = 7500;
@@ -930,12 +929,13 @@
     const laneSpacing = 0.005;
 
 // Global Difficulty Variable Initial States
+    let runTimeTotal = 60;
     let trackLength = 1.5;
     let maxSpeed = 120;
     if (mobile) {
       maxSpeed = 100;
     };
-    let enemySpeed = 35;
+    let enemySpeed = maxSpeed / 3;
     let enemySpacing = 0.01;
 
 // Global Variable Initial States
