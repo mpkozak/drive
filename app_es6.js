@@ -507,10 +507,10 @@
     function rotateNeedle() {
       let rotation = (speed / maxSpeed) * 190 - 12;
 //legacy supported
-      needle.style.webkitTransform = 'rotate(${rotation}deg)';
-      needle.style.mozTransform = 'rotate(${rotation}deg)';
-      needle.style.msTransform = 'rotate(${rotation}deg)';
-      needle.style.oTransform = 'rotate(${rotation}deg)';
+      needle.style.webkitTransform = `rotate(${rotation}deg)`;
+      needle.style.mozTransform = `rotate(${rotation}deg)`;
+      needle.style.msTransform = `rotate(${rotation}deg)`;
+      needle.style.oTransform = `rotate(${rotation}deg)`;
 // modern browser supported
       needle.style.transform = `rotate(${rotation}deg)`;
 // break

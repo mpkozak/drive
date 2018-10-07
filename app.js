@@ -336,10 +336,10 @@ function leadZeros(a, b) {
 }
 function rotateNeedle() {
   var a = 190 * (speed / maxSpeed) - 12;
-  (needle.style.webkitTransform = "rotate(${rotation}deg)"),
-    (needle.style.mozTransform = "rotate(${rotation}deg)"),
-    (needle.style.msTransform = "rotate(${rotation}deg)"),
-    (needle.style.oTransform = "rotate(${rotation}deg)"),
+  (needle.style.webkitTransform = "rotate(" + a + "deg)"),
+    (needle.style.mozTransform = "rotate(" + a + "deg)"),
+    (needle.style.msTransform = "rotate(" + a + "deg)"),
+    (needle.style.oTransform = "rotate(" + a + "deg)"),
     (needle.style.transform = "rotate(" + a + "deg)");
 }
 function speedBoxRefresh() {
