@@ -101,7 +101,7 @@
 
 // Function Create Sky
     function makeSky() {
-      p10.style.backgroundColor = '#00BFFF';
+      setTimeout(() => { p10.style.backgroundColor = '#00BFFF' }, 1);
     };
 
 // Function Create Player Car
@@ -1031,7 +1031,7 @@
     p3.style.opacity = 0.5;
     buildGamePage();
     makeBackplane();
-    setTimeout(() => { makeSky() }, 1);
+    makeSky();
     makePlayerCar(p5);
     makeSplashElements();
     window.onload = () => { splash() };
