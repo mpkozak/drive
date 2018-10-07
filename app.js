@@ -59,7 +59,7 @@
 // Set Global Draw Dimension Variables
     let displayUnit = Math.floor(Math.min(window.innerWidth / 18, window.innerHeight / 11));
     if (mobile) {
-      displayUnit = Math.floor(Math.min(window.innerWidth, window.innerHeight) / 9);
+      displayUnit = Math.floor(Math.min(window.innerWidth / 16, window.innerHeight / 9));
     };
     let fullW = displayUnit * 16;
     let fullH = displayUnit * 9;
@@ -69,6 +69,8 @@
 
 // Function Build Page Layout
     function buildGamePage() {
+      par.style.width = fullW + 'px';
+      par.style.height = fullH + 'px';
       if (mobile) {
         makeMobileLayout();
       } else {
@@ -78,16 +80,12 @@
 
 // Function Build Desktop Page Layout
     function makeDesktopLayout() {
-      par.style.width = fullW + 'px';
-      par.style.height = fullH + 'px';
       header.style.height = gameboxPadding + 'px';
       footer.style.height = gameboxPadding + 'px';
     };
 
 // Function Build Mobile Page Layout
     function makeMobileLayout() {
-      par.style.width = fullW + 'px';
-      par.style.height = fullH + 'px';
       header.style.display = 'none';
       footer.style.display = 'none';
     };
@@ -975,6 +973,7 @@
       };
       if (maxSpeed < 200) {
         maxSpeed += 10;
+        enemySpeed += 10;
       };
     };
 
@@ -988,7 +987,6 @@
     const runTimeTotal = 60;
     const minSpeed = 10;
     const startSpeed = 65;
-    const enemySpeed = 35;
     const drawDistScale = 7500;
     const treeSpacing = 0.004;
     const laneSpacing = 0.005;
@@ -999,6 +997,7 @@
     if (mobile) {
       maxSpeed = 100;
     };
+    let enemySpeed = 35;
     let enemySpacing = 0.01;
 
 // Global Variable Initial States
@@ -1048,7 +1047,6 @@
 
 // Function Initialize Gameplay Master Stack
     function initializeGamePlay() {
-      // document.querySelector('#music').play();                //music play
       resetClock();
       resetDistance();
       speed = startSpeed;
