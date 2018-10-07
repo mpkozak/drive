@@ -975,7 +975,7 @@
       };
       if (maxSpeed < 200) {
         maxSpeed += 10;
-        enemySpeed += 10;
+        enemySpeed += 5;
       };
     };
 
