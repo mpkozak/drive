@@ -95,25 +95,9 @@
       footer.style.display = 'none';
     };
 
-// Function Create Backplane
-    function makeBackplane() {
-      p8.style.backgroundImage = `url('img/backplane.png')`;
-      p8.style.backgroundSize = '100%';
-      p8.style.backgroundRepeat = 'no-repeat';
-    };
-
-// Function Create Sky
-    function makeSky() {
-      setTimeout(() => { p10.style.backgroundColor = '#00BFFF' }, 1);
-    };
-
 // Function Create Player Car
     function makePlayerCar(gamePlane) {
       let div = document.createElement('div');
-      div.style.position = 'absolute';
-      div.style.backgroundImage = `url('img/car1.png')`;
-      div.style.backgroundSize = '100%';
-      div.style.backgroundRepeat = 'no-repeat';
       div.style.left = 6 * w + 'px';
       div.style.top = 9 * h + 'px';
       div.style.width = 4 * w + 'px';
@@ -283,13 +267,7 @@
       let div = document.createElement('div');
       div.id = id;
       div.classList.add('title');
-      div.style.position = 'absolute';
-      div.style.transitionDuration = '1s';
-      div.style.transitionTimingFunction = 'ease-in-out';
       div.innerText = text;
-      div.style.textShadow = '5px 5px 5px #222222';
-      div.style.fontFamily = `'Faster One', Futura, sans-serif`;
-      div.style.color = '#FB0006';
       div.style.fontSize = height * h + 'px';
       div.style.left = -10 * w + 'px';
       div.style.top = top * h + 'px';
@@ -303,21 +281,11 @@
       let button = document.createElement('button');
       button.id = id;
       button.classList.add('button');
-      button.style.position = 'absolute';
-      button.style.transitionDuration = '250ms';
-      button.style.transitionTimingFunction = 'ease-in';
       button.style.backgroundColor = bgColor;
-      button.style.boxShadow = '5px 5px 5px #222222';
-      button.style.border = '1px solid #000000';
       button.style.borderRadius = w / 2 + 'px';
       button.innerText = text;
-      button.style.fontFamily = `'Faster One', Futura, sans-serif`;
-      button.style.opacity = 0;
-      button.style.fontSize = 0;
       button.style.left = 8 * w + 'px';
       button.style.top = 7.5 * h + 'px';
-      button.style.width = 0;
-      button.style.height = 0;
       gamePlane.appendChild(button);
     };
 
@@ -372,8 +340,6 @@
 
 // Function Slide Player Car Into Gamefield
     function initializePlayerCar() {
-      playerCar.style.transitionDuration = '1s';
-      playerCar.style.transitionTimingFunction = 'ease-in-out';
       playerCar.style.top = 7 * h + 'px';
       setTimeout( () => {
         playerCar.style.transitionDuration = '250ms';
@@ -393,7 +359,6 @@
       instructions.style.width = w * 14 + 'px';
       instructions.style.fontSize = h / 2 + 'px';
       let keyMap = document.querySelector('.key-map');
-      keyMap.style.backgroundColor = 'rgba(1,1,1,0.2)';
       keyMap.style.padding = w / 5 + 'px';
       keyMap.style.left = 5.55 * w + 'px';
       keyMap.style.top = 2 * h + 'px';
@@ -418,7 +383,6 @@
       cont.style.fontSize = h / 2 + 'px';
       tutorial = document.getElementById('tutorial-desktop');
       tutorial.style.display = 'block';
-      tutorial.style.opacity = 0;
       tutorial.remove();
       p2.appendChild(tutorial);
       document.addEventListener('keydown', initializeGamePlay);
@@ -432,7 +396,6 @@
       instructions.style.width = w * 14 + 'px';
       instructions.style.fontSize = h / 2 + 'px';
       let swipeMap = document.querySelector('.swipe-map');
-      swipeMap.style.backgroundColor = 'rgba(1,1,1,0.2)';
       swipeMap.style.padding = w / 5 + 'px';
       swipeMap.style.left = 5.55 * w + 'px';
       swipeMap.style.top = 2.5 * h + 'px';
@@ -452,7 +415,6 @@
       cont.style.fontSize = h / 2 + 'px';
       tutorial = document.getElementById('tutorial-mobile');
       tutorial.style.display = 'block';
-      tutorial.style.opacity = 0;
       tutorial.remove();
       p2.appendChild(tutorial);
       setTimeout(() => { par.addEventListener('click', initializeGamePlay) }, 100);
@@ -469,8 +431,6 @@
 
 // Function Tutorial Appear
     function tutorialAppear() {
-      tutorial.style.transitionDuration = '1s';
-      tutorial.style.transitionTimingFunction = 'ease-in';
       tutorial.style.opacity = 1;
     };
 
@@ -491,11 +451,6 @@
       let div = document.createElement('div');
       div.id = id;
       div.classList.add('HUD');
-      div.style.position = 'absolute';
-      div.style.transitionDuration = '1s'
-      div.style.opacity = 0;
-      div.style.fontFamily = `'Seven Segment', Helvetica, sans-serif`;
-      div.style.color = '#FD9408';
       div.style.left = left * w + 'px';
       div.style.top = top * h + 'px';
       div.style.width = width * w + 'px';
@@ -503,7 +458,6 @@
       gamePlane.appendChild(div);
       let textBox = document.createElement('div');
       textBox.style.textAlign = textAlign;
-      textBox.style.textShadow = '2px 2px 5px #222222';
       textBox.id = id + 'Text';
       div.appendChild(textBox);
       textBox.style.fontSize = h * fontScale + 'px';
@@ -513,26 +467,8 @@
     function makeNeedle() {
       let div = document.createElement('div');
       div.style.position = 'absolute';
-      div.style.transitionDuration = '100ms';
-      div.style.backgroundColor = '#FB0006';
-      div.style.boxShadow = '2px 2px 5px #222222';
-//legacy supported
-      div.style.webkitTransformOrigin = '100% 100%';
-      div.style.mozTransformOrigin = '100% 100%';
-      div.style.msTransformOrigin = '100% 100%';
-      div.style.oTransformOrigin = '100% 100%';
-// modern browser supported
-      div.style.transformOrigin = '100% 100%';
-// break
-      div.style.left = '21%';
-      div.style.top = '90%';
-      div.style.width = '29%';
-      div.style.height = '1%';
       div.id = 'needle';
       speedBox.appendChild(div);
-      speedBox.style.backgroundImage = `url('img/speedometer.png')`;
-      speedBox.style.backgroundSize = '100%';
-      speedBox.style.backgroundRepeat = 'no-repeat';
     };
 
 // Function HUD Boxes Fade + Slide In
@@ -571,10 +507,10 @@
     function rotateNeedle() {
       let rotation = (speed / maxSpeed) * 190 - 12;
 //legacy supported
-      needle.style.webkitTransform = `rotate(${rotation}deg)`;
-      needle.style.mozTransform = `rotate(${rotation}deg)`;
-      needle.style.msTransform = `rotate(${rotation}deg)`;
-      needle.style.oTransform = `rotate(${rotation}deg)`;
+      needle.style.webkitTransform = 'rotate(${rotation}deg)';
+      needle.style.mozTransform = 'rotate(${rotation}deg)';
+      needle.style.msTransform = 'rotate(${rotation}deg)';
+      needle.style.oTransform = 'rotate(${rotation}deg)';
 // modern browser supported
       needle.style.transform = `rotate(${rotation}deg)`;
 // break
@@ -727,10 +663,7 @@
 // Function Make Dynamic Object
     function newGameObject(timestamp, gamePlane, objectClass, imgSrc, startL, endL, aspect, endW, distScale) {
       let div = document.createElement('div');
-      div.style.position = 'absolute';
       div.style.backgroundImage = imgSrc;
-      div.style.backgroundSize = '100%';
-      div.style.backgroundRepeat = 'no-repeat';
       div.classList.add(objectClass, 'moving', timestamp, startL, endL, aspect, endW, distScale, 0);
       gamePlane.appendChild(div);
       return div;
@@ -851,21 +784,11 @@
 // Variable Initial States
     let lastEnemyD = 0;
 
-// Function Random Lane Generator
-    function randomThree() {
-      return Math.floor(Math.random() * 3) + 1;
-    };
-
-// Function Random Car Color Generator
-    function randomFive() {
-      return Math.floor(Math.random() * 5) + 2;
-    };
-
 // Function Make Enemies
     function makeEnemies(t) {
       if (distance >= lastEnemyD + enemySpacing && speed > enemySpeed * 2) {
-        let lane = randomThree();
-        let color = randomFive();
+        let lane = Math.floor(Math.random() * 3) + 1;
+        let color = Math.floor(Math.random() * 5) + 2;
         switch(lane) {
           case 1:
             newGameObject(t, p6, 'enemy', `url('img/car${color}.png')`, 7, -0.5, 2, 6, drawDistScale);
@@ -964,24 +887,14 @@
       let div = document.createElement('div');
       div.id = 'endgameText';
       div.classList.add('endgame');
-      div.style.position = 'absolute';
       div.innerText = text;
-      div.style.textShadow = '5px 5px 5px #222222';
-      div.style.fontFamily = `'Faster One', Futura, sans-serif`;
-      div.style.color = '#FB0006';
-      div.style.opacity = 0;
-      div.style.fontSize = 0;
       div.style.left = 8 * w + 'px';
       div.style.top = 4.5 * h + 'px';
-      div.style.width = 0;
-      div.style.height = 0;
       p2.appendChild(div);
     };
 
 // Function Endgame Text Pop In
     function endgamePopIn() {
-      endgameText.style.transitionDuration = '200ms';
-      endgameText.style.transitionTimingFunction = 'ease-in';
       endgameText.style.opacity = 1;
       endgameText.style.fontSize = 2 * h + 'px';
       endgameText.style.left = 1 * w + 'px';
@@ -1044,11 +957,7 @@
     if (mobile) {
       showMobileGamebox();
     };
-    p3.style.backgroundColor = '#000000';
-    p3.style.opacity = 0.5;
     buildGamePage();
-    makeBackplane();
-    makeSky();
     makePlayerCar(p5);
     makeSplashElements();
     window.onload = () => { splash() };

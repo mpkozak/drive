@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <meta name="apple-mobile-web-app-title" content="DriveMyCar" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <link rel="apple-touch-icon" href="icon.png" />
+  <link href="https://fonts.googleapis.com/css?family=Faster+One" rel="stylesheet" />
+  <link rel="stylesheet" type="text/css" href="main.css" />
+  <title>Drive My Car</title>
+</head>
+
+<body>
+  <main>
+    <div class="tutorial" id="tutorial-desktop">
+      <div class="instructions" id="instructions-desktop">
+        <p>Can You Cross The Finish Line Before Time Runs Out?</p>
+        <p>Watch Out For Other Cars On The Road!</p>
+      </div>
+      <ul class="key-map">
+        <li>Controls:</li>
+        <li><kbd class="arrow">&uarr;</kbd> Speed Up</li>
+        <li><kbd class="arrow">&darr;</kbd> Slow Down</li>
+        <li><kbd class="arrow">&larr;</kbd> Move Left</li>
+        <li><kbd class="arrow">&rarr;</kbd> Move Right</li>
+        <li><kbd class="space">space</kbd> Jump</li>
+      </ul>
+      <div class="continue" id="continue-desktop">
+        <p>Press Any Key To Continue.</p>
+      </div>
+    </div>
+    <div class="tutorial" id="tutorial-mobile">
+      <div class="instructions" id="instructions-mobile">
+        <p>Can You Cross The Finish Line Before Time Runs Out?</p>
+        <p>Watch Out For Other Cars On The Road!</p>
+      </div>
+      <ul class="swipe-map">
+        <li>&nbsp;&nbsp;Swipe To Move:</li>
+        <li><span class="swipe">&nbsp;&larr;&nbsp;</span> Left</li>
+        <li><span class="swipe">&nbsp;&rarr;&nbsp;</span> Right</li>
+        <li><span class="swipe">&nbsp;&uarr;&nbsp;</span> Jump</li>
+      </ul>
+      <div class="continue" id="continue-mobile">
+        <p>Tap Anywhere To Continue.</p>
+      </div>
+    </div>
+    <div class="header"></div>
+    <p id="rotate">Please Rotate Screen To Play.</p>
+    <div class="gamebox" id="gamebox-parent">
+      <div class="gamebox-child" id="plane1"></div>
+      <div class="gamebox-child" id="plane2"></div>
+      <div class="gamebox-child" id="plane3"></div>
+      <div class="gamebox-child" id="plane4"></div>
+      <div class="gamebox-child" id="plane5"></div>
+      <div class="gamebox-child" id="plane6"></div>
+      <div class="gamebox-child" id="plane7"></div>
+      <div class="gamebox-child" id="plane8"></div>
+      <div class="gamebox-child" id="plane9"></div>
+      <div class="gamebox-child" id="plane10"></div>
+    </div>
+    <div class="footer">
+      <p><span>designed by </span>kozak</p>
+      <p id="copy">&copy2018</p>
+    </div>
+  </main>
+  <!-- <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script> -->
+  <!-- <script type="text/babel" data-presets="es2015,stage-2" src="app.js"></script> -->
+  <script type="text/javascript" src="app.js"></script>
+</body>
+
+</html>

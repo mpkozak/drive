@@ -62,23 +62,9 @@ function makeDesktopLayout() {
 function makeMobileLayout() {
   (header.style.display = "none"), (footer.style.display = "none");
 }
-function makeBackplane() {
-  (p8.style.backgroundImage = "url('img/backplane.png')"),
-    (p8.style.backgroundSize = "100%"),
-    (p8.style.backgroundRepeat = "no-repeat");
-}
-function makeSky() {
-  setTimeout(function() {
-    p10.style.backgroundColor = "#00BFFF";
-  }, 1);
-}
 function makePlayerCar(a) {
   var b = document.createElement("div");
-  (b.style.position = "absolute"),
-    (b.style.backgroundImage = "url('img/car1.png')"),
-    (b.style.backgroundSize = "100%"),
-    (b.style.backgroundRepeat = "no-repeat"),
-    (b.style.left = 6 * w + "px"),
+  (b.style.left = 6 * w + "px"),
     (b.style.top = 9 * h + "px"),
     (b.style.width = 4 * w + "px"),
     (b.style.height = 2 * h + "px"),
@@ -164,13 +150,7 @@ function makeTitleBox(a, b, c, d, e, f) {
   var g = document.createElement("div");
   (g.id = b),
     g.classList.add("title"),
-    (g.style.position = "absolute"),
-    (g.style.transitionDuration = "1s"),
-    (g.style.transitionTimingFunction = "ease-in-out"),
     (g.innerText = c),
-    (g.style.textShadow = "5px 5px 5px #222222"),
-    (g.style.fontFamily = "'Faster One', Futura, sans-serif"),
-    (g.style.color = "#FB0006"),
     (g.style.fontSize = f * h + "px"),
     (g.style.left = -10 * w + "px"),
     (g.style.top = d * h + "px"),
@@ -182,21 +162,11 @@ function makePlayButton(a, b, c, d) {
   var e = document.createElement("button");
   (e.id = b),
     e.classList.add("button"),
-    (e.style.position = "absolute"),
-    (e.style.transitionDuration = "250ms"),
-    (e.style.transitionTimingFunction = "ease-in"),
     (e.style.backgroundColor = d),
-    (e.style.boxShadow = "5px 5px 5px #222222"),
-    (e.style.border = "1px solid #000000"),
     (e.style.borderRadius = w / 2 + "px"),
     (e.innerText = c),
-    (e.style.fontFamily = "'Faster One', Futura, sans-serif"),
-    (e.style.opacity = 0),
-    (e.style.fontSize = 0),
     (e.style.left = 8 * w + "px"),
     (e.style.top = 7.5 * h + "px"),
-    (e.style.width = 0),
-    (e.style.height = 0),
     a.appendChild(e);
 }
 function makeSplashElements() {
@@ -247,9 +217,7 @@ function playButtonExplode() {
     }, 300);
 }
 function initializePlayerCar() {
-  (playerCar.style.transitionDuration = "1s"),
-    (playerCar.style.transitionTimingFunction = "ease-in-out"),
-    (playerCar.style.top = 7 * h + "px"),
+  (playerCar.style.top = 7 * h + "px"),
     setTimeout(function() {
       playerCar.style.transitionDuration = "250ms";
     }, 1e3);
@@ -261,8 +229,7 @@ function drawTutorialDesktop() {
     (a.style.width = 14 * w + "px"),
     (a.style.fontSize = h / 2 + "px");
   var b = document.querySelector(".key-map");
-  (b.style.backgroundColor = "rgba(1,1,1,0.2)"),
-    (b.style.padding = w / 5 + "px"),
+  (b.style.padding = w / 5 + "px"),
     (b.style.left = 5.55 * w + "px"),
     (b.style.top = 2 * h + "px"),
     (b.style.width = 4.5 * w + "px"),
@@ -283,7 +250,6 @@ function drawTutorialDesktop() {
     (f.style.fontSize = h / 2 + "px"),
     (tutorial = document.getElementById("tutorial-desktop")),
     (tutorial.style.display = "block"),
-    (tutorial.style.opacity = 0),
     tutorial.remove(),
     p2.appendChild(tutorial),
     document.addEventListener("keydown", initializeGamePlay);
@@ -295,8 +261,7 @@ function drawTutorialMobile() {
     (a.style.width = 14 * w + "px"),
     (a.style.fontSize = h / 2 + "px");
   var b = document.querySelector(".swipe-map");
-  (b.style.backgroundColor = "rgba(1,1,1,0.2)"),
-    (b.style.padding = w / 5 + "px"),
+  (b.style.padding = w / 5 + "px"),
     (b.style.left = 5.55 * w + "px"),
     (b.style.top = 2.5 * h + "px"),
     (b.style.width = 4.5 * w + "px"),
@@ -313,7 +278,6 @@ function drawTutorialMobile() {
     (e.style.fontSize = h / 2 + "px"),
     (tutorial = document.getElementById("tutorial-mobile")),
     (tutorial.style.display = "block"),
-    (tutorial.style.opacity = 0),
     tutorial.remove(),
     p2.appendChild(tutorial),
     setTimeout(function() {
@@ -324,9 +288,7 @@ function makeTutorial() {
   mobile ? drawTutorialMobile() : drawTutorialDesktop();
 }
 function tutorialAppear() {
-  (tutorial.style.transitionDuration = "1s"),
-    (tutorial.style.transitionTimingFunction = "ease-in"),
-    (tutorial.style.opacity = 1);
+  tutorial.style.opacity = 1;
 }
 function tutorialRemove() {
   (tutorial.style.transitionDuration = "500ms"),
@@ -339,11 +301,6 @@ function makeHudBox(a, b, c, d, e, f, g, j) {
   var k = document.createElement("div");
   (k.id = b),
     k.classList.add("HUD"),
-    (k.style.position = "absolute"),
-    (k.style.transitionDuration = "1s"),
-    (k.style.opacity = 0),
-    (k.style.fontFamily = "'Seven Segment', Helvetica, sans-serif"),
-    (k.style.color = "#FD9408"),
     (k.style.left = c * w + "px"),
     (k.style.top = d * h + "px"),
     (k.style.width = e * w + "px"),
@@ -351,31 +308,13 @@ function makeHudBox(a, b, c, d, e, f, g, j) {
     a.appendChild(k);
   var l = document.createElement("div");
   (l.style.textAlign = g),
-    (l.style.textShadow = "2px 2px 5px #222222"),
     (l.id = b + "Text"),
     k.appendChild(l),
     (l.style.fontSize = h * j + "px");
 }
 function makeNeedle() {
   var a = document.createElement("div");
-  (a.style.position = "absolute"),
-    (a.style.transitionDuration = "100ms"),
-    (a.style.backgroundColor = "#FB0006"),
-    (a.style.boxShadow = "2px 2px 5px #222222"),
-    (a.style.webkitTransformOrigin = "100% 100%"),
-    (a.style.mozTransformOrigin = "100% 100%"),
-    (a.style.msTransformOrigin = "100% 100%"),
-    (a.style.oTransformOrigin = "100% 100%"),
-    (a.style.transformOrigin = "100% 100%"),
-    (a.style.left = "21%"),
-    (a.style.top = "90%"),
-    (a.style.width = "29%"),
-    (a.style.height = "1%"),
-    (a.id = "needle"),
-    speedBox.appendChild(a),
-    (speedBox.style.backgroundImage = "url('img/speedometer.png')"),
-    (speedBox.style.backgroundSize = "100%"),
-    (speedBox.style.backgroundRepeat = "no-repeat");
+  (a.style.position = "absolute"), (a.id = "needle"), speedBox.appendChild(a);
 }
 function hudFadeIn() {
   for (var a = document.querySelectorAll(".HUD"), b = 0; b < a.length; b++)
@@ -397,10 +336,10 @@ function leadZeros(a, b) {
 }
 function rotateNeedle() {
   var a = 190 * (speed / maxSpeed) - 12;
-  (needle.style.webkitTransform = "rotate(" + a + "deg)"),
-    (needle.style.mozTransform = "rotate(" + a + "deg)"),
-    (needle.style.msTransform = "rotate(" + a + "deg)"),
-    (needle.style.oTransform = "rotate(" + a + "deg)"),
+  (needle.style.webkitTransform = "rotate(${rotation}deg)"),
+    (needle.style.mozTransform = "rotate(${rotation}deg)"),
+    (needle.style.msTransform = "rotate(${rotation}deg)"),
+    (needle.style.oTransform = "rotate(${rotation}deg)"),
     (needle.style.transform = "rotate(" + a + "deg)");
 }
 function speedBoxRefresh() {
@@ -491,10 +430,7 @@ function jump() {
 function newGameObject(a, b, c, d, e, f, g, j, k) {
   var l = document.createElement("div");
   return (
-    (l.style.position = "absolute"),
     (l.style.backgroundImage = d),
-    (l.style.backgroundSize = "100%"),
-    (l.style.backgroundRepeat = "no-repeat"),
     l.classList.add(c, "moving", a, e, f, g, j, k, 0),
     b.appendChild(l),
     l
@@ -601,16 +537,10 @@ function bgElements(a) {
   bgDistRefresh(), makeTrees(a), makeLanes(a);
 }
 var lastEnemyD = 0;
-function randomThree() {
-  return Math.floor(3 * Math.random()) + 1;
-}
-function randomFive() {
-  return Math.floor(5 * Math.random()) + 2;
-}
 function makeEnemies(a) {
   if (distance >= lastEnemyD + enemySpacing && speed > 2 * enemySpeed) {
-    var b = randomThree(),
-      c = randomFive();
+    var b = Math.floor(3 * Math.random()) + 1,
+      c = Math.floor(5 * Math.random()) + 2;
     1 === b
       ? newGameObject(
           a,
@@ -716,23 +646,13 @@ function makeEndgameBox(a) {
   var b = document.createElement("div");
   (b.id = "endgameText"),
     b.classList.add("endgame"),
-    (b.style.position = "absolute"),
     (b.innerText = a),
-    (b.style.textShadow = "5px 5px 5px #222222"),
-    (b.style.fontFamily = "'Faster One', Futura, sans-serif"),
-    (b.style.color = "#FB0006"),
-    (b.style.opacity = 0),
-    (b.style.fontSize = 0),
     (b.style.left = 8 * w + "px"),
     (b.style.top = 4.5 * h + "px"),
-    (b.style.width = 0),
-    (b.style.height = 0),
     p2.appendChild(b);
 }
 function endgamePopIn() {
-  (endgameText.style.transitionDuration = "200ms"),
-    (endgameText.style.transitionTimingFunction = "ease-in"),
-    (endgameText.style.opacity = 1),
+  (endgameText.style.opacity = 1),
     (endgameText.style.fontSize = 2 * h + "px"),
     (endgameText.style.left = 1 * w + "px"),
     (endgameText.style.top = 3 * h + "px"),
@@ -769,11 +689,7 @@ var enemySpeed = 35,
   finishLine = !1,
   finished = !1;
 mobile && showMobileGamebox();
-(p3.style.backgroundColor = "#000000"),
-  (p3.style.opacity = 0.5),
-  buildGamePage(),
-  makeBackplane(),
-  makeSky(),
+buildGamePage(),
   makePlayerCar(p5),
   makeSplashElements(),
   (window.onload = function() {
