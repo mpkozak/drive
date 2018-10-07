@@ -48,7 +48,9 @@ var p10 = document.getElementById('plane10'); // sky
 // Set Global Draw Dimension Variables
 var displayUnit = Math.floor(Math.min(window.innerWidth / 18, window.innerHeight / 11));
 if (mobile) {
-  displayUnit = Math.floor(Math.min(window.innerWidth / 16, window.innerHeight / 9));
+  var width = Math.max(screen.availWidth, screen.availHeight);
+  var height = Math.min(screen.availWidth, screen.availHeight);
+  displayUnit = Math.floor(Math.min(width / 16, height / 9));
 };
 var fullW = displayUnit * 16;
 var fullH = displayUnit * 9;

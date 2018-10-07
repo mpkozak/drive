@@ -59,7 +59,9 @@
 // Set Global Draw Dimension Variables
     let displayUnit = Math.floor(Math.min(window.innerWidth / 18, window.innerHeight / 11));
     if (mobile) {
-      displayUnit = Math.floor(Math.min(window.innerWidth / 16, window.innerHeight / 9));
+      let width = Math.max(screen.availWidth, screen.availHeight);
+      let height = Math.min(screen.availWidth, screen.availHeight);
+      displayUnit = Math.floor(Math.min(width / 16, height / 9));
     };
     let fullW = displayUnit * 16;
     let fullH = displayUnit * 9;
