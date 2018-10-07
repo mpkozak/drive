@@ -3,8 +3,8 @@
 ///////////////////////////////////////////////////////////////////////////////////
 
 // requestAnimationFrame Polyfill  ---  Adapted From https://gist.github.com/amsul/3691721
-    window.requestAnimFrame = (function(){
-      return  window.requestAnimationFrame ||
+    window.requestAnimFrame = (function() {
+      return window.requestAnimationFrame ||
         window.webkitRequestAnimationFrame ||
         window.mozRequestAnimationFrame ||
         window.oRequestAnimationFrame ||
@@ -12,7 +12,7 @@
         function(callback){
           window.setTimeout(callback, 1000 / 60);
         };
-      })();
+    })();
 
 // Function Detect Mobile Browser  ---  Adapted From https://stackoverflow.com/questions/11381673/detecting-a-mobile-browser
     function isMobile() {
@@ -1056,6 +1056,7 @@
       finishLine = false;
       finished = false;
       document.removeEventListener('keydown', initializeGamePlay);
+      par.removeEventListener('click', initializeGamePlay);
       tutorialRemove();
       splashState = false;
       p3.style.transitionDuration = '2s';
