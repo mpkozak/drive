@@ -74,8 +74,6 @@ main {
 
 #plane3 {
   z-index: 8;
-  background-color: #000000;
-  opacity: 0.5;
 }
 
 #plane4 {
@@ -202,7 +200,6 @@ main {
 
 .tutorial {
   position: absolute;
-  transition-duration: 1s;
   transition-timing-function: ease-in;
   display: none;
   width: 100%;

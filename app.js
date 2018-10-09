@@ -1,4 +1,39 @@
 "use strict";
+var _createClass = (function() {
+  function a(b, c) {
+    for (var e, d = 0; d < c.length; d++)
+      (e = c[d]),
+        (e.enumerable = e.enumerable || !1),
+        (e.configurable = !0),
+        "value" in e && (e.writable = !0),
+        Object.defineProperty(b, e.key, e);
+  }
+  return function(b, c, d) {
+    return c && a(b.prototype, c), d && a(b, d), b;
+  };
+})();
+function _possibleConstructorReturn(a, b) {
+  if (!a)
+    throw new ReferenceError(
+      "this hasn't been initialised - super() hasn't been called"
+    );
+  return b && ("object" == typeof b || "function" == typeof b) ? b : a;
+}
+function _inherits(a, b) {
+  if ("function" != typeof b && null !== b)
+    throw new TypeError(
+      "Super expression must either be null or a function, not " + typeof b
+    );
+  (a.prototype = Object.create(b && b.prototype, {
+    constructor: { value: a, enumerable: !1, writable: !0, configurable: !0 }
+  })),
+    b &&
+      (Object.setPrototypeOf ? Object.setPrototypeOf(a, b) : (a.__proto__ = b));
+}
+function _classCallCheck(a, b) {
+  if (!(a instanceof b))
+    throw new TypeError("Cannot call a class as a function");
+}
 window.requestAnimFrame = (function() {
   return (
     window.requestAnimationFrame ||
@@ -61,6 +96,12 @@ function makeDesktopLayout() {
 }
 function makeMobileLayout() {
   (header.style.display = "none"), (footer.style.display = "none");
+}
+function overlayDark(a) {
+  var b = +p3.style.opacity;
+  (p3.style.transitionDuration = a + "ms"),
+    (p3.style.backgroundColor = "#000000"),
+    (p3.style.opacity = b ? 0 : 0.5);
 }
 function makePlayerCar(a) {
   var b = document.createElement("div");
@@ -140,12 +181,6 @@ function removeSwipeListener() {
   par.removeEventListener("touchstart", touchStart),
     par.removeEventListener("touchend", touchEnd);
 }
-function addInputListener() {
-  mobile ? addSwipeListener() : addKeyListener();
-}
-function removeInputListener() {
-  mobile ? removeSwipeListener() : removeKeyListener();
-}
 function makeTitleBox(a, b, c, d, e, f) {
   var g = document.createElement("div");
   (g.id = b),
@@ -160,51 +195,57 @@ function makeTitleBox(a, b, c, d, e, f) {
 }
 function makePlayButton(a, b, c, d) {
   var e = document.createElement("button");
-  (e.id = b),
+  return (
+    (e.id = b),
     e.classList.add("button"),
     (e.style.backgroundColor = d),
     (e.style.borderRadius = w / 2 + "px"),
     (e.innerText = c),
     (e.style.left = 8 * w + "px"),
     (e.style.top = 7.5 * h + "px"),
-    a.appendChild(e);
+    a.appendChild(e),
+    e
+  );
 }
 function makeSplashElements() {
   makeTitleBox(p2, "title1", "Drive", 0, 10, 2),
     makeTitleBox(p2, "title2", "My", 2, 10, 2),
-    makeTitleBox(p2, "title3", "Car", 4, 10, 2),
-    makePlayButton(p1, "playButton", "Play!", "#FFFF0C");
+    makeTitleBox(p2, "title3", "Car", 4, 10, 2);
 }
 function titleFlyIn() {
-  (title1.style.left = 3 * h + "px"),
+  var a = document.querySelectorAll(".title");
+  Array.from(a).map(function(b, c) {
     setTimeout(function() {
-      title2.style.left = 3 * h + "px";
-    }, 200),
-    setTimeout(function() {
-      title3.style.left = 3 * h + "px";
-    }, 400);
+      b.style.left = 3 * h + "px";
+    }, 200 * c);
+  });
 }
 function titleFlyOut() {
-  (title1.style.left = 16 * h + "px"),
+  var a = document.querySelectorAll(".title");
+  Array.from(a).map(function(b, c) {
     setTimeout(function() {
-      title2.style.left = 16 * h + "px";
-    }, 200),
+      b.style.left = 16 * h + "px";
+    }, 200 * c);
+  }),
     setTimeout(function() {
-      title3.style.left = 16 * h + "px";
-    }, 400),
-    setTimeout(function() {
-      title1.remove(), title2.remove(), title3.remove();
+      Array.from(a).map(function(b) {
+        return b.remove();
+      });
     }, 2e3);
 }
-function playButtonAppear() {
-  (playButton.style.left = 6.5 * w + "px"),
-    (playButton.style.top = 7 * h + "px"),
-    (playButton.style.width = 3 * w + "px"),
-    (playButton.style.height = 1 * h + "px"),
-    (playButton.style.fontSize = h / 1.5 + "px"),
-    (playButton.style.opacity = 0.8);
+function playButtonAppear(a, b, c, d, e, f) {
+  var g = makePlayButton(a, b, c, d);
+  setTimeout(function() {
+    (g.style.left = 6.5 * w + "px"),
+      (g.style.top = 7 * h + "px"),
+      (g.style.width = 3 * w + "px"),
+      (g.style.height = 1 * h + "px"),
+      (g.style.fontSize = h / 1.5 + "px"),
+      (g.style.opacity = 0.8),
+      g.addEventListener("click", f);
+  }, e);
 }
-function playButtonExplode() {
+function playButtonExplode(a) {
   (playButton.style.borderRadius = w + "px"),
     (playButton.style.left = 5 * w + "px"),
     (playButton.style.top = 6.5 * h + "px"),
@@ -212,6 +253,7 @@ function playButtonExplode() {
     (playButton.style.height = 2 * h + "px"),
     (playButton.style.fontSize = 2 * (h / 1.5) + "px"),
     (playButton.style.opacity = 0),
+    playButton.removeEventListener("click", a),
     setTimeout(function() {
       playButton.remove();
     }, 300);
@@ -284,18 +326,21 @@ function drawTutorialMobile() {
       par.addEventListener("click", initializeGamePlay);
     }, 100);
 }
-function makeTutorial() {
-  mobile ? drawTutorialMobile() : drawTutorialDesktop();
+function tutorialAppear(a) {
+  mobile ? drawTutorialMobile() : drawTutorialDesktop(),
+    (tutorial.style.transitionDuration = a + "ms"),
+    setTimeout(function() {
+      tutorial.style.opacity = 1;
+    }, 100);
 }
-function tutorialAppear() {
-  tutorial.style.opacity = 1;
-}
-function tutorialRemove() {
-  (tutorial.style.transitionDuration = "500ms"),
+function tutorialRemove(a) {
+  (tutorial.style.transitionDuration = a + "ms"),
     (tutorial.style.opacity = 0),
     setTimeout(function() {
       tutorial.remove();
-    }, 500);
+    }, 2 * a),
+    document.removeEventListener("keydown", initializeGamePlay),
+    par.removeEventListener("click", initializeGamePlay);
 }
 function makeHudBox(a, b, c, d, e, f, g, j) {
   var k = document.createElement("div");
@@ -317,16 +362,18 @@ function makeNeedle() {
   (a.style.position = "absolute"), (a.id = "needle"), speedBox.appendChild(a);
 }
 function hudFadeIn() {
-  for (var a = document.querySelectorAll(".HUD"), b = 0; b < a.length; b++)
-    a[b].style.opacity = 1;
-  (speedBox.style.left = "0px"),
+  Array.from(document.querySelectorAll(".HUD")).map(function(a) {
+    a.style.opacity = 1;
+  }),
+    (speedBox.style.left = 0 * w + "px"),
     (timeBox.style.top = 1 * h + "px"),
     (distBox.style.left = 13 * w + "px");
 }
 function hudFadeOut() {
-  for (var a = document.querySelectorAll(".HUD"), b = 0; b < a.length; b++)
-    a[b].style.opacity = 0;
-  (speedBox.style.left = "-3px"),
+  Array.from(document.querySelectorAll(".HUD")).map(function(a) {
+    a.style.opacity = 0;
+  }),
+    (speedBox.style.left = -3 * w + "px"),
     (timeBox.style.top = -2 * h + "px"),
     (distBox.style.left = 16 * w + "px");
 }
@@ -377,8 +424,8 @@ var runTimeStart = 0,
 function resetClock() {
   runTimeStart = Math.floor(tStamp / 1e3);
 }
-function setClock(a) {
-  (runTimeElapsed = Math.floor(a / 1e3) - runTimeStart),
+function setClock() {
+  (runTimeElapsed = Math.floor(tStamp / 1e3) - runTimeStart),
     (runTimeRemain = runTimeTotal - runTimeElapsed);
 }
 var speedUp = !1,
@@ -400,19 +447,19 @@ var distance = 0,
 function resetDistance() {
   (distance = 0), (lastTimeDistanceSet = tStamp);
 }
-function setDistance(a) {
-  var b = (a - lastTimeDistanceSet) / 1e3;
-  (distance += b * (speed / 3600)),
+function setDistance() {
+  var a = (tStamp - lastTimeDistanceSet) / 1e3;
+  (distance += a * (speed / 3600)),
     (distanceRemain = trackLength - distance),
-    (lastTimeDistanceSet = a);
+    (lastTimeDistanceSet = tStamp);
 }
 function moveLeft() {
   var a = parseInt(playerCar.style.left.replace(/px/g, ""));
-  a >= 6 * w && (playerCar.style.left = a - 4 * w + "px");
+  a >= 6 * w ? (playerCar.style.left = a - 4 * w + "px") : null;
 }
 function moveRight() {
   var a = parseInt(playerCar.style.left.replace(/px/g, ""));
-  a <= 6 * w && (playerCar.style.left = a + 4 * w + "px");
+  a <= 6 * w ? (playerCar.style.left = a + 4 * w + "px") : null;
 }
 function jump() {
   var a = parseInt(playerCar.style.top.replace(/px/g, ""));
@@ -427,116 +474,177 @@ function jump() {
       playerCar.classList.remove("jump");
     }, 500));
 }
-function newGameObject(a, b, c, d, e, f, g, j, k) {
-  var l = document.createElement("div");
+var MovingObject = (function() {
+  function a(b, c, d, e, f, g, j, k, l, n) {
+    _classCallCheck(this, a),
+      (this.timestamp = b),
+      (this.gamePlane = c),
+      (this.type = d),
+      (this.imgSrc = e),
+      (this.startL = f),
+      (this.endL = g),
+      (this.aspect = j),
+      (this.startW = k),
+      (this.endW = l),
+      (this.distScale = n),
+      (this.dist = 0),
+      (this.top = 0),
+      (this.node = this.make()),
+      (this.canRemove = !1);
+  }
   return (
-    (l.style.backgroundImage = d),
-    l.classList.add(c, "moving", a, e, f, g, j, k, 0),
-    b.appendChild(l),
-    l
+    _createClass(a, [
+      {
+        key: "make",
+        value: function make() {
+          var b = document.createElement("div");
+          return (
+            (b.style.backgroundImage = this.imgSrc),
+            b.classList.add(this.type, "moving"),
+            this.gamePlane.appendChild(b),
+            b
+          );
+        }
+      },
+      {
+        key: "move",
+        value: function move() {
+          var b = "enemy" === this.type ? speed - enemySpeed : speed,
+            c = this.endW * w - this.startW * w,
+            d = (this.endW / this.aspect) * h,
+            e = this.endL * w - this.startL * w,
+            g = this.dist + b * (t - this.timestamp);
+          (this.timestamp = t), (this.dist = g);
+          var j = Math.pow(g, 5) / Math.pow(this.distScale, 5);
+          (this.node.style.left = this.startL * w + e * j + "px"),
+            (this.node.style.top = horizon + (fullH - horizon) * j + "px"),
+            (this.node.style.width = this.startW * w + c * j + "px"),
+            (this.node.style.height = 0 + d * j + "px"),
+            (this.top = parseInt(this.node.style.top.replace(/px/g, "")));
+        }
+      },
+      {
+        key: "clear",
+        value: function clear() {
+          this.node.remove(), (this.canRemove = !0);
+        }
+      }
+    ]),
+    a
   );
-}
-function moveBox(a, b) {
-  var c = a,
-    d = c.classList[0],
-    e = speed;
-  "enemy" === d && (e = speed - enemySpeed);
-  var f = c.classList[3] * w,
-    g = horizon,
-    j = 0;
-  "finish" === d && (j = 3 * w);
-  var k = 0,
-    l = c.classList[4] * w,
-    n = c.classList[6] * w,
-    o = (c.classList[6] / c.classList[5]) * h,
-    s = n - j,
-    u = c.classList[7],
-    v = parseInt(c.classList[8]),
-    x = v + e * (b - c.classList[2]),
-    y =
-      c.classList[0] +
-      " " +
-      c.classList[1] +
-      " " +
-      b +
-      " " +
-      c.classList[3] +
-      " " +
-      c.classList[4] +
-      " " +
-      c.classList[5] +
-      " " +
-      c.classList[6] +
-      " " +
-      c.classList[7] +
-      " " +
-      x;
-  (c.className = ""), (c.className = y);
-  var z = Math.pow(x, 5) / Math.pow(u, 5);
-  (c.style.left = f + (l - f) * z + "px"),
-    (c.style.top = g + (fullH - g) * z + "px"),
-    (c.style.width = j + s * z + "px"),
-    (c.style.height = k + (o - k) * z + "px");
-  var A = parseInt(a.style.top.replace(/px/g, ""));
-  "enemy" === d && 6 <= A && (checkForHit(c), enemyDeltaZ(c, A));
-  A >= 9 * h && clearObject(c, d, A);
-}
-function clearObject(a, b, c) {
-  c > 9 * h && "enemy" !== b ? a.remove() : c > 18 * h && a.remove();
-}
+})();
+var Enemy = (function(a) {
+  function b(c, d, e, f, g, j, k, l, n, o) {
+    return (
+      _classCallCheck(this, b),
+      _possibleConstructorReturn(
+        this,
+        (b.__proto__ || Object.getPrototypeOf(b)).call(
+          this,
+          c,
+          d,
+          e,
+          f,
+          g,
+          j,
+          k,
+          l,
+          n,
+          o
+        )
+      )
+    );
+  }
+  return (
+    _inherits(b, a),
+    _createClass(b, [
+      {
+        key: "deltaZ",
+        value: function deltaZ() {
+          this.canRemove
+            ? null
+            : this.top > 7 * h
+              ? (this.node.remove(), p4.appendChild(this.node))
+              : (this.node.remove(), p6.appendChild(this.node));
+        }
+      },
+      {
+        key: "clear",
+        value: function clear() {
+          this.top > 18 * h
+            ? (this.node.remove(), (this.canRemove = !0))
+            : null;
+        }
+      }
+    ]),
+    b
+  );
+})(MovingObject);
 var bgDist = 0,
   lastTimeBgDistSet = 0,
   lastTreeD = 0,
   lastLaneD = 0;
-function makeTrees(a) {
+function makeTrees() {
   bgDist >= lastTreeD + treeSpacing &&
-    (newGameObject(
-      a,
-      p7,
-      "tree",
-      "url('img/tree.png')",
-      6.25,
-      -12.5,
-      0.5,
-      6,
-      drawDistScale
+    (movers.push(
+      new MovingObject(
+        t,
+        p7,
+        "treeL",
+        "url('img/tree.png')",
+        6.25,
+        -12.5,
+        0.5,
+        0,
+        6,
+        drawDistScale
+      )
     ),
-    newGameObject(
-      a,
-      p7,
-      "tree",
-      "url('img/tree.png')",
-      9.75,
-      22.5,
-      0.5,
-      6,
-      drawDistScale
+    movers.push(
+      new MovingObject(
+        t,
+        p7,
+        "treeR",
+        "url('img/tree.png')",
+        9.75,
+        22.5,
+        0.5,
+        0,
+        6,
+        drawDistScale
+      )
     ),
     (lastTreeD = bgDist));
 }
-function makeLanes(a) {
+function makeLanes() {
   bgDist >= lastLaneD + laneSpacing &&
-    (newGameObject(
-      a,
-      p7,
-      "lane",
-      "url('img/laneL.png')",
-      7.5,
-      4.5,
-      1,
-      2,
-      drawDistScale
+    (movers.push(
+      new MovingObject(
+        t,
+        p7,
+        "laneL",
+        "url('img/laneL.png')",
+        7.5,
+        4.5,
+        1,
+        0,
+        2,
+        drawDistScale
+      )
     ),
-    newGameObject(
-      a,
-      p7,
-      "lane",
-      "url('img/laneR.png')",
-      8.5,
-      9.5,
-      1,
-      2,
-      drawDistScale
+    movers.push(
+      new MovingObject(
+        t,
+        p7,
+        "laneR",
+        "url('img/laneR.png')",
+        8.5,
+        9.5,
+        1,
+        0,
+        2,
+        drawDistScale
+      )
     ),
     (lastLaneD = bgDist));
 }
@@ -544,58 +652,62 @@ function bgDistRefresh() {
   var a = (tStamp - lastTimeBgDistSet) / 1e3;
   (bgDist += a * (speed / 3600)), (lastTimeBgDistSet = tStamp);
 }
-function bgElements(a) {
-  bgDistRefresh(), makeTrees(a), makeLanes(a);
+function bgElements() {
+  bgDistRefresh(), makeTrees(), makeLanes();
 }
 var lastEnemyD = 0;
-function makeEnemies(a) {
+function makeEnemies() {
   if (distance >= lastEnemyD + enemySpacing && speed > 2 * enemySpeed) {
-    var b = Math.floor(3 * Math.random()) + 1,
-      c = Math.floor(5 * Math.random()) + 2;
-    1 === b
-      ? newGameObject(
-          a,
-          p6,
-          "enemy",
-          "url('img/car" + c + ".png')",
-          7,
-          -0.5,
-          2,
-          6,
-          drawDistScale
-        )
-      : 2 === b
-        ? newGameObject(
-            a,
+    var a = Math.floor(3 * Math.random()) + 1,
+      b = Math.floor(5 * Math.random()) + 2;
+    1 === a
+      ? movers.push(
+          new Enemy(
+            t,
             p6,
             "enemy",
-            "url('img/car" + c + ".png')",
-            8,
-            5,
+            "url('img/car" + b + ".png')",
+            7,
+            -0.5,
             2,
+            0,
             6,
             drawDistScale
           )
-        : 3 === b
-          ? newGameObject(
-              a,
+        )
+      : 2 === a
+        ? movers.push(
+            new Enemy(
+              t,
               p6,
               "enemy",
-              "url('img/car" + c + ".png')",
-              9,
-              10.5,
+              "url('img/car" + b + ".png')",
+              8,
+              5,
               2,
+              0,
               6,
               drawDistScale
+            )
+          )
+        : 3 === a
+          ? movers.push(
+              new Enemy(
+                t,
+                p6,
+                "enemy",
+                "url('img/car" + b + ".png')",
+                9,
+                10.5,
+                2,
+                0,
+                6,
+                drawDistScale
+              )
             )
           : void 0;
     lastEnemyD = distance;
   }
-}
-function enemyDeltaZ(a, b) {
-  b >= 7 * h
-    ? (a.remove(), p4.appendChild(a))
-    : b < 7 * h && (a.remove(), p6.appendChild(a));
 }
 var playerHitSpotLeft = 0,
   playerHitSpotTop = 0;
@@ -618,8 +730,8 @@ function getEnemyHitSpotTop(a) {
 }
 function checkForHit(a) {
   getPlayerHitSpot();
-  var b = Math.abs(getEnemyHitSpotLeft(a) - playerHitSpotLeft),
-    c = Math.abs(getEnemyHitSpotTop(a) - playerHitSpotTop);
+  var b = Math.abs(getEnemyHitSpotLeft(a.node) - playerHitSpotLeft),
+    c = Math.abs(getEnemyHitSpotTop(a.node) - playerHitSpotTop);
   c < h / 2 &&
     b < w / 4 &&
     "jump" !== playerCar.classList[0] &&
@@ -628,28 +740,33 @@ function checkForHit(a) {
 function collisionEvent(a) {
   (speed = 0.9 * enemySpeed),
     setTimeout(function() {
-      a.remove();
+      a.node.remove(), (a.canRemove = !0);
     }, 100),
-    finished ||
-      ((p3.style.opacity = 0),
-      (p3.style.transitionDuration = "100ms"),
-      (p3.style.backgroundColor = "#FFFFFF"),
-      (p3.style.opacity = 0.5),
-      setTimeout(function() {
-        p3.style.opacity = 0;
-      }, 100));
+    finished ? null : overlayFlash(100);
 }
-function makeFinish(a) {
-  newGameObject(
-    a,
-    p7,
-    "finish",
-    "url('img/finish.png')",
-    6.5,
-    1.875,
-    12,
-    12.25,
-    drawDistScale
+function overlayFlash(a) {
+  (p3.style.opacity = 0),
+    (p3.style.transitionDuration = a + "ms"),
+    (p3.style.backgroundColor = "#FFFFFF"),
+    (p3.style.opacity = 0.5),
+    setTimeout(function() {
+      p3.style.opacity = 0;
+    }, a);
+}
+function makeFinish() {
+  movers.push(
+    new MovingObject(
+      t,
+      p7,
+      "finish",
+      "url('img/finish.png')",
+      6.5,
+      1.875,
+      12,
+      3,
+      12.25,
+      drawDistScale
+    )
   ),
     (finishLine = !0);
 }
@@ -679,8 +796,8 @@ function endgameFlyOut() {
 function makeHarder() {
   (trackLength += 0.1),
     (runTimeTotal += 5),
-    5e-3 < enemySpacing && (enemySpacing -= 5e-4);
-  200 > maxSpeed && (maxSpeed += 5);
+    5e-3 < enemySpacing ? (enemySpacing -= 5e-4) : null,
+    200 > maxSpeed ? (maxSpeed += 5) : null;
 }
 var horizon = 3 * h,
   minSpeed = 10,
@@ -690,114 +807,94 @@ var horizon = 3 * h,
   laneSpacing = 5e-3,
   runTimeTotal = 60,
   trackLength = 1.5,
-  maxSpeed = 120;
-mobile && (maxSpeed = 100);
-var enemySpeed = maxSpeed / 3,
+  maxSpeed = mobile ? 100 : 120,
+  enemySpeed = maxSpeed / 3,
   enemySpacing = 0.01,
   tStamp = 0,
   t = 0,
+  movers = [],
   speed = startSpeed,
   speedInput = !1,
+  tutorial = !1,
   splashState = !0,
   finishLine = !1,
   finished = !1;
-mobile && showMobileGamebox();
-buildGamePage(),
+mobile ? showMobileGamebox() : null,
+  buildGamePage(),
+  overlayDark(0),
   makePlayerCar(p5),
   makeSplashElements(),
-  (window.onload = function() {
-    splash();
-  });
-function splash() {
   titleFlyIn(),
-    setTimeout(function() {
-      playButtonAppear();
-    }, 1200),
-    playButton.addEventListener("click", togglePlay);
-}
+  playButtonAppear(p1, "playButton", "Play!", "#FFFF0C", 1e3, togglePlay);
 function togglePlay() {
-  playButton.removeEventListener("click", togglePlay),
-    initializePlayerCar(),
+  initializePlayerCar(),
     titleFlyOut(),
-    playButtonExplode(),
+    playButtonExplode(togglePlay),
     makeHud(),
-    tutorial();
-}
-function tutorial() {
-  makeTutorial(),
-    setTimeout(function() {
-      tutorialAppear();
-    }, 200);
+    tutorialAppear(1e3);
 }
 function initializeGamePlay() {
   resetClock(),
     resetDistance(),
+    (splashState = !1),
     (speed = startSpeed),
     (lastEnemyD = 0),
     (finishLine = !1),
     (finished = !1),
-    document.removeEventListener("keydown", initializeGamePlay),
-    par.removeEventListener("click", initializeGamePlay),
-    tutorialRemove(),
-    (splashState = !1),
-    (p3.style.transitionDuration = "2s"),
-    setTimeout(function() {
-      p3.style.opacity = 0;
-    }, 500),
-    addInputListener(),
+    tutorialRemove(500),
+    overlayDark(2500),
+    mobile ? addSwipeListener() : addKeyListener(),
     setTimeout(function() {
       hudFadeIn(), resetClock(), resetDistance();
-    }, 500),
-    mobile &&
-      setTimeout(function() {
-        speedUp = !0;
-      }, 1e3);
+    }, 100),
+    mobile
+      ? setTimeout(function() {
+          speedUp = !0;
+        }, 1e3)
+      : null;
 }
-function gameStack(a, b) {
+function gameStack() {
   finished ||
     (0 < distanceRemain && 0 < runTimeRemain
-      ? (refreshHud(b),
-        makeEnemies(b),
-        0.038 > distanceRemain && !finishLine && makeFinish(b))
+      ? (refreshHud(),
+        makeEnemies(),
+        0.038 > distanceRemain && !finishLine && makeFinish())
       : (0 >= distanceRemain || 0 >= runTimeRemain) && endgame());
 }
 function endgame() {
   (finished = !0),
-    removeInputListener(),
+    mobile ? removeSwipeListener() : removeKeyListener(),
     (speedInput = !1),
     (speedUp = !1),
     (speedDown = !1),
     hudFadeOut(),
+    overlayDark(1e3),
     0 < distanceRemain
       ? makeEndgameBox("You Lose!")
-      : (makeEndgameBox("You Win!"), makeHarder());
-  makePlayButton(p1, "playButton", "More?", "yellow"),
-    playButton.addEventListener("click", replay),
-    setTimeout(function() {
-      (p3.style.transitionDuration = "1s"),
-        (p3.style.backgroundColor = "#000000"),
-        (p3.style.opacity = 0.5),
-        endgamePopIn();
-    }, 100),
-    setTimeout(function() {
-      playButtonAppear();
-    }, 500);
+      : (makeEndgameBox("You Win!"), makeHarder()),
+    endgamePopIn(),
+    playButtonAppear(p1, "playButton", "More?", "yellow", 500, replay);
 }
 function replay() {
-  playButton.removeEventListener("click", replay),
-    endgameFlyOut(),
-    playButtonExplode(),
-    initializeGamePlay();
+  endgameFlyOut(), playButtonExplode(replay), initializeGamePlay();
 }
-function globalRefresh(a, b) {
-  setClock(a), setSpeed(b), setDistance(a);
+function globalRefresh() {
+  setClock(), setSpeed(), setDistance();
 }
-function redraw(a, b) {
-  globalRefresh(a, b), bgElements(b), splashState || gameStack(a, b);
-  for (var c = document.querySelectorAll(".moving"), d = 0; d < c.length; d++)
-    moveBox(c[d], b);
+function redraw() {
+  globalRefresh(),
+    bgElements(),
+    splashState ? null : gameStack(),
+    movers.map(function(a, b) {
+      a.move(),
+        a.top > 9 * h ? a.clear() : null,
+        a.canRemove ? movers.splice(b, 1) : null,
+        "enemy" === a.type && a.top > 6 * h
+          ? (a.deltaZ(), checkForHit(a))
+          : null;
+    });
 }
 function drawGame(a) {
-  (tStamp = a), (t = a / 16), redraw(a, t), window.requestAnimFrame(drawGame);
+  (tStamp = a), (t = a / 16), redraw(), window.requestAnimFrame(drawGame);
 }
 window.requestAnimFrame(drawGame);
