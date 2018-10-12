@@ -3,18 +3,18 @@
 ///////////////////////////////////////////////////////////////////////////////////
 
 // requestAnimationFrame Polyfill  ---  Adapted From https://gist.github.com/amsul/3691721
-    // window.requestAnimFrame = (function() {
-    //   return (
-    //     window.requestAnimationFrame ||
-    //     window.webkitRequestAnimationFrame ||
-    //     window.mozRequestAnimationFrame ||
-    //     window.oRequestAnimationFrame ||
-    //     window.msRequestAnimationFrame ||
-    //     function(callback){
-    //       window.setTimeout(callback, 1000 / 60);
-    //     }
-    //   );
-    // })();
+    window.requestAnimFrame = (function() {
+      return (
+        window.requestAnimationFrame ||
+        window.webkitRequestAnimationFrame ||
+        window.mozRequestAnimationFrame ||
+        window.oRequestAnimationFrame ||
+        window.msRequestAnimationFrame ||
+        function(callback) {
+          window.setTimeout(callback, 1000 / 60);
+        }
+      );
+    })();
 
 // Function Detect Mobile Browser  ---  Adapted From https://stackoverflow.com/questions/11381673/detecting-a-mobile-browser
     function isMobile() {
@@ -104,30 +104,22 @@
 //  //  //  //  //  //  //  //  SCREEN ROTATION FUNCTIONS  //  //  //  //  //  //  //  //
 /////////////////////////////////////////////////////////////////////////////////////////
 
-// Function Show Or Hide Mobile Gamebox
-    function showMobileGamebox() {
-      let rotate = document.getElementById('rotate');
+// Function Initialize Mobile Rotation Splash Screen + Event Listener
+    function mobileRotateSplash() {
       if (window.innerWidth < window.innerHeight) {
-        par.style.display = 'none';
-        rotate.style.display = 'block';
-      } else {
-        rotate.style.display = 'none';
-        par.style.display = 'block';
+        rotationHandler();
       };
+      window.addEventListener('orientationchange', rotationHandler);
     };
-
-// Rotation Event Listener
-    window.addEventListener('orientationchange', rotationHandler);
 
 // Function Rotation Handler
     function rotationHandler() {
-      let orientation = Math.abs(window.orientation);
-      if (orientation === 90) {
-        rotate.style.display = 'none';
+      if (Math.abs(window.orientation) === 90) {
         par.style.display = 'block';
+        rotate.style.display = 'none';
       } else {
-        par.style.display = 'none';
         rotate.style.display = 'block';
+        par.style.display = 'none';
       };
     };
 
@@ -632,10 +624,10 @@
         this.aspect = aspect;
         this.startW = startW;
         this.endW = endW;
-        this.widthMove = (endW - startW) * w;
-        this.heightMove = (endW / aspect) * h;
         this.leftMove = (endL - startL) * w;
         this.topMove = fullH - horizon;
+        this.widthMove = (endW - startW) * w;
+        this.heightMove = (endW / aspect) * h;
         this.distScale = distScale;
         this.dist = 0;
         this.top = 0;
@@ -652,9 +644,9 @@
       move(t) {
         let moveSpeed = (this.type === 'enemy') ? (speed - enemySpeed) : speed;
         let distance = this.dist + moveSpeed * (t - this.timestamp);
+        let rate = Math.pow(distance, 5) / Math.pow(this.distScale, 5);
         this.timestamp = t;
         this.dist = distance;
-        let rate = Math.pow(distance, 5) / Math.pow(this.distScale, 5);
         this.node.style.left = (this.startL * w) + (this.leftMove * rate) + 'px';
         this.node.style.top = horizon + (this.topMove * rate) + 'px';
         this.node.style.width = (this.startW * w) + (this.widthMove * rate) + 'px';
@@ -697,7 +689,7 @@
     let lastLaneD = 0;
 
 // Function Make Trees
-    function makeTrees(t) {
+    function makeTrees() {
       if (bgDist >= lastTreeD + treeSpacing) {
         movers.push(new MovingObject(t, p7, 'treeL', `url('img/tree.png')`, 6.25, -12.5, 0.5, 0, 6, drawDistScale));
         movers.push(new MovingObject(t, p7, 'treeR', `url('img/tree.png')`, 9.75, 22.5, 0.5, 0, 6, drawDistScale));
@@ -706,7 +698,7 @@
     };
 
 // Function Make Lanes
-    function makeLanes(t) {
+    function makeLanes() {
       if (bgDist >= lastLaneD + laneSpacing) {
         movers.push(new MovingObject(t, p7, 'laneL', `url('img/laneL.png')`, 7.5, 4.5, 1, 0, 2, drawDistScale));
         movers.push(new MovingObject(t, p7, 'laneR', `url('img/laneR.png')`, 8.5, 9.5, 1, 0, 2, drawDistScale));
@@ -722,10 +714,10 @@
     };
 
 // Function Master Background Stack
-    function bgElements(tStamp, t) {
+    function bgElements(tStamp) {
       bgDistRefresh(tStamp);
-      makeTrees(t);
-      makeLanes(t);
+      makeTrees();
+      makeLanes();
     };
 
 
@@ -737,7 +729,7 @@
     let lastEnemyD = 0;
 
 // Function Make Enemies
-    function makeEnemies(t) {
+    function makeEnemies() {
       if (distance >= lastEnemyD + enemySpacing && speed > enemySpeed * 2) {
         let lane = Math.floor(Math.random() * 3) + 1;
         let color = Math.floor(Math.random() * 5) + 2;
@@ -824,7 +816,7 @@
 /////////////////////////////////////////////////////////////////////////////////
 
 // Function Make Finish Line
-    function makeFinish(t) {
+    function makeFinish() {
       movers.push(new MovingObject(t, p7, 'finish', `url('img/finish.png')`, 6.5, 1.875, 12, 3, 12.25, drawDistScale));
       finishLine = true;
     };
@@ -860,8 +852,12 @@
     function makeHarder() {
       trackLength += 0.1;
       runTimeTotal += 5;
-      (enemySpacing > 0.005) ? (enemySpacing -= 0.0005) : null;
-      (maxSpeed < 200) ? (maxSpeed += 5) : null;
+      if (enemySpacing > 0.005) {
+        enemySpacing -= 0.0005;
+      };
+      if (maxSpeed < 200) {
+        maxSpeed += 5;
+      };
     };
 
 
@@ -897,7 +893,7 @@
     let finished = false;
 
 // Initialization Functions Master Stack
-    mobile ? showMobileGamebox() : null;
+    mobile ? mobileRotateSplash() : null;
     buildGamePage();
     overlayDark(0);
     titleFlyIn('Drive My Car');
@@ -929,7 +925,6 @@
         resetClock();
         resetDistance();
       }, 100);
-      // mobile ? setTimeout(() => { speedUp = true }, 1000) : null;
       mobile ? speedUp = true : null;
     };
 
@@ -937,9 +932,9 @@
     function gameStack(t) {
       if (distanceRemain > 0 && runTimeRemain > 0) {
         refreshHud();
-        makeEnemies(t);
+        makeEnemies();
         if (distanceRemain < 0.038 && !finishLine) {
-          makeFinish(t);
+          makeFinish();
         };
       } else if (distanceRemain <= 0 || runTimeRemain <= 0) {
         endgame();
@@ -982,7 +977,7 @@
 // Function Redraw All Moving Elements
     function redraw(tStamp) {
       globalRefresh(tStamp);
-      bgElements(tStamp, t);
+      bgElements(tStamp);
       if (!splashState && !finished) {
         gameStack(t);
       };
@@ -1008,10 +1003,10 @@
 // Function Master Animation Frame Stack
     function drawGame(timestamp) {
       tStamp = timestamp;
-      t = timestamp / 16;
+      t++;
       redraw(tStamp, t);
-      window.requestAnimationFrame(drawGame);
+      window.requestAnimFrame(drawGame);
     };
 
 // rAF Initialize
-    window.requestAnimationFrame(drawGame);
+    window.requestAnimFrame(drawGame);
