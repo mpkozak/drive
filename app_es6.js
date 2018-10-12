@@ -3,18 +3,18 @@
 ///////////////////////////////////////////////////////////////////////////////////
 
 // requestAnimationFrame Polyfill  ---  Adapted From https://gist.github.com/amsul/3691721
-    window.requestAnimFrame = (function() {
-      return (
-        window.requestAnimationFrame ||
-        window.webkitRequestAnimationFrame ||
-        window.mozRequestAnimationFrame ||
-        window.oRequestAnimationFrame ||
-        window.msRequestAnimationFrame ||
-        function(callback){
-          window.setTimeout(callback, 1000 / 60);
-        }
-      );
-    })();
+    // window.requestAnimFrame = (function() {
+    //   return (
+    //     window.requestAnimationFrame ||
+    //     window.webkitRequestAnimationFrame ||
+    //     window.mozRequestAnimationFrame ||
+    //     window.oRequestAnimationFrame ||
+    //     window.msRequestAnimationFrame ||
+    //     function(callback){
+    //       window.setTimeout(callback, 1000 / 60);
+    //     }
+    //   );
+    // })();
 
 // Function Detect Mobile Browser  ---  Adapted From https://stackoverflow.com/questions/11381673/detecting-a-mobile-browser
     function isMobile() {
@@ -97,17 +97,6 @@
       p3.style.transitionDuration = ms + 'ms';
       p3.style.backgroundColor = '#000000';
       opacity ? p3.style.opacity = 0 : p3.style.opacity = 0.5;
-    };
-
-// Function Create Player Car
-    function makePlayerCar(gamePlane) {
-      let div = document.createElement('div');
-      div.style.left = 6 * w + 'px';
-      div.style.top = 9 * h + 'px';
-      div.style.width = 4 * w + 'px';
-      div.style.height = 2 * h + 'px';
-      div.id = 'playerCar';
-      gamePlane.appendChild(div);
     };
 
 
@@ -255,6 +244,7 @@
       div.style.width = width * w + 'px';
       div.style.height = height * h + 'px';
       gamePlane.appendChild(div);
+      return div;
     };
 
 // Function Make Play Button
@@ -271,24 +261,17 @@
       return button;
     };
 
-// Function Make Title Screen Elements
-    function makeSplashElements() {
-      makeTitleBox(p2, 'title1', 'Drive', 0, 10, 2);
-      makeTitleBox(p2, 'title2', 'My', 2, 10, 2);
-      makeTitleBox(p2, 'title3', 'Car', 4, 10, 2);
-    };
-
 // Function Titles Fly In
-    function titleFlyIn() {
-      let titles = document.querySelectorAll('.title');
-      Array.from(titles).map( (t, i) => { setTimeout(() => { t.style.left = 3 * h + 'px' }, (i * 200)) });
+    function titleFlyIn(title) {
+      let titles = title.split(' ').map((t, i) => makeTitleBox(p2, `title${i}`, t, (i * 2), 10, 2))
+      Array.from(titles).map((t, i) => { setTimeout(() => { t.style.left = 3 * h + 'px' }, (i * 200)) });
     };
 
 // Function Titles Fly Out + Removed
     function titleFlyOut() {
       let titles = document.querySelectorAll('.title');
-      Array.from(titles).map( (t, i) => { setTimeout(() => { t.style.left = 16 * h + 'px' }, (i * 200)) });
-      setTimeout(() => { Array.from(titles).map( t => t.remove() ) }, 2000);
+      Array.from(titles).map((t, i) => { setTimeout(() => { t.style.left = 16 * h + 'px' }, (i * 200)) });
+      setTimeout(() => { Array.from(titles).map(t => t.remove()) }, 2000);
     };
 
 // Function Make Play Button Appear
@@ -318,9 +301,23 @@
       setTimeout(() => { playButton.remove() }, 300);
     };
 
+// Function Create Player Car
+    function makePlayerCar() {
+      let div = document.createElement('div');
+      div.style.transitionDuration = '1s';
+      div.style.left = 6 * w + 'px';
+      div.style.top = 9 * h + 'px';
+      div.style.width = 4 * w + 'px';
+      div.style.height = 2 * h + 'px';
+      div.id = 'playerCar';
+      p5.appendChild(div);
+      return div;
+    };
+
 // Function Slide Player Car Into Gamefield
     function initializePlayerCar() {
-      playerCar.style.top = 7 * h + 'px';
+      makePlayerCar();
+      setTimeout(() => {playerCar.style.top = 7 * h + 'px'}, 10);
       setTimeout(() => { playerCar.style.transitionDuration = '250ms' }, 1000);
     };
 
@@ -446,7 +443,7 @@
 
 // Function HUD Boxes Fade + Slide In
     function hudFadeIn() {
-      Array.from(document.querySelectorAll('.HUD')).map( t => { t.style.opacity = 1 });
+      Array.from(document.querySelectorAll('.HUD')).map(t => { t.style.opacity = 1 });
       speedBox.style.left = 0 * w + 'px';
       timeBox.style.top = 1 * h + 'px';
       distBox.style.left = 13 * w + 'px';
@@ -454,7 +451,7 @@
 
 // Function HUD Boxes Fade + Slide Out
     function hudFadeOut() {
-      Array.from(document.querySelectorAll('.HUD')).map( t => { t.style.opacity = 0 });
+      Array.from(document.querySelectorAll('.HUD')).map(t => { t.style.opacity = 0 });
       speedBox.style.left = -3 * w + 'px';
       timeBox.style.top = -2 * h + 'px';
       distBox.style.left = 16 * w + 'px';
@@ -541,7 +538,7 @@
     };
 
 // Function Refresh Clock
-    function setClock() {
+    function setClock(tStamp) {
       runTimeElapsed = Math.floor(tStamp / 1000) - runTimeStart;
       runTimeRemain = runTimeTotal - runTimeElapsed;
     };
@@ -557,9 +554,6 @@
 
 // Function Refresh Speed
     function setSpeed() {
-      // speedUp ? (speed += ((maxSpeed - speed) / maxSpeed)) : null;
-      // speedDown ? (speed += ((minSpeed - speed) / (minSpeed * 5))) : null;
-      // (speedInput && !speedUp && !speedDown && speed > minSpeed + 1) ? (speed *= 0.995) : null;
       if (speedUp) {
         speed += ((maxSpeed - speed) / maxSpeed);
       } else if (speedDown) {
@@ -586,7 +580,7 @@
     };
 
 // Function Refresh Distance
-    function setDistance() {
+    function setDistance(tStamp) {
       let interval = (tStamp - lastTimeDistanceSet) / 1000;
       distance += interval * (speed / 3600);
       distanceRemain = trackLength - distance;
@@ -638,6 +632,10 @@
         this.aspect = aspect;
         this.startW = startW;
         this.endW = endW;
+        this.widthMove = (endW - startW) * w;
+        this.heightMove = (endW / aspect) * h;
+        this.leftMove = (endL - startL) * w;
+        this.topMove = fullH - horizon;
         this.distScale = distScale;
         this.dist = 0;
         this.top = 0;
@@ -651,20 +649,16 @@
         this.gamePlane.appendChild(div);
         return div;
       };
-      move() {
+      move(t) {
         let moveSpeed = (this.type === 'enemy') ? (speed - enemySpeed) : speed;
-        let widthMove = (this.endW * w) - (this.startW * w);
-        let heightMove = (this.endW / this.aspect) * h;
-        let leftMove = (this.endL * w) - (this.startL * w);
-        let topMove = fullH - horizon;
         let distance = this.dist + moveSpeed * (t - this.timestamp);
         this.timestamp = t;
         this.dist = distance;
         let rate = Math.pow(distance, 5) / Math.pow(this.distScale, 5);
-        this.node.style.left = (this.startL * w) + (leftMove * rate) + 'px';
-        this.node.style.top = horizon + (topMove * rate) + 'px';
-        this.node.style.width = (this.startW * w) + (widthMove * rate) + 'px';
-        this.node.style.height = 0 + (heightMove * rate) + 'px';
+        this.node.style.left = (this.startL * w) + (this.leftMove * rate) + 'px';
+        this.node.style.top = horizon + (this.topMove * rate) + 'px';
+        this.node.style.width = (this.startW * w) + (this.widthMove * rate) + 'px';
+        this.node.style.height = (this.heightMove * rate) + 'px';
         this.top = parseInt(this.node.style.top.replace(/px/g, ''));
       };
       clear() {
@@ -679,12 +673,15 @@
         super(timestamp, gamePlane, type, imgSrc, startL, endL, aspect, startW, endW, distScale);
       };
       deltaZ() {
-        !this.canRemove ? (
-          (this.top > 7 * h) ? (this.node.remove(), p4.appendChild(this.node)) : (this.node.remove(), p6.appendChild(this.node))
-        ) : null;
-      };
-      clear() {
-        (this.top > 18 * h) ? (this.node.remove(), this.canRemove = true) : null;
+        if (!this.canRemove) {
+          if (this.top > 7 * h) {
+            this.node.remove();
+            p4.appendChild(this.node);
+          } else {
+            this.node.remove();
+            p6.appendChild(this.node);
+          };
+        };
       };
     };
 
@@ -700,7 +697,7 @@
     let lastLaneD = 0;
 
 // Function Make Trees
-    function makeTrees() {
+    function makeTrees(t) {
       if (bgDist >= lastTreeD + treeSpacing) {
         movers.push(new MovingObject(t, p7, 'treeL', `url('img/tree.png')`, 6.25, -12.5, 0.5, 0, 6, drawDistScale));
         movers.push(new MovingObject(t, p7, 'treeR', `url('img/tree.png')`, 9.75, 22.5, 0.5, 0, 6, drawDistScale));
@@ -709,7 +706,7 @@
     };
 
 // Function Make Lanes
-    function makeLanes() {
+    function makeLanes(t) {
       if (bgDist >= lastLaneD + laneSpacing) {
         movers.push(new MovingObject(t, p7, 'laneL', `url('img/laneL.png')`, 7.5, 4.5, 1, 0, 2, drawDistScale));
         movers.push(new MovingObject(t, p7, 'laneR', `url('img/laneR.png')`, 8.5, 9.5, 1, 0, 2, drawDistScale));
@@ -718,17 +715,17 @@
     };
 
 // Function Background Distance Refresh
-    function bgDistRefresh() {
+    function bgDistRefresh(tStamp) {
       let interval = (tStamp - lastTimeBgDistSet) / 1000;
       bgDist += interval * (speed / 3600);
       lastTimeBgDistSet = tStamp;
     };
 
 // Function Master Background Stack
-    function bgElements() {
-      bgDistRefresh();
-      makeTrees();
-      makeLanes();
+    function bgElements(tStamp, t) {
+      bgDistRefresh(tStamp);
+      makeTrees(t);
+      makeLanes(t);
     };
 
 
@@ -740,19 +737,19 @@
     let lastEnemyD = 0;
 
 // Function Make Enemies
-    function makeEnemies() {
+    function makeEnemies(t) {
       if (distance >= lastEnemyD + enemySpacing && speed > enemySpeed * 2) {
         let lane = Math.floor(Math.random() * 3) + 1;
         let color = Math.floor(Math.random() * 5) + 2;
         switch(lane) {
           case 1:
-            movers.push(new Enemy(t, p6, 'enemy', `url('img/car${color}.png')`, 7, -0.5, 2, 0, 6, drawDistScale));
+            enemies.push(new Enemy(t, p6, 'enemy', `url('img/car${color}.png')`, 7, -0.5, 2, 0, 6, drawDistScale));
           break;
           case 2:
-            movers.push(new Enemy(t, p6, 'enemy', `url('img/car${color}.png')`, 8, 5, 2, 0, 6, drawDistScale));
+            enemies.push(new Enemy(t, p6, 'enemy', `url('img/car${color}.png')`, 8, 5, 2, 0, 6, drawDistScale));
           break;
           case 3:
-            movers.push(new Enemy(t, p6, 'enemy', `url('img/car${color}.png')`, 9, 10.5, 2, 0, 6, drawDistScale));
+            enemies.push(new Enemy(t, p6, 'enemy', `url('img/car${color}.png')`, 9, 10.5, 2, 0, 6, drawDistScale));
           break;
         };
         lastEnemyD = distance;
@@ -827,7 +824,7 @@
 /////////////////////////////////////////////////////////////////////////////////
 
 // Function Make Finish Line
-    function makeFinish() {
+    function makeFinish(t) {
       movers.push(new MovingObject(t, p7, 'finish', `url('img/finish.png')`, 6.5, 1.875, 12, 3, 12.25, drawDistScale));
       finishLine = true;
     };
@@ -891,6 +888,7 @@
     let tStamp = 0;
     let t = 0;
     let movers = [];
+    let enemies = [];
     let speed = startSpeed;
     let speedInput = false;
     let tutorial = false;
@@ -902,16 +900,14 @@
     mobile ? showMobileGamebox() : null;
     buildGamePage();
     overlayDark(0);
-    makePlayerCar(p5);
-    makeSplashElements();
-    titleFlyIn();
+    titleFlyIn('Drive My Car');
     playButtonAppear(p1, 'playButton', 'Play!', '#FFFF0C', 1000, togglePlay);
 
 // Function Clear Splash Master Stack
     function togglePlay() {
+      playButtonExplode(togglePlay);
       initializePlayerCar();
       titleFlyOut();
-      playButtonExplode(togglePlay);
       makeHud();
       tutorialAppear(1000);
     };
@@ -933,21 +929,20 @@
         resetClock();
         resetDistance();
       }, 100);
-      mobile ? setTimeout(() => { speedUp = true }, 1000) : null;
+      // mobile ? setTimeout(() => { speedUp = true }, 1000) : null;
+      mobile ? speedUp = true : null;
     };
 
 // Function Gameplay Runtime Master Stack
-    function gameStack() {
-      if (!finished) {
-        if (distanceRemain > 0 && runTimeRemain > 0) {
-          refreshHud();
-          makeEnemies();
-          if (distanceRemain < 0.038 && !finishLine) {
-            makeFinish();
-          };
-        } else if (distanceRemain <= 0 || runTimeRemain <= 0) {
-          endgame();
+    function gameStack(t) {
+      if (distanceRemain > 0 && runTimeRemain > 0) {
+        refreshHud();
+        makeEnemies(t);
+        if (distanceRemain < 0.038 && !finishLine) {
+          makeFinish(t);
         };
+      } else if (distanceRemain <= 0 || runTimeRemain <= 0) {
+        endgame();
       };
     };
 
@@ -978,22 +973,35 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 // Function Refresh Global Variables
-    function globalRefresh() {
-      setClock();
+    function globalRefresh(tStamp) {
+      setClock(tStamp);
       setSpeed();
-      setDistance();
+      setDistance(tStamp);
     };
 
 // Function Redraw All Moving Elements
-    function redraw() {
-      globalRefresh();
-      bgElements();
-      !splashState ? gameStack() : null;
+    function redraw(tStamp) {
+      globalRefresh(tStamp);
+      bgElements(tStamp, t);
+      if (!splashState && !finished) {
+        gameStack(t);
+      };
       movers.map((m, i) => {
-        m.move();
-        (m.top > 9 * h) ? m.clear() : null;
-        m.canRemove ? movers.splice(i, 1) : null;
-        (m.type === 'enemy' && m.top > 6 * h) ? (m.deltaZ(), checkForHit(m)) : null;
+        m.canRemove ? movers.splice(i, 1) : null
+        m.move(t);
+        if (m.top > 9 * h) {
+          m.clear();
+        };
+      });
+      enemies.map((m, i) => {
+        m.canRemove ? enemies.splice(i, 1) : null
+        m.move(t);
+        if (m.top > 6 * h) {
+          m.deltaZ();
+          checkForHit(m);
+        } else if (m.top > 18 * h) {
+          m.clear();
+        };
       });
     };
 
@@ -1001,9 +1009,9 @@
     function drawGame(timestamp) {
       tStamp = timestamp;
       t = timestamp / 16;
-      redraw();
-      window.requestAnimFrame(drawGame);
+      redraw(tStamp, t);
+      window.requestAnimationFrame(drawGame);
     };
 
 // rAF Initialize
-    window.requestAnimFrame(drawGame);
+    window.requestAnimationFrame(drawGame);

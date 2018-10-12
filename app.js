@@ -895,6 +895,6 @@ function redraw() {
     });
 }
 function drawGame(a) {
-  (tStamp = a), (t = a / 16), redraw(), window.requestAnimFrame(drawGame);
+  (tStamp = a), (t = a / 16), redraw(), window.requestAnimationFrame(drawGame);
 }
-window.requestAnimFrame(drawGame);
+window.requestAnimationFrame(drawGame);
