@@ -113,13 +113,29 @@
     };
 
 // Function Rotation Handler
+    // function rotationHandler() {
+    //   if (Math.abs(window.orientation) === 90) {
+    //     par.style.display = 'block';
+    //     rotate.style.display = 'none';
+    //   } else {
+    //     rotate.style.display = 'block';
+    //     par.style.display = 'none';
+    //   };
+    // };
+
     function rotationHandler() {
       if (Math.abs(window.orientation) === 90) {
-        par.style.display = 'block';
-        rotate.style.display = 'none';
+        par.style.transform = `rotate(0deg)`;
+        // par.style.display = 'block';
+        // rotate.style.display = 'none';
       } else {
-        rotate.style.display = 'block';
-        par.style.display = 'none';
+        // rotate.style.display = 'none';
+        // par.style.display = 'block';
+        par.style.transitionDuration = '400ms';
+        // par.style.transitionTimingFunction = 'ease-in'
+        par.style.transform = `rotate(90deg) translateX(${h * 3.5}px) translateY(${h * 3.5}px)`;
+        // par.style.transform = ``;
+
       };
     };
 

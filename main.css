@@ -55,6 +55,7 @@ main {
 #gamebox-parent {
   position: relative;
   overflow: hidden;
+  /*transform-origin: 50% 50%;*/
 }
 
 .gamebox-child {
