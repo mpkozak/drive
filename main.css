@@ -121,7 +121,7 @@ main {
 
 #playerCar {
   position: absolute;
-  transition-duration: 25ms;
+  transition-duration: 1s;
   transition-timing-function: ease-in-out;
   background-image: url('img/car1.png');
   background-size: 100%;
