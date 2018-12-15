@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <meta name="apple-mobile-web-app-title" content="DriveMyCar" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <link rel="apple-touch-icon" href="icon.png" />
+  <link rel="stylesheet" type="text/css" href="new.css" />
+  <title>Drive My Car by Kozak</title>
+</head>
+
+<body>
+  <main>
+    <div class="gamebox" id="gamebox-parent">
+
+      <div class="gamebox-child" id="p1">
+
+<!-- desktop tutorial -->
+        <div class="tutorial" id="tutorial-desktop">
+          <div class="tutorial-head">
+            <h1>Can You Cross The Finish Line Before Time Runs Out?</h1>
+            <h1>Watch Out For Other Cars On The Road!</h1>
+          </div>
+          <div class="tutorial-control">
+            <h2>Controls:</h2>
+            <div><kbd class="control">&uarr;</kbd>Speed Up</div>
+            <div><kbd class="control">&darr;</kbd>Slow Down</div>
+            <div><kbd class="control">&larr;</kbd>Move Left</div>
+            <div><kbd class="control">&rarr;</kbd>Move Right</div>
+            <div><kbd class="control">space</kbd>Jump</div>
+          </div>
+          <div class="tutorial-foot">
+            <h1>Press Any Key To Continue.</h1>
+          </div>
+        </div>
+<!-- mobile tutorial -->
+        <div class="tutorial" id="tutorial-mobile">
+          <div class="tutorial-head">
+          <p>Can You Cross The Finish Line Before Time Runs Out?</p>
+          <p>Watch Out For Other Cars On The Road!</p>
+          </div>
+          <div class="tutorial-control">
+            <h2>Swipe To Move:</h2>
+            <div><span class="control">&larr;</span>Left</div>
+            <div><span class="control">&rarr;</span>Right</div>
+            <div><span class="control">&uarr;</span>Jump</div>
+          </div>
+          <div class="tutorial-foot">
+            <h1>Tap Anywhere To Continue.</h1>
+          </div>
+        </div>
+
+      </div>
+
+
+      <div class="gamebox-child" id="p2">
+      </div>
+
+      <div class="gamebox-child" id="p3">
+        <canvas id="c1"/>
+      </div>
+
+      <div class="gamebox-child" id="p4">
+        <canvas id="c2"/>
+      </div>
+
+      <div class="gamebox-child" id="p5">
+        <canvas id="c3"/>
+      </div>
+
+      <div class="gamebox-child" id="p6">
+      </div>
+
+
+    </div>
+  </main>
+
+  <div class="hidden">
+    <img src="./img/car1.png" class="car1">
+    <img src="./img/car2.png" class="car2">
+    <img src="./img/car3.png" class="car3">
+    <img src="./img/car4.png" class="car4">
+    <img src="./img/car5.png" class="car5">
+    <img src="./img/car6.png" class="car6">
+    <img src="./img/laneL.png" class="laneL">
+    <img src="./img/laneR.png" class="laneR">
+    <img src="./img/tree.png" class="tree">
+  </div>
+
+  <!-- mobile tutorial -->
+<!--       <div class="tutorial" id="tutorial-mobile">
+        <div class="instructions" id="instructions-mobile">
+          <p>Can You Cross The Finish Line Before Time Runs Out?</p>
+          <p>Watch Out For Other Cars On The Road!</p>
+        </div>
+        <ul class="swipe-map">
+          <li>&nbsp;&nbsp;Swipe To Move:</li>
+          <li><span class="swipe">&nbsp;&larr;&nbsp;</span> Left</li>
+          <li><span class="swipe">&nbsp;&rarr;&nbsp;</span> Right</li>
+          <li><span class="swipe">&nbsp;&uarr;&nbsp;</span> Jump</li>
+        </ul>
+        <div class="continue" id="continue-mobile">
+          <p>Tap Anywhere To Continue.</p>
+        </div>
+      </div> -->
+
+
+<!--
+
+      <div class="gamebox-child" id="plane1"></div>
+      <div class="gamebox-child" id="plane2"></div>
+      <div class="gamebox-child" id="plane3"></div>
+      <div class="gamebox-child" id="plane4"></div>
+      <div class="gamebox-child" id="plane5"></div>
+      <div class="gamebox-child" id="plane6"></div>
+      <div class="gamebox-child" id="plane7"></div>
+      <div class="gamebox-child" id="plane8"></div>
+      <div class="gamebox-child" id="plane9"></div>
+      <div class="gamebox-child" id="plane10"></div>
+
+ -->
+
+
+<!--
+    <div class="footer">
+      <p><span>designed by </span>kozak</p>
+      <p id="copy">&copy2018</p>
+    </div>
+ -->
+
+  </main>
+  <script type="text/javascript" src="new.js"></script>
+</body>
+
+</html>
