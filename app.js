@@ -33,6 +33,7 @@
       };
     };
     let mobile = isMobile();
+    // console.log(mobile)
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -145,29 +146,122 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 // Function Key Down Handler
-    function keyDownHandler(event) {
-      if (event.keyCode === 38) {
-        speedInput = true;
-        speedUp = true;
-      } else if (event.keyCode === 40) {
-        speedInput = true;
-        speedDown = true;
-      } else if (event.keyCode === 37) {
-        moveLeft();
-      } else if (event.keyCode === 39) {
-        moveRight();
-      } else if (event.keyCode === 32) {
-        jump();
-      };
-    };
+    // function keyDownHandler(event) {
+    //   console.log(event.keyCode)
+    //   if (event.keyCode === 38) {
+    //     speedInput = true;
+    //     speedUp = true;
+    //   } else if (event.keyCode === 40) {
+    //     speedInput = true;
+    //     speedDown = true;
+    //   } else if (event.keyCode === 37) {
+    //     // moveLeft();
+    //     let left = parseInt(playerCar.style.left.replace(/px/g, ''));
+    //     (left >= w * 6) ? (playerCar.style.left = left - (w * 4) + 'px') : null;
+    //   } else if (event.keyCode === 39) {
+    //     // moveRight();
+    //     let left = parseInt(playerCar.style.left.replace(/px/g, ''));
+    //     (left <= w * 6) ? (playerCar.style.left = left + (w * 4) + 'px') : null;
+    //   } else if (event.keyCode === 32) {
+    //     // jump();
+    //     let top = parseInt(playerCar.style.top.replace(/px/g, ''));
+    //     if (top >= w * 7 && playerCar.classList[0] !== 'jump') {
+    //       playerCar.classList.add('jump');
+    //       playerCar.style.top = top - (h * 2) + 'px';
+    //       setTimeout(() => { playerCar.style.top = top + 'px' }, 250);
+    //       setTimeout(() => { playerCar.classList.remove('jump') }, 500);
+    //     };
+    //   };
+    // };
+
 
 // Function Key Up Handler
-    function keyUpHandler(event) {
-      if (event.keyCode === 38) {
-        speedUp = false;
-      } else if (event.keyCode === 40) {
-        speedDown = false;
+    // function keyUpHandler(event) {
+    //   if (event.keyCode === 38) {
+    //     speedUp = false;
+    //   } else if (event.keyCode === 40) {
+    //     speedDown = false;
+    //   };
+    // };
+
+    // let prevKey
+
+    const keyDownHandler = (e) => {
+      e.preventDefault();
+      const key = e.key;
+      if (key === 'ArrowLeft') {
+        console.log('left')
+        moveLeft();
+      } else if (key === 'ArrowRight') {
+        console.log('right')
+        moveRight();
+      } else if (key === ' ') {
+        console.log('jump')
+        jump();
+      } else if (key === 'ArrowUp') {
+        changeSpeed(true);
+      } else if (key === 'ArrowDown') {
+        changeSpeed(false);
       };
+      // prevKey = key;
+    };
+
+    const changeSpeed = (up) => {
+      speedInput = true;
+      if (up) {
+        console.log('speed up')
+        speedUp = true;
+      } else {
+        console.log('speed down')
+        speedDown = true;
+      }
+    }
+
+// // Function Key Down Handler
+//     function keyDownHandler(e) {
+//     // speed += 1
+//       console.log(e)
+//       // const key = e.key;
+//       // const left = parseInt(playerCar.style.left.replace(/px/g, ''));
+//       switch (key) {
+//         case 'ArrowLeft' :
+//           moveLeft();
+//           // if (left >= w * 6) playerCar.style.left = left - (w * 4) + 'px';
+//           break;
+//         case 'ArrowRight' :
+//           moveRight();
+//           // if (left <= w * 6) playerCar.style.left = left + (w * 4) + 'px';
+//           break;
+//         case ' ' :
+//           jump();
+//           // let top = parseInt(playerCar.style.top.replace(/px/g, ''));
+//           // if (top >= w * 7 && playerCar.classList[0] !== 'jump') {
+//           //   playerCar.classList.add('jump');
+//           //   playerCar.style.top = top - (h * 2) + 'px';
+//           //   setTimeout(() => { playerCar.style.top = top + 'px' }, 250);
+//           //   setTimeout(() => { playerCar.classList.remove('jump') }, 500);
+//           // };
+//           break;
+//         case 'ArrowUp' :
+//         //   // speedInput = true;
+//           speedUp = true;
+//           break;
+//         case 'ArrowDown' :
+//           // speedInput = true;
+//           speedDown = true;
+//           break;
+//       };
+//     };
+
+
+// Function Key Up Handler
+    function keyUpHandler(e) {
+      const key = e.key;
+      if (key === 'ArrowUp') {
+        speedUp = false;
+      } else if (key === 'ArrowDown') {
+        speedDown = false;
+      } else return null;
     };
 
 // Function Add Key Listeners
@@ -187,53 +281,53 @@
 //  //  //  //  //  //  //  //  SWIPE EVENT FUNCTIONS  //  //  //  //  //  //  //  //
 /////////////////////////////////////////////////////////////////////////////////////
 
-// Variable Initial States
-    let xStart = 0;
-    let xEnd = 0;
-    let deltaX = 0;
-    let yStart = 0;
-    let yEnd = 0;
-    let deltaY = 0;
+// // Variable Initial States
+//     let xStart = 0;
+//     let xEnd = 0;
+//     let deltaX = 0;
+//     let yStart = 0;
+//     let yEnd = 0;
+//     let deltaY = 0;
 
-// Function Touch Start
-    function touchStart(event) {
-      event.preventDefault();
-      xStart = event.changedTouches[0].screenX;
-      yStart = event.changedTouches[0].screenY;
-    };
+// // Function Touch Start
+//     function touchStart(event) {
+//       event.preventDefault();
+//       xStart = event.changedTouches[0].screenX;
+//       yStart = event.changedTouches[0].screenY;
+//     };
 
-// Function Touch End
-    function touchEnd(event) {
-      event.preventDefault();
-      xEnd = event.changedTouches[0].screenX;
-      yEnd = event.changedTouches[0].screenY;
-      deltaX = Math.abs(xEnd - xStart);
-      deltaY = Math.abs(yEnd - yStart);
-      swipeHandler();
-    };
+// // Function Touch End
+//     function touchEnd(event) {
+//       event.preventDefault();
+//       xEnd = event.changedTouches[0].screenX;
+//       yEnd = event.changedTouches[0].screenY;
+//       deltaX = Math.abs(xEnd - xStart);
+//       deltaY = Math.abs(yEnd - yStart);
+//       swipeHandler();
+//     };
 
-// Function Swipe Handler
-    function swipeHandler() {
-      if (deltaX > deltaY && xEnd < xStart) {
-        moveLeft();
-      } else if (deltaX > deltaY && xEnd > xStart) {
-        moveRight();
-      } else if (deltaX < deltaY && yEnd < yStart) {
-        jump();
-      };
-    };
+// // Function Swipe Handler
+//     function swipeHandler() {
+//       if (deltaX > deltaY && xEnd < xStart) {
+//         moveLeft();
+//       } else if (deltaX > deltaY && xEnd > xStart) {
+//         moveRight();
+//       } else if (deltaX < deltaY && yEnd < yStart) {
+//         jump();
+//       };
+//     };
 
-// Function Add Swipe Listeners
-    function addSwipeListener() {
-      par.addEventListener('touchstart', touchStart);
-      par.addEventListener('touchend', touchEnd);
-    };
+// // Function Add Swipe Listeners
+//     function addSwipeListener() {
+//       par.addEventListener('touchstart', touchStart);
+//       par.addEventListener('touchend', touchEnd);
+//     };
 
-// Function Remove Swipe Listeners
-    function removeSwipeListener() {
-      par.removeEventListener('touchstart', touchStart);
-      par.removeEventListener('touchend', touchEnd);
-    };
+// // Function Remove Swipe Listeners
+//     function removeSwipeListener() {
+//       par.removeEventListener('touchstart', touchStart);
+//       par.removeEventListener('touchend', touchEnd);
+//     };
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -312,7 +406,7 @@
 // Function Create Player Car
     function makePlayerCar() {
       let div = document.createElement('div');
-      div.style.transitionDuration = '1s';
+      // div.style.transitionDuration = '1s';
       div.style.left = 6 * w + 'px';
       div.style.top = 9 * h + 'px';
       div.style.width = 4 * w + 'px';
@@ -326,7 +420,7 @@
     function initializePlayerCar() {
       makePlayerCar();
       setTimeout(() => {playerCar.style.top = 7 * h + 'px'}, 10);
-      setTimeout(() => { playerCar.style.transitionDuration = '250ms' }, 1000);
+      // setTimeout(() => { playerCar.style.transitionDuration = '250ms' }, 1000);
     };
 
 
@@ -563,11 +657,13 @@
 // Function Refresh Speed
     function setSpeed() {
       if (speedUp) {
-        speed += ((maxSpeed - speed) / maxSpeed);
+        // speed += ((maxSpeed - speed) / maxSpeed);
+        speed += 1
       } else if (speedDown) {
-        speed += ((minSpeed - speed) / (minSpeed * 5));
-      } else if (speedInput && !speedUp && !speedDown && speed > minSpeed + 1) {
-        speed *= 0.995;
+        speed -= 1
+        // speed += ((minSpeed - speed) / (minSpeed * 5));
+      // } else if (speedInput && !speedUp && !speedDown && speed > minSpeed + 1) {
+        // speed *= 0.995;
       };
     };
 
@@ -602,18 +698,21 @@
 
 // Function Move Left
     function moveLeft() {
+      console.log('moved left')
       let left = parseInt(playerCar.style.left.replace(/px/g, ''));
-      (left >= w * 6) ? (playerCar.style.left = left - (w * 4) + 'px') : null;
+      if (left >= w * 6) playerCar.style.left = left - (w * 4) + 'px';
     };
 
 // Function Move Right
     function moveRight() {
+      console.log('moved right')
       let left = parseInt(playerCar.style.left.replace(/px/g, ''));
-      (left <= w * 6) ? (playerCar.style.left = left + (w * 4) + 'px') : null;
+      if (left <= w * 6) playerCar.style.left = left + (w * 4) + 'px';
     };
 
 // Function Jump
     function jump() {
+      console.log('jumped')
       let top = parseInt(playerCar.style.top.replace(/px/g, ''));
       if (top >= w * 7 && playerCar.classList[0] !== 'jump') {
         playerCar.classList.add('jump');
@@ -814,7 +913,7 @@
         object.node.remove();
         object.canRemove = true;
       }, 100);
-      !finished ? overlayFlash(100) : null;
+      if (!finished) overlayFlash(100);
     };
 
 // Function Overlay Flash
@@ -884,7 +983,7 @@
 // Global Constant Declarations
     const horizon = 3 * h;
     const minSpeed = 10;
-    const startSpeed = 65;
+    const startSpeed = 125;
     const drawDistScale = 7500;
     const treeSpacing = 0.004;
     const laneSpacing = 0.005;
@@ -909,7 +1008,7 @@
     let finished = false;
 
 // Initialization Functions Master Stack
-    mobile ? mobileRotateSplash() : null;
+    if (mobile) mobileRotateSplash();
     buildGamePage();
     overlayDark(0);
     titleFlyIn('Drive My Car');
@@ -941,7 +1040,7 @@
         resetClock();
         resetDistance();
       }, 100);
-      mobile ? speedUp = true : null;
+      if (mobile) speedUp = true;
     };
 
 // Function Gameplay Runtime Master Stack
@@ -998,14 +1097,14 @@
         gameStack(t);
       };
       movers.map((m, i) => {
-        m.canRemove ? movers.splice(i, 1) : null
+        if (m.canRemove) movers.splice(i, 1);
         m.move(t);
         if (m.top > 9 * h) {
           m.clear();
         };
       });
       enemies.map((m, i) => {
-        m.canRemove ? enemies.splice(i, 1) : null
+        if (m.canRemove) enemies.splice(i, 1);
         m.move(t);
         if (m.top > 6 * h) {
           m.deltaZ();
