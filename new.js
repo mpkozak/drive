@@ -54,9 +54,11 @@
     const ctx1 = c1.getContext('2d');
     const ctx2 = c2.getContext('2d');
     const ctx3 = c3.getContext('2d');
-    let width, height, wUnit, hUnit;
+    let width, height, wUnit, hUnit, horizon;
 
 // Static Image Defs
+    const player = document.querySelector('#player-car');
+    const ps = player.style;
     const car1 = document.querySelector('.car1');
     const car2 = document.querySelector('.car2');
     const car3 = document.querySelector('.car3');
@@ -70,22 +72,31 @@
 
 // Viewport Size Calibrate + Refresh
     const setSize = () => {
-      width = gamebox.clientWidth / 2;
-      height = gamebox.clientHeight / 2;
+      width = gamebox.clientWidth;
+      height = gamebox.clientHeight;
       wUnit = width / 16;
       hUnit = height / 9;
+      horizon = hUnit * 3;
       c1.width = c2.width = c3.width = width;
       c1.height = c2.height = c3.height = height;
     };
-    window.addEventListener('resize', () => setSize());
+    // window.addEventListener('resize', () => setSize());
     setSize();
 
+// Initialize Player Car
+    const initPlayer = () => {
+      ps.top = 7 * hUnit + 'px';
+      ps.transform = `translate(${6 * wUnit}px, ${2 * hUnit}px)`;
+      setTimeout(() => {
+        ps.opacity = 1;
+        ps.transform = `translate(${6 * wUnit}px, 0)`
+      }, 1000);
+    }
 
 
 
 
-
-
+initPlayer()
 
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -137,16 +148,32 @@
 //  //  //  //  //  //  //  //  PLAYER MOVE FUNCTIONS  //  //  //  //  //  //  //  //
 /////////////////////////////////////////////////////////////////////////////////////
 
+
+    let playerLane = 2;
+
+
     const moveLeft = () => {
-      console.log('move left')
+      if (playerLane > 1) {
+        playerLane -= 1;
+        ps.transform = `translateX(${wUnit * (playerLane * 4 - 2)}px)`
+      };
     };
 
     const moveRight = () => {
-      console.log('move right')
+      if (playerLane < 3) {
+        playerLane += 1;
+        ps.transform = `translateX(${wUnit * (playerLane * 4 - 2)}px)`
+      };
     };
 
     const jump = () => {
-      console.log('jump')
+      // let top = parseInt(playerCar.style.top.replace(/px/g, ''));
+      if (player.classList[0] !== 'jump') {
+        player.classList.add('jump');
+        ps.transform = `translate(${wUnit * (playerLane * 4 - 2)}px, -${hUnit * 2}px)`;
+        setTimeout(() => ps.transform = `translate(${wUnit * (playerLane * 4 - 2)}px, 0)`, 250);
+        setTimeout(() => player.classList.remove('jump'), 500);
+      };
     };
 
 
@@ -224,10 +251,8 @@
 
 // Moving Object Class Prototype
   class MovingObject {
-    constructor(dInit, tInit, ctx, img, width, aspect, xStart, xEnd, type) {
+    constructor(tInit, ctx, img, width, aspect, xStart, xEnd, type) {
       this.type = type;
-      this.tInit = tInit;
-      this.dInit = dInit;
       this.ctx = ctx;
       this.img = img;
       this.width = width;
@@ -236,37 +261,46 @@
       this.yStart = 3;
       this.xRange = xEnd - xStart;
       this.yRange = 6;
-      this.y = 0;
+      this.y = horizon;
+      this.dist = 0;
+      this.t = tInit;
     };
     move() {
-      // const offset = (this.type === 'enemy') ? ((tStamp - this.tInit) / 1000 / (enemySpeed * 1)) : 0;
-      const offset = (this.type === 'enemy') ? (speed / enemySpeed) : 1;
-
-      const elapsed = distance - (this.dInit) ;
-      const adv = Math.pow(elapsed / (distScale/ offset), 4);
-      const x = (this.xStart + adv * this.xRange) * wUnit;
-      const y = (this.yStart + adv * this.yRange) * hUnit;
-      const w = adv * this.width * wUnit;
-      const h = adv * this.height * hUnit;
-      this.ctx.drawImage(this.img, x, y, w, h);
+      const moveSpeed = (this.type === 'enemy') ? (speed - enemySpeed) : speed;
+      const moveDistance = this.dist + moveSpeed * (tStamp - this.t) / 16;
+      this.dist = moveDistance;
+      this.t = tStamp;
+      const adv = Math.pow(moveDistance, 3) / distExp;
+      const x = Math.round((this.xStart + adv * this.xRange) * wUnit);
+      const y = Math.round((this.yStart + adv * this.yRange) * hUnit);
+      const w = Math.round(adv * this.width * wUnit);
+      const h = Math.round(adv * this.height * hUnit);
+      // this.ctx.drawImage(this.img, x, y, w, h);
+      this.ctx.fillRect(x, y, w, h)
       this.y = y;
-      // if (this.type === 'enemy') console.log(offset)
     };
   };
 
 
-    const distScale = .05;
-    let movers = [];
-    let treeSpacing = .005;
-    let laneSpacing = .01;
+    const treeSpacing = 0.004;
+    const laneSpacing = 0.005;
+    const enemySpacing = .01;
     let lastTree = 0;
     let lastLane = 0;
+    let lastEnemy = 0;
+
+    let trackLength = 1.5;
+    let distScale = trackLength * 5000;
+    let distExp = Math.pow(distScale, 3);
+    let bg = [];
+    let enemies = [];
+
 
 // Make Trees
     const makeTrees = () => {
       if (distance - lastTree >= treeSpacing) {
-        movers.push(new MovingObject(distance, tStamp, ctx3, tree, 4, 2, 6.25, -12.5, 'bg'));
-        movers.push(new MovingObject(distance, tStamp, ctx3, tree, 4, 2, 9.75, 22.5, 'bg'));
+        bg.push(new MovingObject(tStamp, ctx3, tree, 5, 2, 6.25, -12, 'bg'));
+        bg.push(new MovingObject(tStamp, ctx3, tree, 5, 2, 9.75, 22, 'bg'));
         lastTree = distance;
       };
     };
@@ -274,9 +308,29 @@
 // Make Lanes
     const makeLanes = () => {
       if (distance - lastLane >= laneSpacing) {
-        movers.push(new MovingObject(distance, tStamp, ctx3, laneL, 3, 1, 7.5, 3.5, 'bg'));
-        movers.push(new MovingObject(distance, tStamp, ctx3, laneR, 3, 1, 8.5, 9.5, 'bg'));
+        bg.push(new MovingObject(tStamp, ctx3, laneL, 2, 1, 7.5, 4.5, 'bg'));
+        bg.push(new MovingObject(tStamp, ctx3, laneR, 2, 1, 8.5, 9.5, 'bg'));
         lastLane = distance;
+      };
+    };
+
+// Make Enemies
+    const makeEnemies = () => {
+      if (distance >= lastEnemy + enemySpacing && speed > enemySpeed * 2) {
+        const lane = Math.floor(Math.random() * 3) + 1;
+        const img = enemyImg[Math.floor(Math.random() * 5)];
+        switch (lane) {
+          case 1:
+            enemies.push(new MovingObject(tStamp, ctx3, img, 6, .5, 7, -.5, 'enemy'));
+            break;
+          case 2:
+            enemies.push(new MovingObject(tStamp, ctx3, img, 6, .5, 8, 5, 'enemy'));
+            break;
+          case 3:
+            enemies.push(new MovingObject(tStamp, ctx3, img, 6, .5, 9, 10.5, 'enemy'));
+            break;
+        };
+        lastEnemy = distance;
       };
     };
 
@@ -286,39 +340,6 @@
       makeLanes();
       makeEnemies();
     };
-
-
-
-
-    let lastEnemy = 0;
-    let enemySpacing = .02;
-    let enemySpeed = 65;
-
-// Make Enemies
-    const makeEnemies = () => {
-      if (distance >= lastEnemy + enemySpacing) {
-        const lane = Math.floor(Math.random() * 3) + 1;
-        const img = enemyImg[Math.floor(Math.random() * 5)];
-        switch (lane) {
-          case 1:
-            movers.push(new MovingObject(distance, tStamp, ctx3, img, 6, .5, 7, -.5, 'enemy'));
-            break;
-          case 2:
-            movers.push(new MovingObject(distance, tStamp, ctx3, img, 6, .5, 8, 5, 'enemy'));
-            break;
-          case 3:
-            movers.push(new MovingObject(distance, tStamp, ctx3, img, 6, .5, 9, 10.5, 'enemy'));
-            break;
-        };
-        lastEnemy = distance;
-      };
-    };
-
-
-
-
-
-
 
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -331,8 +352,9 @@
     let timeTotal = 60;
     let maxSpeed = 120;
     let minSpeed = 10;
+    let enemySpeed = maxSpeed / 3;
     let speed = 60;
-    let trackLength = 1.5;
+    const cutoff = 7 * hUnit;
 
 
 // Function Refresh Global Variables
@@ -345,14 +367,36 @@
 // Function Redraw All Moving Elements
     const animate = () => {
       refreshBg();
-      // ctx1.clearRect(0, 0, width, height);
-      // ctx2.clearRect(0, 0, width, height);
+
+      ctx1.clearRect(0, 0, width, height);
       ctx3.clearRect(0, 0, width, height);
-      movers = movers.filter(a => a.y < height)
-      movers.forEach(d => {
-        d.move();
-      });
+      bg = bg.filter(a => a.y <= height);
+      // bg.forEach(d => d.move());
+
+      enemies = enemies.filter(a => a.y >= horizon * .9 && a.y <= height * 2);
+      // enemies.forEach(d => {
+      //   d.ctx = d.y >= cutoff ? ctx1 : ctx3;
+      //   d.move();
+      // })
+
+      let eLength = enemies.length;
+      for (let i = 0; i < eLength; i++) {
+        const enemy = enemies[i];
+        enemy.ctx = enemy.y >= cutoff ? ctx1 : ctx3;
+        enemy.move();
+      }
+
+      let bLength = bg.length;
+      for (let i = 0; i < bLength; i++) {
+        bg[i].move();
+      }
+
+      // let bgLength = bg.length
+      // for (let i = 0; i < bgLength; i++) {
+      //   bg[i].move();
+      // }
     };
+
 
 // Function Master Animation Frame Stack
     const masterDraw = (timestamp) => {
@@ -369,70 +413,6 @@
 
 
 addKeyListener();
-
-
-
-
-
-// // Class Moving Object
-//     class MovingObject {
-//       constructor(timestamp, gamePlane, type, imgSrc, startL, endL, aspect, startW, endW, distScale) {
-//         this.timestamp = timestamp;
-//         this.gamePlane = gamePlane;
-//         this.type = type;
-//         this.imgSrc = imgSrc;
-//         this.startL = startL;
-//         this.endL = endL;
-//         this.aspect = aspect;
-//         this.startW = startW;
-//         this.endW = endW;
-//         this.leftMove = (endL - startL) * w;
-//         this.topMove = fullH - horizon;
-//         this.widthMove = (endW - startW) * w;
-//         this.heightMove = (endW / aspect) * h;
-//         this.distScale = distScale;
-//         this.dist = 0;
-//         this.top = 0;
-//         this.node = this.make();
-//         this.canRemove = false;
-//       };
-//       make() {
-//         let div = document.createElement('div');
-//         div.style.backgroundImage = this.imgSrc;
-//         div.classList.add(this.type, 'moving');
-//         this.gamePlane.appendChild(div);
-//         return div;
-//       };
-//       move(t) {
-//         let moveSpeed = (this.type === 'enemy') ? (speed - enemySpeed) : speed;
-//         let distance = this.dist + moveSpeed * (t - this.timestamp);
-//         let rate = Math.pow(distance, 5) / Math.pow(this.distScale, 5);
-//         this.timestamp = t;
-//         this.dist = distance;
-//         this.node.style.left = (this.startL * w) + (this.leftMove * rate) + 'px';
-//         this.node.style.top = horizon + (this.topMove * rate) + 'px';
-//         this.node.style.width = (this.startW * w) + (this.widthMove * rate) + 'px';
-//         this.node.style.height = (this.heightMove * rate) + 'px';
-//         this.top = parseInt(this.node.style.top.replace(/px/g, ''));
-//       };
-//       clear() {
-//         this.node.remove();
-//         this.canRemove = true;
-//       };
-//     };
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
