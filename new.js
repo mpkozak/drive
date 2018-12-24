@@ -275,8 +275,8 @@ initPlayer()
       const y = Math.round((this.yStart + adv * this.yRange) * hUnit);
       const w = Math.round(adv * this.width * wUnit);
       const h = Math.round(adv * this.height * hUnit);
-      // this.ctx.drawImage(this.img, x, y, w, h);
-      this.ctx.fillRect(x, y, w, h)
+      this.ctx.drawImage(this.img, x, y, w, h);
+      // this.ctx.fillRect(x, y, w, h)
       this.y = y;
     };
   };
